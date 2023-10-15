@@ -15,12 +15,12 @@ FUNCTION FN_VALIDA_TREC(p_nIdePol IN POLIZA.IdePol%TYPE) RETURN VARCHAR2 IS
     FROM CERTIFICADO
     WHERE IdePol = p_nIdePol;
   --
-  nNumCertC NUMBER :=0;
-  nNumCertM NUMBER :=0;
+  nNumCertC NUMBER := 0;
+  nNumCertM NUMBER := 0;
   cValTrasf DATOS_PARTICULARES.ValTrasf%TYPE;
   nMtoMaqui MAQUINARIA_TREC.MtoMaqui%TYPE;
-  nValTrasf NUMBER :=0;
-  cValCas   VARCHAR2(1) :='0';
+  nValTrasf NUMBER := 0;
+  cValCas   VARCHAR2(1) := '0';
   
 BEGIN
   -- Valida numero de certificado registrados 

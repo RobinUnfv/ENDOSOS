@@ -2,6 +2,8 @@
   Nombre      : SP_VALIDA_COBERT_PROV
   Proposito   : Verificar si la poliza se encuentra con cobertura provisional
   Referencia : Formulario MANTPOL.fmb - Tribu Empresas Bloqueo en la Emisión Vehicular que tengan Coberturas Provisionales Activas
+  Parámetros : p_nIdePol     NUMBER    Identificador de Póliza
+  Retorno    : p_cMsjCobProv VARCHAR2  Retorno de resultado del mensaje Valida Cobertura
   Log de Cambios
     Fecha          Autor            Descripcion
   11/10/2023    Robinzon Santana	 Creacion

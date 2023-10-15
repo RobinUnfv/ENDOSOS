@@ -16,7 +16,7 @@ CREATE OR REPLACE PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
   p_nIdePol      IN Poliza.IdePol%TYPE,
   p_nNumCert     IN Certificado.NumCert%TYPE,
   p_cCodRamoCert IN CERT_RAMO.CODRAMOCERT%TYPE,
-  p_cError       OUT VARCHAR2
+  p_cError       OUT VARCHAR2(2000)
 ) IS
 
   POL       POLIZA%ROWTYPE;
