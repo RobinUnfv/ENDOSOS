@@ -41,9 +41,14 @@ ACTUALIZAR_BASERECADTCO  --> PR_INTERFASE_AX.SP_ACTUALIZAR_BASERECADTCO(p_nNumOp
 FR_ACTIVA_GARANTIAS      --> PR_INTERFASE_AX.SP_ACTIVA_GARANTIAS(p_stspol POLIZA.StsPol%TYPE, p_nIdePol IN Poliza.IdePol%TYPE)
                          --> PR_INTERFASE_AX.SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(p_nIdePol IN Poliza.IdePol%TYPE, p_cTipoOper IN LVAL.CODLVAL%TYPE)
 
+15/10/2023
+----------
+FR_OBTCONFREDIST    --> PR_INTERFASE_AX.FN_OBTCONFREDIST( p_nIdePol IN POLIZA.IdePol%TYPE )           
+FR_ModificaCorredor -->
 
-
-
+--------------------------------
+p_cTipoOper  VARCHAR  Tipo motivo del endoso
+p_cTipoOper IN LVAL.CODLVAL%TYPE
 -------------------------
 PROCEDURE PR_OBLIGATORIEDAD_CORREO(p_cOperacion VARCHAR2) IS
   cAlcance VARCHAR2(8);
@@ -56,7 +61,7 @@ LR_Invocar_PreACT
 --------------------------------
 p_cError := '1,'||SQLERRM;
         DBMS_OUTPUT.PUT_LINE(SQLERRM);
-        RAISE_APPLICATION_ERROR(-20106,SQLERRM);
+        RAISE_APPLICATION_ERROR(-20100,SQLERRM);
 -----------------------------
 -- B02_1: POST-QUERY
 :B02_1.cNumTramite := PR_POLIZA_TRAMITE.OBTENERULTIMOTRAMITE(:B02_1.IDEPOL);

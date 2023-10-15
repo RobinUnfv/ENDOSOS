@@ -152,7 +152,7 @@ BEGIN
 			p_nIdePol
 		);
 
-        -- cConfRedist := FR_OBTCONFREDIST (p_nIdePol);
+        cConfRedist := PR_INTERFASE_AX.FN_OBTCONFREDIST(p_nIdePol); -- cConfRedist := FR_OBTCONFREDIST (p_nIdePol);
         BEGIN		
             SELECT NVL(MAX(INDREDIST),'N')
             INTO cConfRedist

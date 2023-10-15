@@ -1,22 +1,15 @@
 /*------------------------------------------------------------------------
   Nombre     : SP_ACTU_OPERA_MOT_ENDOSO
   Propósito  : Procedimiento para actualizar operacion de motivo endoso
+  Referencia : MODCOM.fmb
   Parámetros :
-               p_nIdePol      NUMBER    Identificador de Póliza
-               p_nNumCert     NUMBER    Número de Certificado
-               p_cCodRamoCert VARCHAR2  Codigo de ramo asociado al certificado de una poliza.
-  Referencia : MODCOM.FMB              
-  Retorno    : p_cError       VARCHAR2  Retorno de resultado del proceso (OK = 0,OK / ERROR = 1,DescError)
-
+               p_nIdePol NUMBER Identificador de Póliza
   Log de Cambios:
     Fecha         Autor               Descripción 
     09/10/2023    Robinzon Santana    Creación
  -----------------------------------------------------------------------------*/
 CREATE OR REPLACE PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
-  p_nIdePol      IN Poliza.IdePol%TYPE,
-  p_nNumCert     IN Certificado.NumCert%TYPE,
-  p_cCodRamoCert IN CERT_RAMO.CODRAMOCERT%TYPE,
-  p_cError       OUT VARCHAR2(2000)
+  p_nIdePol      IN Poliza.IdePol%TYPE
 ) IS
 
   POL       POLIZA%ROWTYPE;
@@ -35,11 +28,11 @@ CREATE OR REPLACE PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
   nExiste NUMBER(1) := 0;
 
 DECLARE
-    p_cError := '0,OK';
+
     
     POL := PR_Poliza.Datos_Poliza(p_nIdePol);
     IF P.IdePol IS NULL THEN
-       p_cError := '1,'||'No existe la Póliza '||p_nIdePol;
+
        DBMS_OUTPUT.PUT_LINE('No existe la Póliza '||p_nIdePol);
        RAISE_APPLICATION_ERROR(-20100,'No existe la Póliza '||p_nIdePol);
     END IF;
@@ -49,8 +42,7 @@ DECLARE
         PR_BBVA_UTIL.ProcesaPrimaPactada(p_nIdePol);
       EXCEPTION
         WHEN OTHERS THEN
-          -- LR_Error('Error ' || SQLERRM);
-          p_cError := '1,'||'Error ' || SQLERRM;
+
           DBMS_OUTPUT.PUT_LINE('Error ' || SQLERRM);
           RAISE_APPLICATION_ERROR(-20100,'Error ' || SQLERRM);
       END;
@@ -171,7 +163,7 @@ DECLARE
 		  	  END IF;
           */
           DBMS_OUTPUT.PUT_LINE('Existen Politicas Violadas ...Verifique...');
-          SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
+          PR_INTERFASE_AX.SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
 	  END IF;
 
   BEGIN

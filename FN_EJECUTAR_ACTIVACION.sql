@@ -1,16 +1,17 @@
 /*-----------------------------------------------------------------------
      Nombre : FN_EJECUTAR_ACTIVACION 
-     Proposito:
-     Referencia : Formulario MANTPOL.fmb
+     Proposito   : Funsión que ejecuta la activación de la póliza
+     Referencias : MANTPOL.fmb
      Parametro :
-                 p_nIdePol         Identificador de póliza.
+                 p_nIdePol    NUMBER   Identificador de póliza.
+				 p_cTipoOper  VARCHAR  Tipo motivo del endoso
      Log de Cambios
      Fecha        Autor               Descripcion
      -------      --------            --------------
      Fecha         Autor               Descripción
      14/10/2023    Robinzon Santana     Creación
   -----------------------------------------------------------------------------*/   
-FUNCTION FN_EJECUTAR_ACTIVACION(p_nIdePol IN POLIZA.IdePol%TYPE) RETURN OPER_POL.NumOper%TYPE 
+FUNCTION FN_EJECUTAR_ACTIVACION(p_nIdePol IN POLIZA.IdePol%TYPE, , p_cTipoOper IN LVAL.CODLVAL%TYPE) RETURN OPER_POL.NumOper%TYPE 
 IS
 
 	  kSI             CONSTANT VARCHAR2(1) := 'S';
@@ -154,7 +155,8 @@ BEGIN
 	  -- LR_Cursor_Normal;
 
 	  -- Invocar formulario de PreActivación.
-	  cIndAct := LR_Invocar_PreACT(kActivar,p_nIdePol,1,'N'); -- kActivar = 'AC'
+	  PR_INTERFASE_AX.SP_ACTU_OPERA_MOT_ENDOSO(p_nIdePol);
+	  cIndAct := 'S';  -- .:. LR_Invocar_PreACT(kActivar,p_nIdePol,1,'N'); -- kActivar = 'AC'
 	  --
 	  LR_Cursor_Normal('Trabajando... Activando Poliza (Terminado)');
 
@@ -163,7 +165,7 @@ BEGIN
 	    LR_Cursor_Ocupado('Trabajando... Activando Poliza Definitiva - 1');
         PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Activar(D): IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
 	    -- <I N3041386> Claudia Yugar Ladines / 14-08-2013 / CNT-01702: Manejo de re-cálculo de la distribución de reaseguros	    
-	    cConfRedist := FR_OBTCONFREDIST ( p_nIdePol );
+	    cConfRedist := PR_INTERFASE_AX.FN_OBTCONFREDIST(p_nIdePol);-- FR_OBTCONFREDIST ( p_nIdePol );
 	    --<I RTC-313128> Luis Venancio / 24-05-2022 / Generación de marcas automáticas en la exclusión de certificados desde SAS
 		  BEGIN
 		  	SELECT numcert,
@@ -186,10 +188,7 @@ BEGIN
 	    	 vcMarca := PR_MARCAS_ANULACION.FR_OBTENER_MARCA (p_nIdePol,TRUNC(vdFecExc),vcMotExc,vnNumCert,'CER');
 	    END IF;
 	    --<F RTC-313128> Luis Venancio / 24-05-2022 / Generación de marcas automáticas en la exclusión de certificados desde SAS
-	    nNumOper    := PR_POLIZA.Activar ( p_nIdePol
-		    														   , 'D'
-		    														   , cConfRedist
-		    														   );
+	    nNumOper    := PR_POLIZA.Activar ( p_nIdePol, 'D', cConfRedist);
       --<I RTC-313128> Luis Venancio / 24-05-2022 / Generación de marcas automáticas en la exclusión de certificados desde SAS
       IF PR.Busca_Lval('PROANULA', '313126SWITCH') = 'ON' THEN
 				 IF vcMarca IS NOT NULL AND nNumOper IS NOT NULL THEN
@@ -255,7 +254,7 @@ BEGIN
 	    IF cIndOperValida = 'S' THEN
         PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_OPER_POL_DET.CREAR_MOV: IDEPOL --> '||p_nIdePol ,
 	            															SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-	      PR_OPER_POL_DET.CREAR_MOV(nNumOper, :B07_1.TipoOper, :B07_1.FecIniVig, :B07_1.FecFinVig);
+	    PR_OPER_POL_DET.CREAR_MOV(nNumOper, p_cTipoOper, PZ.FecIniVig, PZ.FecFinVig); -- PR_OPER_POL_DET.CREAR_MOV(nNumOper, :B07_1.TipoOper, :B07_1.FecIniVig, :B07_1.FecFinVig);
         PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_OPER_POL_DET.CREAR_MOV: IDEPOL --> '||p_nIdePol ,
 	            															SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
 	    END IF;   
@@ -269,12 +268,12 @@ BEGIN
 	 	    END IF;        
 	 	  END IF;
 	    --<F N3016652>        
-	    Message('Trabajando... Activando Poliza Definitiva - 2', NO_ACKNOWLEDGE); 
+	    DBMS_OUTPUT.PUT_LINE('Trabajando... Activando Poliza Definitiva - 2'); 
 	    -- <> Elí Segura / 06-04-2004 / Reprogramación.
 	    PR_EVALUA_POLITICA.Inicializa_Autoriza_Violacion(p_nIdePol,nNumOper);
 	    --
 	    cFirma := PR_EVALUA_POLITICA.Obtiene_Firma_Digital(p_nIdePol, nNumOper);
-	    Message('Trabajando... Activando Poliza Definitiva - 3', NO_ACKNOWLEDGE); 
+	    DBMS_OUTPUT.PUT_LINE('Trabajando... Activando Poliza Definitiva - 3'); 
 	    -- 
 	    Actualiza_Ind_Fact;    
 	    --
@@ -286,7 +285,9 @@ BEGIN
 	            															SYSDATE, SYSDATE, '01', 0,p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
       EXCEPTION
         WHEN OTHERS THEN
-          LR_error('FRM-MANTPOL Error en package PR_RECA_DCTO_CERT.ACTUALIZA_RECA_DCTO_CERT - '||SQLERRM);
+          -- LR_error('FRM-MANTPOL Error en package PR_RECA_DCTO_CERT.ACTUALIZA_RECA_DCTO_CERT - '||SQLERRM);
+		  DBMS_OUTPUT.PUT_LINE('FN_EJECUTAR_ACTIVACION Error en package PR_RECA_DCTO_CERT.ACTUALIZA_RECA_DCTO_CERT - '||SQLERRM);
+          RAISE_APPLICATION_ERROR(-20100,'FN_EJECUTAR_ACTIVACION Error en package PR_RECA_DCTO_CERT.ACTUALIZA_RECA_DCTO_CERT - '||SQLERRM);
       END;
 	    -- Actualiza número de operación de las tablas de 
 	    -- remesas a enviarse a Bancos.
@@ -306,10 +307,10 @@ BEGIN
 	    IF nMtoOper != 0 THEN
 	    	-- Si mueve prima se generan documentos.
 	    	LR_Cursor_Normal;
-	      nDummy:=Fr_Alerta('Se procederá a generarár Documentos de Cobranza,segun el Fraccionamiento Calculado,una vez Concluido este Proceso para Realizar cualquier Modificación debera Anular dichos Documentos');
-	      LR_Cursor_Ocupado('Generando Documentos');
+	      DBMS_OUTPUT.PUT_LINE('Se procederá a generarár Documentos de Cobranza,segun el Fraccionamiento Calculado,una vez Concluido este Proceso para Realizar cualquier Modificación debera Anular dichos Documentos');
+	      DBMS_OUTPUT.PUT_LINE('Generando Documentos');
 	      cEvaluarCorreo:=TRUE;--<RTC-154713>13/03/2019   Milton Lope BBVA - Mejoras al proceso de emisión de G&L P9: Envío de correos 
-	      SYNCHRONIZE; 	    
+	    
 	    END IF; 
       PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_POLIZA_UTIL.FINALIZAR_ACTIVACION: IDEPOL --> '||p_nIdePol ,
 	            															SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
@@ -321,31 +322,6 @@ BEGIN
       	cSwitchCorreo := FALSE;
       END IF;
     
-      IF (cEvaluarCorreo AND cSwitchCorreo) THEN
-      	IF PR.BUSCA_LVAL('PCBBVA', USER) = 'INVALIDO' AND PR.BUSCA_LVAL ('PCBBVA', 'VERMSJUSER') = '1'THEN
-      		IF PR.BUSCA_LVAL ('PCBBVA', 'VERMSJUSER') = '1' THEN
-      		  SET_ALERT_PROPERTY('AL_MENSAJE', ALERT_MESSAGE_TEXT, 'Correo del usuario no esta configurado, consultar a TI.');
-	    			alert_button := SHOW_ALERT('AL_MENSAJE');
-	    		END IF;
-      	ELSE
-		      cEnviaCorreo:=ACSELX.PR_GESTOR_CORREO_POLIZA_BBVA.ENVIO_CORREO_POLIZA(p_nIdePol,1);
-		      IF(cEnviaCorreo=cOk) THEN
-		     		SET_ALERT_PROPERTY('AL_MENSAJE',ALERT_MESSAGE_TEXT,'Correo enviado exitosamente');
-		     		alert_button := SHOW_ALERT('AL_MENSAJE');
-		      END IF;
-		      
-		      IF (cEnviaCorreo NOT IN (cNOk,cOk)) THEN
-		      	IF cEnviaCorreo = 'La poliza ya fue enviada por correo para su validación.' THEN
-		      		SET_ALERT_PROPERTY('AL_MENSAJE',ALERT_MESSAGE_TEXT, cEnviaCorreo);
-		      	ELSIF cEnviaCorreo = 'Correo del usuario no esta configurado, consultar a TI.' THEN
-		      		SET_ALERT_PROPERTY('AL_MENSAJE',ALERT_MESSAGE_TEXT, cEnviaCorreo);
-		      	ELSE
-		      	  SET_ALERT_PROPERTY('AL_MENSAJE',ALERT_MESSAGE_TEXT,'El correo no se ha generado correctamente, se volverá a enviar a las 00:00 hrs del día de hoy. Error: '||cEnviaCorreo);
-		      	END IF;
-		      	alert_button := SHOW_ALERT('AL_MENSAJE');
-		      END IF;
-		    END IF;
-      END IF;
 	    --<F RTC-154713>
 	    -- <I N3030497> Miguel Wilson / 11-09-2008 / Req. BSCOM-00103, Requerimiento CAMPAÑA ACP 500  
 	    cIndProc := PR_COBRANZA_PPR.Gen_Cobert_Dscto(p_nIdePol);
@@ -357,7 +333,7 @@ BEGIN
       --<F N3039004>	    
 	    
 	    IF cIndProc = 'S' THEN
-	      PR_GEN_REA_T.Eliminar_Rea_Temporal(p_nIdePol,NULL,NULL,NULL);	    	
+	        PR_GEN_REA_T.Eliminar_Rea_Temporal(p_nIdePol,NULL,NULL,NULL);	    	
 	    	nNumOperAux := PR_POLIZA.Activar(p_nIdePol,'D');
 	    	PR_POLIZA_UTIL.Finalizar_Activacion(p_nIdePol,nNumOperAux);
 	    	PR_COBRANZA_PPR.Compensar_Documentos(nNumOperAux);
@@ -374,18 +350,18 @@ BEGIN
 	     
       PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_POLIZA_UTIL.FINALIZAR_ACTIVACION: IDEPOL --> '||p_nIdePol ,
 	            															SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-	    STANDARD.COMMIT;
+	  -- STANDARD.COMMIT;
 	    
 	    
--- <I N3039737> Néstor Cerón - 31/10/2012 REQ. REA-01816 Optimizar cálculo de impuestos a Sunat.
+        -- <I N3039737> Néstor Cerón - 31/10/2012 REQ. REA-01816 Optimizar cálculo de impuestos a Sunat.
         BEGIN   --<N3040035> - Néstor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-        select ps.stspol
-        into cstspolv
-        from poliza_status ps
-        where ps.idepol = p_nIdePol;
-        cstspolv := nvl(cstspolv,'0');
+			select ps.stspol
+			into cstspolv
+			from poliza_status ps
+			where ps.idepol = p_nIdePol;
+			cstspolv := nvl(cstspolv,'0');
 				--<I N3040035> - Néstor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-				EXCEPTION WHEN OTHERS THEN
+		EXCEPTION WHEN OTHERS THEN
 					cstspolv := '0';
         END;
         --<F N3040035>        
@@ -405,12 +381,12 @@ BEGIN
 					cstspolv := '0';
 				END;
 				--<F N3040035>        
-        STANDARD.COMMIT;
+       -- STANDARD.COMMIT;
         --
 -- <F N3039737>
 
 	    --<F N3020582>
-	    LR_Cursor_Normal('Invocando a Distribución de Reaseguros');	  
+	  DBMS_OUTPUT.PUT_LINE('Invocando a Distribución de Reaseguros');	  
       --<I N3030565> 15.06.2008 / Max Canal Salas /Proyecto Impresiones CCM
       BEGIN
         SELECT STSPOL,CODPROD ,NUMPOL
@@ -419,11 +395,12 @@ BEGIN
         WHERE  P.IDEPOL = p_nIdePol;
       EXCEPTION  
       	WHEN OTHERS THEN 
-      	  MESSAGE('Error al obtener Numero de poliza');
+      	   DBMS_OUTPUT.PUT_LINE('Error al obtener Numero de poliza');
+		   RAISE_APPLICATION_ERROR(-20100,'Error al obtener Numero de poliza');
       END ;  
       nIndCNT := PR_IMP_POL_CCM_CON.VALIDA_CNT(nNumPol,cCodProd);
-	    IF PR.BUSCA_LVAL('CCMLVGRL','SWICTHCCM') = 'S'  AND  nIndCNT ='N' AND PR.EXISTE_LVAL('CCMPRODX',:B01_1.CODPROD) = 'S' THEN  --<N3030980>/ 05.11.2008/Max Canal Salas /Proyecto CCM  impresion de polizas
-        nIdImpresion := PR_IMP_POL_CCM.DEVUELVE_IND_GRUPO_IMP(cCodProd,nNumOper,p_nIdePol);			
+	    IF PR.BUSCA_LVAL('CCMLVGRL','SWICTHCCM') = 'S'  AND  nIndCNT ='N' AND PR.EXISTE_LVAL('CCMPRODX',PZ.CODPROD) = 'S' THEN  --<N3030980>/ 05.11.2008/Max Canal Salas /Proyecto CCM  impresion de polizas
+        nIdImpresion := PR_IMP_POL_CCM.DEVUELVE_IND_GRUPO_IMP(cCodProd,nNumOper,p_nIdePol);	
         BEGIN
 	        SELECT DISTINCT OP.TIPOOP 
 		      INTO   cTipoOper
@@ -434,79 +411,93 @@ BEGIN
         	WHEN OTHERS THEN 
         	  cTipoOper  := NULL;
 		    END ;  
-        IF  cTipoOper != 'REM' THEN 
-				  IF PR.BUSCA_LVAL('CCMPRODX',:B01_1.CODPROD) <> 'INVALIDO'  THEN 
-            nIdImpresion := PR_IMP_POL_CCM.DEVUELVE_IND_GRUPO_IMP(cCodProd,nNumOper,p_nIdePol);
-				    pl_id := CREATE_PARAMETER_LIST('PARAM_LISTA');  
-				    -- 
-				    ADD_PARAMETER(pl_id, 'p_nIdePol', TEXT_PARAMETER,p_nIdePol);
-				    ADD_PARAMETER(pl_id, 'p_nNumOper', TEXT_PARAMETER,nNumOper);
-				    ADD_PARAMETER(pl_id, 'p_nIdImpresion', TEXT_PARAMETER,nIdImpresion);
-				    ADD_PARAMETER(pl_id, 'p_cNumTramite', TEXT_PARAMETER,:B02_1.cNumTramite);
-				    --
-		        CALL_FORM('EMI00229',HIDE,NO_REPLACE,QUERY_ONLY,pl_id);				    
-				    --
-				    DESTROY_PARAMETER_LIST(pl_id);  
-				  END IF; 
-				  GO_BLOCK('B01_1');
-				  commit;
-				ELSE
-				  BEGIN
-					  SELECT NUMFINANC 
-					  INTO   nNumFinanc
-					  FROM   COND_FINANCIAMIENTO F
-					  WHERE  F.NUMOPER = nNumOper
-					  AND    F.IDEPOL  = p_nIdePol;
-						BEGIN
-						  SELECT SQ_NUMCESION.NEXTVAL INTO WSESION FROM SYS.DUAL;
-						END;
-						pl_id := Create_Parameter_List('tmpdata'); 
-					  Add_Parameter(pl_id,'PNUMFINANC',TEXT_PARAMETER,nNumFinanc);
-					  Add_Parameter(pl_id,'PNUMOPER',TEXT_PARAMETER,nNumOper);
-					  Add_Parameter(pl_id,'PSESION',TEXT_PARAMETER,WSESION);
-					  Add_Parameter(pl_id,'PARAMFORM',TEXT_PARAMETER,'NO'); 
-					  Run_Product(reports,'FIN00005.rep',SYNCHRONOUS,RUNTIME,filesystem,pl_id,null);
-					  Destroy_Parameter_List( pl_id ); 
-					END;
-				END IF;  
+          
 			
 	    END IF;
       --<F N3030565>
       
       --<I N3043352> Juan Villaorduña / 17-11-2014 / 5791
 			IF nNumOper IS NOT NULL THEN
-				FR_ModificaCorredor(nNumOper);
+				-- FR_ModificaCorredor(nNumOper);
+                DECLARE
+					nCodInterPol  acselx.intermediacion_pol.numid%TYPE DEFAULT NULL;
+					nCodInterFact acselx.factura.codinter%TYPE DEFAULT NULL;
+				BEGIN
+						BEGIN				
+							SELECT inter.codinter
+							INTO   nCodInterPol
+							FROM   acselx.poliza pol,
+								acselx.intermediacion_pol inp,
+								acselx.intermediario      inter
+							WHERE  pol.idepol = inp.idepol
+							-- AND    pol.idepol = :B01_1.idepol p_nIdePol
+							AND    pol.idepol = p_nIdePol
+							AND    inp.indlider = 'S'
+							AND    inter.numid = inp.numid;
+						EXCEPTION
+							WHEN no_data_found THEN
+							nCodInterPol := NULL;
+						END;
+						
+						BEGIN
+							SELECT codinter
+							INTO nCodInterFact
+							FROM acselx.factura
+							WHERE numoper = nNumOper;
+						EXCEPTION
+						WHEN no_data_found THEN
+							nCodInterFact := NULL;
+						END;
+						
+						IF nCodInterPol IS NOT NULL AND TO_NUMBER(nCodInterFact) IS NOT NULL THEN
+							IF nCodInterPol != nCodInterFact THEN
+								UPDATE acselx.factura
+								SET codinter = LPAD(nCodInterPol, 6, '0')
+								WHERE numoper = nNumOper;
+								
+								UPDATE acselx.acreencia
+								SET codinterlider = LPAD(nCodInterPol, 6, '0')
+								WHERE numacre IN (SELECT gif.numacre
+												FROM acselx.cond_financiamiento cof, acselx.giros_financiamiento gif
+												WHERE cof.numfinanc = gif.numfinanc
+												AND numoper = nNumOper);
+							END IF;
+						END IF;
+				EXCEPTION
+					WHEN OTHERS THEN NULL;
+				END;
+				-- FIN
 			END IF;
 			--<F N3043352> Juan Villaorduña / 17-11-2014 / 5791
       	    
-	    LR_Invocar_DistRea(p_nIdePol,nNumOper,0,'N');                            
+	    -- .:. LR_Invocar_DistRea(p_nIdePol,nNumOper,0,'N');                            
 	    --
-	    LR_Cursor_Ocupado('Eliminando Temporales de Reaseguro.');
+	    DBMS_OUTPUT.PUT_LINE('Eliminando Temporales de Reaseguro.');
 	    PR_GEN_REA_T.Eliminar_Rea_Temporal(p_nIdePol,NULL,NULL,NULL);
-	    STANDARD.COMMIT;
+	    -- STANDARD.COMMIT;
 	    -- Obtenemos datos actualizados de la póliza para hacer validaciones.
-	    P := PR_POLIZA.Datos_Poliza(p_nIdePol);
-	    IF P.StsPol = 'ACT' THEN    	
+	    -- .:. P := PR_POLIZA.Datos_Poliza(p_nIdePol);
+	    IF PZ.StsPol = 'ACT' THEN    	
 	    	-- Poner la actualizacion de inspecciones en notes
 	      IF PR_POLIZA_UTIL.Maneja_Insp_Vehiculos_Pol(p_nIdePol) = kSI THEN    
-	        Message('Actualizando Número de Inspección en Notes',NO_ACKNOWLEDGE);
-	        FR_ACTIVAR.Actualizar_Inspeccion_Notes(p_nIdePol,:B01_1.NumPol);                      
+	        DBMS_OUTPUT.PUT_LINE('Actualizando Número de Inspección en Notes');
+	        -- .:. FR_ACTIVAR.Actualizar_Inspeccion_Notes(p_nIdePol,PZ.NUMPOL);                      
 	      END IF;
 	      -- Elimina datos posibles de rehabilitación si hubiera.
-	      Eliminar_Rehab;
-	      STANDARD.COMMIT;
+	      ELIMINAR_REHAB;
+	      -- .:. STANDARD.COMMIT;
 	    END IF;    
-	    LR_Cursor_Ocupado('Trabajando... Eliminando temporales de Mov.Prima');
+	    DBMS_OUTPUT.PUT_LINE('Trabajando... Eliminando temporales de Mov.Prima');
 	    PR_MOV_PRIMA.Eliminar_Mov_T(p_nIdePol);    
-	    STANDARD.COMMIT;   		
+	    -- .:. STANDARD.COMMIT;   		
    		FR_UPDAUTORIZAREDIST(p_nIdePol, nNumOper); -- <N3041386> Claudia Yugar Ladines / 23-08-2013 / CNT-01702: Manejo de re-cálculo de la distribución de reaseguros
    ELSE
-	    LR_Cursor_Ocupado('Trabajando... Reversando Activación');
+	    DBMS_OUTPUT.PUT_LINE('Trabajando... Reversando Activación');
 	    PR_MOV_PRIMA.Eliminar_Mov_T(p_nIdePol);
-	    STANDARD.COMMIT;
+	    -- .:. STANDARD.COMMIT;
    END IF;
 
-		LR_Cursor_Normal('Proceso ejecutado satisfactoriamente');
+		DBMS_OUTPUT.PUT_LINE('Proceso ejecutado satisfactoriamente');
 --<I N3033323>
   FOR C IN cActualiza LOOP
 		BEGIN
@@ -543,25 +534,23 @@ BEGIN
 		       T.STSLOG = decode(nNumFact,0,'ERR',cStsCert),
 		       T.MTOFACTMONEDA = nMtoFactMoneda,
 		       T.CODMONEDA = cCodMoneda,
-		       T.NUMOPER = nNumOper--<N3035871> NNTCOB-00015. Roberto Escudero / 23-09-2010 / Se agrega numero de operacion
+		       T.NUMOPER = nNumOper
 		WHERE  T.IDEPOL = C.IDEPOL
 			AND  T.NUMCERT = C.NUMCERT
 			AND  T.STSLOG = 'PEN'
 			AND  T.IDECOBERT = C.IDECOBERT
 			AND  T.NUMMOD = C.NUMMOD
 			AND  T.NUMFACT IS NULL;
-		COMMIT;	
+		-- .:. COMMIT;	
   END LOOP;
 --<N3035871> NNTCOB-00015. Roberto Escudero / 23-09-2010 / Se mueve la baja de certificado a otro proceso 
 	  -- Se devuelve la operación procesada.
-	  RETURN nNumOper;
+  RETURN nNumOper;
 EXCEPTION
 	WHEN OTHERS THEN
-    LR_Cursor_Normal;
-    nDummy := LR_Alerta('Error al Activar: '||SQLERRM);
-    STANDARD.ROLLBACK_NR;
-    PR_MOV_PRIMA.Eliminar_Mov_T(p_nIdePol);
-    STANDARD.COMMIT;    
+        PR_MOV_PRIMA.Eliminar_Mov_T(p_nIdePol);
+		-- .:. STANDARD.COMMIT;   
+		DBMS_OUTPUT.PUT_LINE('Error al Activar: '||SQLERRM);     
     -- Devuelve nulo en señal de error.
     RETURN TO_NUMBER(NULL);
 END FN_EJECUTAR_ACTIVACION;
