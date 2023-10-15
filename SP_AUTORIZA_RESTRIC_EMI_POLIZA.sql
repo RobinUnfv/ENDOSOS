@@ -8,7 +8,7 @@
     Fecha         Autor               Descripción 
     10/10/2023    Robinzon Santana    Creación
  -----------------------------------------------------------------------------*/
-CREATE OR REPLACE PROCEDURE SP_AUTORIZA_RESTRIC_EMI_POLIZA(
+PROCEDURE SP_AUTORIZA_RESTRIC_EMI_POLIZA(
   p_nIdePol      IN Poliza.IdePol%TYPE
 ) IS
 

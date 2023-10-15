@@ -11,7 +11,7 @@
      -------      --------            --------------
      15/10/2023   Robinzon Santana    Creación
   -----------------------------------------------------------------------------*/ 
-  FUNCTION FN_OBTCONFREDIST ( p_nIdePol     IN    POLIZA.IdePol%TYPE ) RETURN VARCHAR2 IS  
+ FUNCTION FN_OBTCONFREDIST ( p_nIdePol     IN    POLIZA.IdePol%TYPE ) RETURN VARCHAR2 IS  
   	cConfRedist						 VARCHAR2(1) := 'N';  	
 	BEGIN		
 		SELECT NVL(MAX(INDREDIST),'N')

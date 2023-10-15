@@ -11,7 +11,7 @@
     Fecha         Autor               Descripción 
     14/10/2023    Robinzon Santana    Creación
  -----------------------------------------------------------------------------*/
-CREATE OR REPLACE PROCEDURE SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(
+PROCEDURE SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(
   p_nIdePol   IN Poliza.IdePol%TYPE,
   p_cTipoOper IN LVAL.CODLVAL%TYPE
 ) IS
@@ -41,8 +41,8 @@ BEGIN
 	
     IF p_cTipoOper IS NOT NULL THEN
 
-        PR_INTERFASE_AX.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_Validar_Datos;	
-        PR_INTERFASE_AX.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);  
+        PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_Validar_Datos;	
+        PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);  
 
         --<I RTC 316343> David Yupanqui / 24-02-2023 / [PROYECTO TECH CORE] Mejora en Registro y Validación de Maquinaria TREC
         IF PR.BUSCA_LVAL('MAQTREC', PZ.CODPOL)='1' THEN
@@ -79,7 +79,7 @@ BEGIN
             END IF;
         END IF;
 
-        PR_INTERFASE_AX.SP_ACTIVA_GARANTIAS(PZ.STSPOL, PZ.IDEPOL);  -- FR_ACTIVA_GARANTIAS(nStsPOL);
+        PR_INTERFASE_AX_B2B.SP_ACTIVA_GARANTIAS(PZ.STSPOL, PZ.IDEPOL);  -- FR_ACTIVA_GARANTIAS(nStsPOL);
 
         --<I RTC 316472> David Yupanqui / 27-04-2023 / [PROYECTO TECH CORE] Armado Automático del Anexo 7
         if pr.busca_lval('SLIP_AUT',PZ.CODPROD) <> 'INVALIDO' then

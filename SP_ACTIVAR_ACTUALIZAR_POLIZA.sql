@@ -10,7 +10,7 @@
     Fecha         Autor               Descripción
     14/10/2023    Robinzon Santana    Creación
  -----------------------------------------------------------------------------*/
-CREATE OR REPLACE PROCEDURE SP_ACTIVAR_ACTUALIZAR_POLIZA( p_nIdePol IN Poliza.IdePol%TYPE)
+PROCEDURE SP_ACTIVAR_ACTUALIZAR_POLIZA( p_nIdePol IN Poliza.IdePol%TYPE)
 IS
   
 	    kActivo       CONSTANT VARCHAR2(3) := 'ACT';
@@ -75,15 +75,15 @@ BEGIN
 		
 				IF PZ.STSPOL = kActivo AND PZ.CODFORMPAGO IN ('A','E') THEN
 			        -- LR_Error(LR_Mensaje_Acsel('CSG',52,'  ','  ','  '));
-                    DBMS_OUTPUT.PUT_LINE(PR_INTERFASE_AX.FN_Mensaje_ACSEL('CSG',52,'  ','  ','  '));
-                    RAISE_APPLICATION_ERROR(-20100,PR_INTERFASE_AX.FN_Mensaje_ACSEL('CSG',52,'  ','  ','  '));
+                    DBMS_OUTPUT.PUT_LINE(PR_INTERFASE_AX_B2B.FN_Mensaje_ACSEL('CSG',52,'  ','  ','  '));
+                    RAISE_APPLICATION_ERROR(-20100,PR_INTERFASE_AX_B2B.FN_Mensaje_ACSEL('CSG',52,'  ','  ','  '));
 			    END IF;
 					-- Actualizamos fecha de operación.
 					UPDATE POLIZA
 					SET    FecOper = PR.Fecha_Movimiento(TRUNC(SYSDATE)) -- :C00.dFecOper
 					WHERE  IdePol = PZ.IDEPOL;
 				  IF PZ.CODFORMPAGO IN ('A','E') THEN
-				  	    nNumOper := PR_INTERFASE_AX.FN_EJECUTAR_ACTIVACION(PZ.IDEPOL); --FR_ACTIVAR.Ejecutar_Activacion(p_nIdePol);		    
+				  	    nNumOper := PR_INTERFASE_AX_B2B.FN_EJECUTAR_ACTIVACION(PZ.IDEPOL); --FR_ACTIVAR.Ejecutar_Activacion(p_nIdePol);		    
 						IF nNumOper IS NULL THEN
 							-- LR_Rollback('Error al ejecutar activación de póliza.');
 							DBMS_OUTPUT.PUT_LINE('Error al ejecutar activación de póliza.');
@@ -110,7 +110,7 @@ BEGIN
 							DBMS_OUTPUT.PUT_LINE('No se puede actualizar movimientos despues de haber Pre-Liquidado');
                             RAISE_APPLICATION_ERROR(-20100,'No se puede actualizar movimientos despues de haber Pre-Liquidado');
 						END IF;
-						nNumOper := PR_INTERFASE_AX.FN_EJECUTAR_ACTIVACION(p_nIdePol);  -- FR_ACTIVAR.Ejecutar_Activacion(p_nIdePol);
+						nNumOper := PR_INTERFASE_AX_B2B.FN_EJECUTAR_ACTIVACION(p_nIdePol);  -- FR_ACTIVAR.Ejecutar_Activacion(p_nIdePol);
 						IF nNumOper IS NULL THEN
 							-- LR_Rollback('Error al ejecutar activación de póliza.');
 							DBMS_OUTPUT.PUT_LINE('Error al ejecutar activación de póliza.');
@@ -121,8 +121,8 @@ BEGIN
 								SET    ClasePol = cClasePol, CodFormPago = cCodFormPago
 								WHERE  IdePol = p_nIdePol;        
 								PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE('I','ACTIVAR POLIZA - MANTPOL','FR_ACTIVAR.Actualizar_BaseRecaDtco: IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, PZ.IdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT
-								PR_INTERFASE_AX.SP_ACTUALIZAR_BASERECADTCO(nNumOper); -- FR_ACTIVAR.Actualizar_BaseRecaDtco(nNumOper);            
-								PR_INTERFASE_AX.SP_ACTUALIZAR_INDCOBESP(nNumOper); -- FR_ACTIVAR.Actualizar_IndCobEsp(nNumOper);
+								PR_INTERFASE_AX_B2B.SP_ACTUALIZAR_BASERECADTCO(nNumOper); -- FR_ACTIVAR.Actualizar_BaseRecaDtco(nNumOper);            
+								PR_INTERFASE_AX_B2B.SP_ACTUALIZAR_INDCOBESP(nNumOper); -- FR_ACTIVAR.Actualizar_IndCobEsp(nNumOper);
 								PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE('F','ACTIVAR POLIZA - MANTPOL','FR_ACTIVAR.Actualizar_BaseRecaDtco: IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, PZ.IdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT Log de proceso. Pase temporal
 								-- STANDARD.COMMIT;
 						END IF;       

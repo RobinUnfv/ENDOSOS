@@ -11,7 +11,7 @@
     Fecha         Autor               Descripción
     02/10/2023    Robinzon Santana    Creación
  -----------------------------------------------------------------------------*/
-CREATE OR REPLACE PROCEDURE SP_INCLUIR_CERTI_CLAU_C( 
+PROCEDURE SP_INCLUIR_CERTI_CLAU_C( 
   p_nIdePol      IN Poliza.IdePol%TYPE,
   p_nNumCert     IN Certificado.NumCert%TYPE,
   p_cError       OUT VARCHAR2(3000)

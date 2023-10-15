@@ -8,7 +8,7 @@
     Fecha         Autor               Descripción 
     09/10/2023    Robinzon Santana    Creación
  -----------------------------------------------------------------------------*/
-CREATE OR REPLACE PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
+PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
   p_nIdePol      IN Poliza.IdePol%TYPE
 ) IS
 
@@ -163,7 +163,7 @@ DECLARE
 		  	  END IF;
           */
           DBMS_OUTPUT.PUT_LINE('Existen Politicas Violadas ...Verifique...');
-          PR_INTERFASE_AX.SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
+          PR_INTERFASE_AX_B2B.SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
 	  END IF;
 
   BEGIN

@@ -155,7 +155,7 @@ BEGIN
 	  -- LR_Cursor_Normal;
 
 	  -- Invocar formulario de PreActivación.
-	  PR_INTERFASE_AX.SP_ACTU_OPERA_MOT_ENDOSO(p_nIdePol);
+	  PR_INTERFASE_AX_B2B.SP_ACTU_OPERA_MOT_ENDOSO(p_nIdePol);
 	  cIndAct := 'S';  -- .:. LR_Invocar_PreACT(kActivar,p_nIdePol,1,'N'); -- kActivar = 'AC'
 	  --
 	  LR_Cursor_Normal('Trabajando... Activando Poliza (Terminado)');
@@ -165,7 +165,7 @@ BEGIN
 	    LR_Cursor_Ocupado('Trabajando... Activando Poliza Definitiva - 1');
         PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Activar(D): IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
 	    -- <I N3041386> Claudia Yugar Ladines / 14-08-2013 / CNT-01702: Manejo de re-cálculo de la distribución de reaseguros	    
-	    cConfRedist := PR_INTERFASE_AX.FN_OBTCONFREDIST(p_nIdePol);-- FR_OBTCONFREDIST ( p_nIdePol );
+	    cConfRedist := PR_INTERFASE_AX_B2B.FN_OBTCONFREDIST(p_nIdePol);-- FR_OBTCONFREDIST ( p_nIdePol );
 	    --<I RTC-313128> Luis Venancio / 24-05-2022 / Generación de marcas automáticas en la exclusión de certificados desde SAS
 		  BEGIN
 		  	SELECT numcert,
