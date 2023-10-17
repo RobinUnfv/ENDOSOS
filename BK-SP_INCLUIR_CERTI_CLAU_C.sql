@@ -16,7 +16,7 @@ PROCEDURE SP_INCLUIR_CERTI_CLAU_C(
   p_nNumCert     IN Certificado.NumCert%TYPE,
   p_cError       OUT VARCHAR2(3000)
 ) IS
-  bExisteSelec BOOLEAN;
+   bExisteSelec BOOLEAN;
   n_IDLogLote  NUMBER;
   WSESION      NUMBER;
   cEmiPro      INTEGER;
@@ -227,4 +227,5 @@ EXCEPTION
         p_cError := '1,'||SQLERRM;
         DBMS_OUTPUT.PUT_LINE(SQLERRM);
         RAISE_APPLICATION_ERROR(-20100,SQLERRM);
+
 END SP_INCLUIR_CERTI_CLAU_C;

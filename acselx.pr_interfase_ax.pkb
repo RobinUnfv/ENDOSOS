@@ -1,52 +1,52 @@
-create or replace package body PR_INTERFASE_AX_B2B is
+create or replace package body acselx.PR_INTERFASE_AX is
 
 /*-----------------------------------------------------------------------
-    Nombre : PR_INTERFASE_AX_B2B
+    Nombre : PR_INTERFASE_AX
     Autor  : Jorge benel
-    Proposito: Implementaci¬øn de l¬øgica para la Digitalizaci¬øn de Endosos
+    Proposito: Implementaciøn de løgica para la Digitalizaciøn de Endosos
     Log de Cambios
     Fecha        Autor                        Descripcion
     11/03/2022   Jorge Benel                  RTC-313089 Creacion
-    01/04/2022   Jorge Benel                  RTC-313089 Actualizaci¬øn del procedimiento Actualiza_comisi¬øn
-    06/04/2022   Ronald Barreda               RTC-313092 Actualizaci¬øn del procedimiento ADD_COBERT_CERT_3D
-    13/04/2022   Ronald Barreda               RTC-313344 Inserci¬øn procedimiento de inserci¬øn de endosatario
-    22/04/2022   Ronald Barreda               RTC-313344 Inserci¬øn procedimiento de exclusi¬øn de endosatario
-    27/04/2022   Ronald Barreda               RTC-313092 Se a¬øadio parametros Tasa y Suma Asegurada procedimiento ADD_COBERT_CERT_3D
-    05/05/2022   Ronald Barreda               RTC-313089 Se a¬øadio procedimiento comun TramiteVincular y TramiteDesvincular
+    01/04/2022   Jorge Benel                  RTC-313089 Actualizaciøn del procedimiento Actualiza_comisiøn
+    06/04/2022   Ronald Barreda               RTC-313092 Actualizaciøn del procedimiento ADD_COBERT_CERT_3D
+    13/04/2022   Ronald Barreda               RTC-313344 Inserciøn procedimiento de inserciøn de endosatario
+    22/04/2022   Ronald Barreda               RTC-313344 Inserciøn procedimiento de exclusiøn de endosatario
+    27/04/2022   Ronald Barreda               RTC-313092 Se aøadio parametros Tasa y Suma Asegurada procedimiento ADD_COBERT_CERT_3D
+    05/05/2022   Ronald Barreda               RTC-313089 Se aøadio procedimiento comun TramiteVincular y TramiteDesvincular
     12/05/2022   Ronald Barreda               RTC 313089 mejora en cursor para solo considerar Certificados en INC y MOD en "AJUSTE_COMISION"
-    24/05/2022   Ronald Barreda               RTC-313092 Actualizaci¬øn de par¬ømetros de procedimiento Add_Cobert_Cert
-    14/06/2022   Ronald Barreda               RTC-313092 Se a¬øadio procedimiento para Modificaci¬ø de Corredor
+    24/05/2022   Ronald Barreda               RTC-313092 Actualizaciøn de parømetros de procedimiento Add_Cobert_Cert
+    14/06/2022   Ronald Barreda               RTC-313092 Se aøadio procedimiento para Modificaciø de Corredor
     16/06/2022   Ronald Barreda               RTC 313344 Se agrego parametros canal y tipo de canal a procedimiento ModificacionCorredor
-    24/06/2022   Jorge Benel                  RTC 314175 proceso de Endoso de modificaci¬øn de valores declarados
-    24/06/2022   Jorge Benel                  RTC 313346 Implementa validaci¬øn VALIDA_CONTRATANTE2 para el endoso de contratante
+    24/06/2022   Jorge Benel                  RTC 314175 proceso de Endoso de modificaciøn de valores declarados
+    24/06/2022   Jorge Benel                  RTC 313346 Implementa validaciøn VALIDA_CONTRATANTE2 para el endoso de contratante
     28/06/2022   Mauro Zegarra                RTC-314182 Cambio de Comision
-    28/06/2022   Jorge Benel                  RTC-313343 Se implementa validaci¬øn de cambio de asegurado
-    30/06/2022   Ronald Barreda               RTC-313344 Se a¬øadio procedimiento REVERTIR_OPERACION como parte de anulaci¬øn de endoso
+    28/06/2022   Jorge Benel                  RTC-313343 Se implementa validaciøn de cambio de asegurado
+    30/06/2022   Ronald Barreda               RTC-313344 Se aøadio procedimiento REVERTIR_OPERACION como parte de anulaciøn de endoso
     08/07/2022   Jorge Benel                  RTC-314175 Creacion del procedimiento GENERA_BIEN_MASI2
     12/07/2022   Jorge Benel                  RTC-314179 Creacion del Endoso de Traslado de Bienes
     14/07/2022   Jorge Benel                  RTC-314179 Reinicio de variable
     19/07/2022   Mauro Zegarra                RTC-314183 Inclusion de Equipos TREC
-    20/07/2022   Jorge Benel                  RTC-313346 Incluye logica exclusi¬øn
+    20/07/2022   Jorge Benel                  RTC-313346 Incluye logica exclusiøn
     20/07/2022   Jorge Benel                  RTC-313349 Creacion de Cambio de responsable de pago
-    02/08/2022   Mauro Zegarra                RTC-314181 Modificaci¬øn de Deducible
+    02/08/2022   Mauro Zegarra                RTC-314181 Modificaciøn de Deducible
     29/08/2022   Jorge Benel                  RTC-313349 Complementa logica de actualizacion de la tabla PORC_DER_EMI y RESPONSABLE DE PAGO.
     29/08/2022   Mauro Zegarra                RTC-313746 Validacion de clausula ya registrada
-    06/09/2022   Jorge Benel                  RTC-314175 Implementaci√≥n de parametros de bienes y bienes x riesgo de Endoso de Valores Declarados
-    12/09/2022   Jorge Benel                  RTC-314951 Creaci√≥n de Endoso de Anulaci√≥n
-    12/09/2022   Jorge Benel                  RTC-314175 implementa logica de actualizaci√≥n Endoso Valores Declarados
-    19/09/2022   Jorge Benel                  RTC 313349 Inclusi√≥n de cursor de salida en procedimiento CAMBIO_RESP_PAGO
-    26/09/2022   Jorge Benel                  RTC 313742 Actualizaci√≥n de l√≥gica - Modificiaci√≥n de Locales
+    06/09/2022   Jorge Benel                  RTC-314175 ImplementaciÛn de parametros de bienes y bienes x riesgo de Endoso de Valores Declarados
+    12/09/2022   Jorge Benel                  RTC-314951 CreaciÛn de Endoso de AnulaciÛn
+    12/09/2022   Jorge Benel                  RTC-314175 implementa logica de actualizaciÛn Endoso Valores Declarados
+    19/09/2022   Jorge Benel                  RTC 313349 InclusiÛn de cursor de salida en procedimiento CAMBIO_RESP_PAGO
+    26/09/2022   Jorge Benel                  RTC 313742 ActualizaciÛn de lÛgica - ModificiaciÛn de Locales
     11/10/2022   JORGE BENEL                  RTC 314175 Actualizacion tipo de cambio
     14/11/2022   Jorge Benel                  RTC 314175 Carga los locales que no se modifican
     23-11-2022   Jorge Benel                  RTC 314185 Actualiza campos
-    25-11-2022   Jorge Benel                  RTC 314185 Actualiza logica para exclusi√≥n de locales.
-    07-12-2022   Jorge benel                  RTC 314185 Implementaci√≥n de validaci√≥n en Endoso de Anulaci√≥n
-    10/01/2023   CBayona                      RTC 316106 Actualizaci√≥n Endoso Modificaci√≥n de Locales
+    25-11-2022   Jorge Benel                  RTC 314185 Actualiza logica para exclusiÛn de locales.
+    07-12-2022   Jorge benel                  RTC 314185 ImplementaciÛn de validaciÛn en Endoso de AnulaciÛn
+    10/01/2023   CBayona                      RTC 316106 ActualizaciÛn Endoso ModificaciÛn de Locales
     17/02/2023   CBayona                      RTC 316449 Se agrega nuevo procedimiento
-    12/05/2023   Christian Bayona             RTC 316878 CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+    12/05/2023   Christian Bayona             RTC 316878 CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
     26/05/2023   Manuel Navarro               RTC 316878 Suma Asegurada VB Core
-    11/08/2023   Manuel Navarro               DIGB2B03-2877 Mejora en Registro y Validaci√≥n de Maquinaria TREC
-    22/09/2023   Manuel Navarro               DIGB2B03-2815 Inclusi√≥n Locales Legacy Dubai Masivo
+    11/08/2023   Manuel Navarro               DIGB2B03-2877 Mejora en Registro y ValidaciÛn de Maquinaria TREC
+    22/09/2023   Manuel Navarro               DIGB2B03-2815 InclusiÛn Locales Legacy Dubai Masivo
   -------------------------------------------------------------------------*/
 
     p_TABLA_AUTORIZA_VIOLACION   ACSELX.TDU_TABLA_AUTORIZA_VIOLACION;
@@ -55,7 +55,7 @@ create or replace package body PR_INTERFASE_AX_B2B is
     kCodParametro                CONSTANT VARCHAR2(20) := 'PARAM_SAS';  --Parametros en RIM_TAB_GRAL
     kAPI                         CONSTANT VARCHAR2(1) := 'S';           -- jbenel [S= Origen API; N=flujo normal]  -- vale
     kCodMsgValidacion            CONSTANT VARCHAR2(10) := 'VALIDACION';
-    kRecalculo                   CONSTANT VARCHAR2(1) := 'S';           --  Consultar si debe aplicar rec¬ølculo [S] [N]
+    kRecalculo                   CONSTANT VARCHAR2(1) := 'S';           --  Consultar si debe aplicar recølculo [S] [N]
     p_cError                     varchar2(2000);
     nCantReg                     Number(5) := 0;
     i                            Number(5) := 0;
@@ -73,7 +73,7 @@ create or replace package body PR_INTERFASE_AX_B2B is
        Log de Cambios
        Fecha        Autor               Descripcion
        -------      --------            --------------
-       26/05/2023   Manuel Navarro      <RTC 316878> Creaci√≥n
+       26/05/2023   Manuel Navarro      <RTC 316878> CreaciÛn
     -----------------------------------------------------------------------------*/
     FUNCTION MONTO_TOTAL_ENDOSADO_X_CERT(p_idepol CERTIFICADO.IDEPOL%type,
                                             p_numcert CERTIFICADO.NUMCERT%type) RETURN NUMBER IS
@@ -120,7 +120,7 @@ create or replace package body PR_INTERFASE_AX_B2B is
        Log de Cambios
        Fecha        Autor               Descripcion
        -------      --------            --------------
-       26/05/2023   Manuel Navarro      <RTC 316878> Creaci√≥n
+       26/05/2023   Manuel Navarro      <RTC 316878> CreaciÛn
     -----------------------------------------------------------------------------*/
 
     FUNCTION VALIDA_SUMAASEGURADA_SUSTENTO(p_idepol    poliza.idepol%type,
@@ -154,14 +154,14 @@ create or replace package body PR_INTERFASE_AX_B2B is
 
         IF n_TotalEndoso > n_SumaAsegRP THEN
            IF p_usuarioaprob IS NULL OR NVL(LENGTH(trim(p_usuarioaprob)),0) = 0 THEN
-               DBMS_OUTPUT.PUT_LINE('Se Necesita el c√≥digo de usuario de aprobaci√≥n');
-               p_cError := '1,Se Necesita el c√≥digo de usuario de aprobaci√≥n';
+               DBMS_OUTPUT.PUT_LINE('Se Necesita el cÛdigo de usuario de aprobaciÛn');
+               p_cError := '1,Se Necesita el cÛdigo de usuario de aprobaciÛn';
                RETURN 1;
            END IF;
            IF (p_Aprobado IS NULL OR p_Aprobado <> 'S') OR
               (p_Sustento IS NULL OR NVL(LENGTH(trim(p_Sustento)),0) = 0) THEN
-              DBMS_OUTPUT.PUT_LINE('Se Necesita Aprobaci√≥n y sustento cuando el Endoso es mayor a la Suma Asegurada');
-              p_cError := '100,Se Necesita Aprobaci√≥n y sustento de la misma cuando el Endoso es mayor a la Suma Asegurada';
+              DBMS_OUTPUT.PUT_LINE('Se Necesita AprobaciÛn y sustento cuando el Endoso es mayor a la Suma Asegurada');
+              p_cError := '100,Se Necesita AprobaciÛn y sustento de la misma cuando el Endoso es mayor a la Suma Asegurada';
               RETURN 1;
            END IF;
 
@@ -193,7 +193,7 @@ create or replace package body PR_INTERFASE_AX_B2B is
        Log de Cambios
        Fecha        Autor               Descripcion
        -------      --------            --------------
-       26/05/2023   Manuel Navarro      <RTC 316878> Creaci√≥n
+       26/05/2023   Manuel Navarro      <RTC 316878> CreaciÛn
     -----------------------------------------------------------------------------*/
     PROCEDURE INSERTA_AUTORIZACIONE (p_idepol    poliza.idepol%type,
                                      p_numcert   certificado.numcert%type,
@@ -226,7 +226,7 @@ create or replace package body PR_INTERFASE_AX_B2B is
 
 /*-----------------------------------------------------------------------
    Nombre : CONFIRMAR_RECALCULO
-   Proposito: En caso de existir pol¬øtica de rec¬ølculo, pedir confirmaci¬øn.
+   Proposito: En caso de existir poløtica de recølculo, pedir confirmaciøn.
    Parametro :
                 p_nIdeAut  Identificacion del bloqueo
                 p_nIdePol  Numero Interno de poliza de seguros.
@@ -234,7 +234,7 @@ create or replace package body PR_INTERFASE_AX_B2B is
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
 -----------------------------------------------------------------------------*/
 
 PROCEDURE CONFIRMAR_RECALCULO (
@@ -263,12 +263,12 @@ BEGIN
     CCODBLOQ := NULL;
   END;
 
-  IF PR.BUSCA_LVAL('BLQRECAL', CCODBLOQ) != 'INVALIDO' THEN -- CON MOVIMIENTO DE VALIDACI¬øN DE RECALCULO
+  IF PR.BUSCA_LVAL('BLQRECAL', CCODBLOQ) != 'INVALIDO' THEN -- CON MOVIMIENTO DE VALIDACIøN DE RECALCULO
 
     --<I RTC-93382> Brayan Pereda / 28-03-2017 / Solo se eliminan los registros de AUTORIZA_REDIST si la version es 1
     IF PR.BUSCA_LVAL('CFREAMIX','VERSION') = '1' THEN
     --<F RTC-93382>
-      -- Limpiamos alguna confirmaci¬øn previa, en caso exista...
+      -- Limpiamos alguna confirmaciøn previa, en caso exista...
       DELETE AUTORIZA_REDIST
        WHERE IDEPOL = p_nIdePol
          AND NUMOPER IS NULL
@@ -277,8 +277,8 @@ BEGIN
     END IF; --<RTC-93382> Brayan Pereda / 28-03-2017 / Solo se eliminan los registros de AUTORIZA_REDIST si la version es 1
 
     /*
-    cTextoTr := 'Si elige Ok, se recalcular¬ø la distribuci¬øn de reaseguros de movimientos anteriores. '|| CHR(13) ||
-                'Si elige Cancelar, la Cuenta Corriente se generar¬ø en base al nuevo movimiento.';
+    cTextoTr := 'Si elige Ok, se recalcularø la distribuciøn de reaseguros de movimientos anteriores. '|| CHR(13) ||
+                'Si elige Cancelar, la Cuenta Corriente se generarø en base al nuevo movimiento.';
     ret_button := LR_ConfBox(cTextoTr,'CONFIRMACION DE RECALCULO');
     --
     IF ret_button = ALERT_BUTTON1 THEN
@@ -302,19 +302,19 @@ BEGIN
 
 EXCEPTION
   WHEN OTHERS THEN
-    RAISE_APPLICATION_ERROR('-20002','Error al confirmar el rec¬ølculo. p_cRecalculo-->'||p_cRecalculo||SQLERRM);
+    RAISE_APPLICATION_ERROR('-20002','Error al confirmar el recølculo. p_cRecalculo-->'||p_cRecalculo||SQLERRM);
 END CONFIRMAR_RECALCULO;
 
 /*-----------------------------------------------------------------------
    Nombre : CONFIRMAR_RECALCULO
-   Proposito: En caso de existir pol¬øtica de rec¬ølculo, pedir confirmaci¬øn.
+   Proposito: En caso de existir poløtica de recølculo, pedir confirmaciøn.
    Parametro :
                 p_nIdePol  Numero Interno de poliza de seguros.
 
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
 
 -----------------------------------------------------------------------------*/
 
@@ -336,7 +336,7 @@ PROCEDURE FR_AUTORIZA_VIOLACION ( p_nIdePol                  IN  POLIZA.idepol%t
        EXCEPTION
            WHEN OTHERS THEN
               nCantReg := 0;
-              PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('FR_AUTORIZA_VIOLACION', 'VAL-9999'); --'No se han enviado los violaciones de la p¬øliza.
+              PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('FR_AUTORIZA_VIOLACION', 'VAL-9999'); --'No se han enviado los violaciones de la pøliza.
 
        END;
 
@@ -363,11 +363,11 @@ PROCEDURE FR_AUTORIZA_VIOLACION ( p_nIdePol                  IN  POLIZA.idepol%t
 
 /*-----------------------------------------------------------------------
    Nombre : EJECUTA_POLITICAS_VIOLADAS
-   Proposito: Ejecuta politicas previa  a la activaci¬øn de la poliza.
+   Proposito: Ejecuta politicas previa  a la activaciøn de la poliza.
    Parametro :  p_nIdePol    Numero Interno de poliza de seguros.
                 p_nNumPol    Numero de Poliza.
                 p_cCodProd   Codigo de producto.
-                p_cTipoOper   Tipo de operaci¬øn
+                p_cTipoOper   Tipo de operaciøn
                 p_cCodUsuario    Codigo usuario de auditoria,
                 p_TABLA_POLITICA_AUTORIZADA  Array con las politicas previamente autorizadas
 
@@ -380,8 +380,8 @@ PROCEDURE FR_AUTORIZA_VIOLACION ( p_nIdePol                  IN  POLIZA.idepol%t
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
-   23/03/2022   Jorge Benel       <RTC 313089> actualizaci¬øn para pruebas en TEST.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
+   23/03/2022   Jorge Benel       <RTC 313089> actualizaciøn para pruebas en TEST.
    01/04/2022   Jorge Benel       <RTC 313089> Se actualiza logica para autorizar politicas violadas.
    26/04/2020   Jorge Benel       <RTC 313089> Se inserta la funcion autorizador
 
@@ -458,7 +458,7 @@ end AUTORIZADOR;
 
  BEGIN
 
-   p_cError := '0,OK'; --<RTC-313091> Jorge Benel /  24-06-2022 / Inicializaci¬øn de variable
+   p_cError := '0,OK'; --<RTC-313091> Jorge Benel /  24-06-2022 / Inicializaciøn de variable
    ACSELX.PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('I',p_nIdePol,NULL,NULL,'LOG',NULL ,SYSDATE,SYSDATE,'EJECUTA_POLITICAS_VIOLADAS','',nSecuencia );
 
    EJECUTA_POLITICAS_VIOLADAS.p_TABLA_AUTORIZA_VIOLACION := acselx.TDU_TABLA_AUTORIZA_VIOLACION();
@@ -474,7 +474,7 @@ end AUTORIZADOR;
 
      BEGIN
       dbms_output.put_line('p_nIdePol, p_nNumPol, p_cCodProd = '||p_nIdePol||' , '|| p_nNumPol||' , '|| p_cCodProd);
-        -- Almacena la violacio¬øn de politicas en tabla autoriza_violacion
+        -- Almacena la violacioøn de politicas en tabla autoriza_violacion
         cPolitica := PR_POLITICAS.PRINCIPAL(p_nIdePol, p_nNumPol, p_cCodProd, USER, 'AC');
      EXCEPTION
        WHEN OTHERS THEN
@@ -510,7 +510,7 @@ end AUTORIZADOR;
 
        END LOOP;
        -- <F RTC 313089 > 26-04-2022
-       -- <I RTC-313089 jbenel 01/04/2022 Digitalizaci¬øn de Endoso>
+       -- <I RTC-313089 jbenel 01/04/2022 Digitalizaciøn de Endoso>
        IF p_TABLA_POLITICA_AUTORIZADA.COUNT > 0 THEN
          FOR i in p_TABLA_POLITICA_AUTORIZADA.First .. p_TABLA_POLITICA_AUTORIZADA.Last LOOP
            IF AUTORIZADOR ( p_TABLA_POLITICA_AUTORIZADA(i).idepol, p_TABLA_POLITICA_AUTORIZADA(i).autorizadopor, p_TABLA_POLITICA_AUTORIZADA(i).CODBLOQ, p_TABLA_POLITICA_AUTORIZADA(i).CODAUT ) = 'S' THEN -- <RTC 313089 > 26-04-2022
@@ -527,7 +527,7 @@ end AUTORIZADOR;
             END IF; -- <RTC 313089 > 26-04-2022
          END LOOP;
        END IF;
-        -- <F RTC-313089 jbenel 01/04/2022 Digitalizaci¬øn de Endoso>
+        -- <F RTC-313089 jbenel 01/04/2022 Digitalizaciøn de Endoso>
 
         i := 0;
 
@@ -536,12 +536,12 @@ end AUTORIZADOR;
                     WHERE IDEPOL = p_nIdePol
                       AND STSAUTORIZADO <> 'ACT'  ) LOOP
 
-           -- <I RTC-313089 jbenel 01/04/2022 Digitalizaci¬øn de Endoso>
+           -- <I RTC-313089 jbenel 01/04/2022 Digitalizaciøn de Endoso>
            IF i = 0 THEN
              ACSELX.PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('ACTIVAR_POLIZA', 'VAL-0569'); --Existen politicas violadas. Verifique.:mx1
              p_cerror := 'VAL-0569,Existen politicas violadas';
            END IF;
-           -- <F RTC-313089 jbenel 01/04/2022 Digitalizaci¬øn de Endoso>
+           -- <F RTC-313089 jbenel 01/04/2022 Digitalizaciøn de Endoso>
 
            ACSELX.PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('ACTIVAR_POLIZA', kCodMsgValidacion ,'Politica Violada : ' || c1.motivoviolacion );
            --
@@ -593,14 +593,14 @@ end AUTORIZADOR;
 
 /*-----------------------------------------------------------------------
    Nombre : CARGA_POLITICAS_AUTORIZADA
-   Proposito: Proceso de autorizaci¬øn de politicas.
+   Proposito: Proceso de autorizaciøn de politicas.
    Parametro :
                 p_nIdePol  Numero Interno de poliza de seguros.
 
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
 
 -----------------------------------------------------------------------------*/
 
@@ -666,7 +666,7 @@ end AUTORIZADOR;
            WHEN OTHERS THEN
               vcount := 0;
 
-             --  PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('FR_AUTORIZA_VIOLACION', 'VAL-9999'); --'No se han enviado los violaciones de la p¬øliza.
+             --  PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('FR_AUTORIZA_VIOLACION', 'VAL-9999'); --'No se han enviado los violaciones de la pøliza.
        END;
 
        --Verificar la existencia del anexo de la poliza
@@ -699,7 +699,7 @@ end AUTORIZADOR;
 
 /*-----------------------------------------------------------------------
    Nombre : VALIDA_FACULTATIVO
-   Proposito: V¬ølida si una poliza es facultativa o no.
+   Proposito: Vølida si una poliza es facultativa o no.
    Parametro :
                 p_nIdePol   Numero Interno de poliza de seguros.
    Retorno   : <> 0 'Es facultativo'
@@ -708,8 +708,8 @@ end AUTORIZADOR;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
-   23/03/2022   Jorge Benel       <RTC 313089> actualizaci¬øn para pruebas en TEST.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
+   23/03/2022   Jorge Benel       <RTC 313089> actualizaciøn para pruebas en TEST.
 
 -----------------------------------------------------------------------------*/
 
@@ -761,7 +761,7 @@ END VALIDA_FACULTATIVO;
 
 /*-----------------------------------------------------------------------
    Nombre     : ACTUALIZA_COMISION
-   Proposito  : Actualizaci¬øn la comisi¬øn de la prorroga con la comisi¬øn que se calcula en el proceso de activaci¬øn de la poliza
+   Proposito  : Actualizaciøn la comisiøn de la prorroga con la comisiøn que se calcula en el proceso de activaciøn de la poliza
    Referencia : Formulario EMI00139.FMB y CAJ00308
    Parametro  :
                 p_nIdePol   Numero Interno de poliza de seguros.
@@ -771,10 +771,10 @@ END VALIDA_FACULTATIVO;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
-   23/03/2022   Jorge Benel       <RTC 313089> actualizaci¬øn para pruebas en TEST.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
+   23/03/2022   Jorge Benel       <RTC 313089> actualizaciøn para pruebas en TEST.
    12/05/2022   Ronald Barreda    <RTC 313089> mejora en cursor para solo considerar Certificados en INC y MOD
-   30/03/2023   Christian Bayona  <RTC 316747> Modificaci√≥n, inicializar variable
+   30/03/2023   Christian Bayona  <RTC 316747> ModificaciÛn, inicializar variable
 -----------------------------------------------------------------------------*/
  PROCEDURE ACTUALIZA_COMISION(   p_nIdePol         IN POLIZA.IDEPOL%TYPE ,
                                  p_nNumOper        IN oper_pol.Numoper%TYPE
@@ -797,7 +797,7 @@ END VALIDA_FACULTATIVO;
 
        acselx.PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('I',p_nIdePol,NULL,NULL,'LOG',NULL ,SYSDATE,SYSDATE,'ACTUALIZA_COMISION','',nSecuencia );
 
-       -- lee la comisi¬øn de la activaci¬øn de la poliza
+       -- lee la comisiøn de la activaciøn de la poliza
        FOR x IN (  SELECT R.NumCert, RA.CodRamo,
                           NVL(SUM(R.MtoMoneda),0) Prima,
                           NVL(SUM(R.MtoComMoneda),0)Comision,
@@ -894,7 +894,7 @@ END VALIDA_FACULTATIVO;
 
 /*-----------------------------------------------------------------------
    Nombre     : PRIMA_PACTADA
-   Proposito  : Actualizaci¬øn de la prima que se calcula en el proceso de activaci¬øn de la poliza
+   Proposito  : Actualizaciøn de la prima que se calcula en el proceso de activaciøn de la poliza
    Referencia : Formulario EMI00139.FMB
    Parametro  : p_nIdePol          Numero Interno de poliza de seguros
                 p_nNumcert         Numero de certificado
@@ -909,8 +909,8 @@ END VALIDA_FACULTATIVO;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
-    23/03/2022   Jorge Benel       <RTC 313089> actualizaci¬øn para pruebas en TEST.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
+    23/03/2022   Jorge Benel       <RTC 313089> actualizaciøn para pruebas en TEST.
 
 -----------------------------------------------------------------------------*/
 
@@ -992,7 +992,7 @@ END VALIDA_FACULTATIVO;
 
     ACSELX.PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('I',p_nIdePol,NULL,NULL,'LOG',NULL ,SYSDATE,SYSDATE,'PRIMA_PACTADA','',nSecuencia );
 
-    DBMS_OUTPUT.PUT_LINE('Se proceder¬ø a asignar los recargos / descuentos de acuerdo a la prima pactada. Los recargos ¬ø descuentos que haya definido para ¬østa operaci¬øn, ser¬øn eliminados');
+    DBMS_OUTPUT.PUT_LINE('Se procederø a asignar los recargos / descuentos de acuerdo a la prima pactada. Los recargos ø descuentos que haya definido para østa operaciøn, serøn eliminados');
 
     -- Elimina recargos y descuentos de la tabla RECA_DCTO_CERT
     FR_Eliminar_RecaDcto_Pactada;
@@ -1072,7 +1072,7 @@ END VALIDA_FACULTATIVO;
         nNumOper := PR_POLIZA.Activar(p_nIdePol, 'T');
     EXCEPTION
       WHEN OTHERS THEN
-          p_cError := '1,'||'Error preactivaci¬øn - ' || SQLERRM;
+          p_cError := '1,'||'Error preactivaciøn - ' || SQLERRM;
     END;
 
     ACSELX.PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('F',p_nIdePol,NULL,NULL,'LOG','OK' ,SYSDATE,SYSDATE,'PRIMA_PACTADA','',nSecuencia );
@@ -1089,7 +1089,7 @@ END VALIDA_FACULTATIVO;
 
 
 FUNCTION DEV_CODPLAN_MODPLAN ( p_nIdePol POLIZA.IDEPOL%TYPE,
---<I RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+--<I RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
                                p_nNumCert Certificado.NumCert%TYPE DEFAULT 1 )
                                RETURN VARCHAR2 IS
 --<F RTC 316878>
@@ -1101,7 +1101,7 @@ BEGIN
     INTO cPlan
     FROM cond_financiamiento
     WHERE idepol = p_nIdePol
-      AND NumCert = p_nNumCert  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+      AND NumCert = p_nNumCert  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
     AND ROWNUM < 2
     ;
   EXCEPTION
@@ -1141,10 +1141,10 @@ END DEV_TIPOCLI;
 
 /*-----------------------------------------------------------------------
    Nombre : DEV_RESP_PAGO
-   Proposito: Devolver lleno el TDU_TABLA_RESP_PAGO para ser enviado en la Activaci¬øn de Poliza.
+   Proposito: Devolver lleno el TDU_TABLA_RESP_PAGO para ser enviado en la Activaciøn de Poliza.
    Referencia :
    Parametro :  p_nIdePol   Numero Interno de poliza de seguros.
-                p_nNumCert  N√∫mero de Certificado
+                p_nNumCert  N˙mero de Certificado
 
    Retorno :   p_cError         Valor de retorno del proceso. En caso de error se concatena el mensaje de error.
                0, OK
@@ -1153,13 +1153,13 @@ END DEV_TIPOCLI;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   30/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
+   30/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
    29/08/2022   Jorge Benel       <RTC 313349> Lee el responsable de pago del TDU p_TABLA_RESP_PAGO.
-   24/05/2023   Christian Bayona  <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+   24/05/2023   Christian Bayona  <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
 -----------------------------------------------------------------------------*/
 
 PROCEDURE DEV_RESP_PAGO ( p_nIdePol         IN POLIZA.IDEPOL%TYPE,
-                          p_nNumCert        IN Certificado.NumCert%TYPE DEFAULT 1,  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+                          p_nNumCert        IN Certificado.NumCert%TYPE DEFAULT 1,  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
                           p_TABLA_RESP_PAGO OUT ACSELX.TDU_TABLA_RESP_PAGO,
                           p_cError          OUT VARCHAR2
                         )      AS
@@ -1170,7 +1170,7 @@ PROCEDURE DEV_RESP_PAGO ( p_nIdePol         IN POLIZA.IDEPOL%TYPE,
   vTipoCli               PLAN_FINANCIAMIENTO.TIPOCLI%TYPE;
   cNumID                 CLIENTE.NUMID%TYPE ;
   i                      NUMBER(5);
-  --<I RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+  --<I RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
   cCodPlanIni            Cond_Financiamiento.CodPlan%TYPE;
   cModPlanIni            Cond_Financiamiento.ModPlan%TYPE;
   --<F RTC 316878>
@@ -1182,13 +1182,13 @@ BEGIN -- main
    DEV_RESP_PAGO.p_TABLA_RESP_PAGO := acselx.TDU_TABLA_RESP_PAGO();
 
    cPlan := DEV_CODPLAN_MODPLAN ( p_nIdePol => p_nIdePol,
-                                  p_nNumCert => p_nNumCert );  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+                                  p_nNumCert => p_nNumCert );  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
 
    SELECT SUBSTR(cPlan,1,6), SUBSTR(cPlan,7,3)
    INTO cCodPlan, cModPlan
    FROM DUAL;
 
-   --<I RTC 316878> / Christian Bayona / 19-04-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+   --<I RTC 316878> / Christian Bayona / 19-04-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
    --Guardamos el plan obtenido
    cCodPlanIni := cCodPlan;
    cModPlanIni := cModPlan;
@@ -1201,8 +1201,8 @@ BEGIN -- main
 
    dbms_output.put_line(vTipoCli);
 
-   --<I RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
-   /* --Se comenta este c√≥digo observaci√≥n de est√°ndares
+   --<I RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
+   /* --Se comenta este cÛdigo observaciÛn de est·ndares
    -- Lee el plan a usar
    IF vTipoCli = 'P' THEN   -- CONTADO PERSONA NATURAL
      cCodPlan := 'CON001';
@@ -1255,8 +1255,8 @@ BEGIN -- main
    FOR c1 IN ( SELECT *
               FROM RESP_PAGO
               WHERE IdePol   = p_nIdePol
-              --AND   NumCert  = 1 ) LOOP  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
-              AND   NumCert  = p_nNumCert ) LOOP  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+              --AND   NumCert  = 1 ) LOOP  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
+              AND   NumCert  = p_nNumCert ) LOOP  --<RTC 316878> / Christian Bayona / 24-05-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
 
      i := i + 1;
 
@@ -1360,8 +1360,8 @@ END DEV_RESP_PAGO;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   10/03/2022   Jorge Benel       <RTC 313089> Creaci¬øn.
-   23/03/2022   Jorge Benel       <RTC 313089> actualizaci¬øn para pruebas en TEST.
+   10/03/2022   Jorge Benel       <RTC 313089> Creaciøn.
+   23/03/2022   Jorge Benel       <RTC 313089> actualizaciøn para pruebas en TEST.
 -----------------------------------------------------------------------------*/
 
 PROCEDURE PRORROGA_VIGENCIA ( p_nIdePol               IN Poliza.Idepol%TYPE,
@@ -1418,11 +1418,11 @@ Nombre      : ACT_NUMOPER_AUTORIZA_VIOLACION
 Proposito   : Actualizar la tabla AUTORIZA_VIOLACION con el NUMOPER generado al activar la poliza
 Referencias :
 Parametros  : p_nIdePol         Identificador de la poliza
-              p_nNumOper        Numero de operaci¬øn
+              p_nNumOper        Numero de operaciøn
 
 LOG de CAMBIO!
 Fecha           Autor                     Descripcion
-29/04/2022      Jorge Benel               <RTC 313346> Creaci¬øn
+29/04/2022      Jorge Benel               <RTC 313346> Creaciøn
 -------------------------------------------------------------------------------*/
 
  PROCEDURE ACT_NUMOPER_AUTORIZA_VIOLACION(p_nIdepol POLIZA.IDEPOL%TYPE, p_nNumOper OPER_POL.NUMOPER%TYPE) AS
@@ -1451,10 +1451,10 @@ Parametros  : p_nIdePol         Identificador de la poliza
               p_dFecIniVig      Fecha Inicio de Vigencia de Endoso
               p_dFecFinVig      Fecha Fin    de Vigencia de Endoso
               p_cCodProd        Codigo de Producto
-              p_nIndModCobert   Indicador de modificaci¬øn de Cobertura
+              p_nIndModCobert   Indicador de modificaciøn de Cobertura
 LOG de CAMBIO!
 Fecha        Autor                        Descripcion
-2022/03      Ronald Barreda               Creaci¬øn
+2022/03      Ronald Barreda               Creaciøn
 -------------------------------------------------------------------------------*/
 PROCEDURE FR_MOVIMIENTO_SALIDA(
   p_nIdePol         POLIZA.IdePol%TYPE,
@@ -1559,7 +1559,7 @@ Parametros  : p_nIdePol         Identificador de la poliza
               p_cCodProd        Codigo de Producto
 LOG de CAMBIO!
 Fecha        Autor                        Descripcion
-2022/03      Ronald Barreda               Creaci¬øn
+2022/03      Ronald Barreda               Creaciøn
 20/01/2023   Christian Bayona             Se modifica indicador
 -------------------------------------------------------------------------------*/
 PROCEDURE FR_GENERA_ENDOSO (
@@ -1628,7 +1628,7 @@ BEGIN
                             p_cCodRamoCert, p_dFECINIVIG, p_dFecFinVig, nExiste);
 
   IF nIndRecaDcto = 1 AND cStsCert <> 'VAL' THEN
---    nRetButton1 := FR_CONFBOX ('Se Modificar¬øn las coberturas de acuerdo al tarifario?. El proceso es IRREVERSIBLE.');
+--    nRetButton1 := FR_CONFBOX ('Se Modificarøn las coberturas de acuerdo al tarifario?. El proceso es IRREVERSIBLE.');
   dbms_output.put_line('IF nIndRecaDcto = 1 AND cStsCert <> VAL THEN');
     --IF nRetButton1 = ALERT_BUTTON1 THEN
       nIndModCobert := 1;
@@ -1638,7 +1638,7 @@ BEGIN
   END IF;
   nIndModCobert := 1;  --<RTC-316106> / CBayona / 20-01-2023 / Se establece el indicador de Mod Cobert en 1
 
-  IF p_cCodPlan != '900' THEN  -- Plan de Migraci¬øn
+  IF p_cCodPlan != '900' THEN  -- Plan de Migraciøn
     nError := 60;
   dbms_output.put_line('IF p_cCodPlan != 900 THEN');
     IF p_dFecIniVig IS NULL OR p_dFecFinVig IS NULL THEN
@@ -1721,7 +1721,7 @@ BEGIN
       nRetButton1 := 1;
       --
       IF nRetButton1 = 2 THEN
---        nRetButton2 := FR_CONFBOX ('Se reasignar¬øn los deducibles a las coberturas. Se perder¬øn los deducibles asignados en la emisi¬øn masiva. El proceso es IRREVERSIBLE.') ;
+--        nRetButton2 := FR_CONFBOX ('Se reasignarøn los deducibles a las coberturas. Se perderøn los deducibles asignados en la emisiøn masiva. El proceso es IRREVERSIBLE.') ;
         nRetButton2 := 1;
         --IF nRetButton2 = ALERT_BUTTON1 THEN
         IF nRetButton2 = 1 THEN
@@ -1809,7 +1809,7 @@ Parametros  : p_nIdePol               Identificador de la poliza
                                       0 : OK  /  1 : ERROR
 LOG de CAMBIO!
 Fecha        Autor                        Descripcion
-2022/03      Ronald Barreda               Creaci¬øn
+2022/03      Ronald Barreda               Creaciøn
 -------------------------------------------------------------------------------*/
 PROCEDURE FR_KEY_EXIT(
   p_nIdePol               POLIZA.IdePol%TYPE,
@@ -1928,9 +1928,9 @@ BEGIN
   END IF;
 
   IF 'N' = 'S' THEN   --IF :GLOBAL.MOSTRAR = 'S' THEN
-    RAISE_APPLICATION_ERROR(-20101, 'RAE!!! El registro de una Tasa menor'|| chr(10)||'a la Tasa M¬ønima del Producto,'|| chr(10)||'requiere de una autorizaci¬øn especial');
+    RAISE_APPLICATION_ERROR(-20101, 'RAE!!! El registro de una Tasa menor'|| chr(10)||'a la Tasa Mønima del Producto,'|| chr(10)||'requiere de una autorizaciøn especial');
     --GO_BLOCK('AUTORIZA'); :GLOBAL.MOSTRAR := 'N'; :GLOBAL.CRITERIO := '';
-    --LR_Error('Registrar un valor menor a la Tasa M¬ønima del Producto, requiere del ingreso de una clave');
+    --LR_Error('Registrar un valor menor a la Tasa Mønima del Producto, requiere del ingreso de una clave');
   END IF;
   /*
   IF :GLOBAL.MUESTRA_MENSAJE = 'N' THEN
@@ -2067,8 +2067,8 @@ BEGIN
     EXCEPTION
     WHEN OTHERS THEN
       --STANDARD.ROLLBACK_NR; FR_CURSOR_NORMAL;
-      --FR_MENSAJE('AL_ALERTA','Tarificaci¬øn ' || nError || ' : ' ||SQLERRM); EXIT_FORM(NO_VALIDATE);
-      RAISE_APPLICATION_ERROR(-20101, 'RAE!!! Tarificaci¬øn ' || nError || ' : ' ||SQLERRM);
+      --FR_MENSAJE('AL_ALERTA','Tarificaciøn ' || nError || ' : ' ||SQLERRM); EXIT_FORM(NO_VALIDATE);
+      RAISE_APPLICATION_ERROR(-20101, 'RAE!!! Tarificaciøn ' || nError || ' : ' ||SQLERRM);
     END;
 
     IF existe_Mod = 'S' THEN
@@ -2162,7 +2162,7 @@ END FR_KEY_EXIT;
 
 /*-----------------------------------------------------------------------------
   Nombre      : GRABAR_DATOS_PARTICULARES
-  Proposito   : Creaci¬øn o modificaci¬øn de los Datos Particulares (DATOS_PARTICULARES).
+  Proposito   : Creaciøn o modificaciøn de los Datos Particulares (DATOS_PARTICULARES).
   Referencias : Ninguna
   Parametros  : p_nIdepol      in datos_particulares.idepol%type,
                 p_nNumCert     in datos_particulares.numcert%type,
@@ -2201,7 +2201,7 @@ END FR_KEY_EXIT;
        and numcert = p_nNumCert
        and codplan = p_cCodplan
        and revplan = p_crevplan
-       -- Actualizar¬ø para todos los ramos del certificado.
+       -- Actualizarø para todos los ramos del certificado.
        --  and codramocert= p_cCodramocert
        and codcrit    = p_ccodcrit;
 
@@ -2242,8 +2242,8 @@ END GRABAR_DATOS_PARTICULARES;
                               0 : OK  , 1 : Error
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           Creaci¬øn
-  2022/04/06   Ronald Barreda           Modificaci¬øn : Mejora en variable de retorno p_cError
+  2022/03      Ronald Barreda           Creaciøn
+  2022/04/06   Ronald Barreda           Modificaciøn : Mejora en variable de retorno p_cError
   ----------------------------------------------------------------------------*/
   PROCEDURE GRABAR_TABLA_DATOS_PARTIC(
     p_nIdePol             IN poliza.idepol%type,
@@ -2474,8 +2474,8 @@ END GRABAR_TABLA_DATOS_PARTIC;
                               0 : OK  , 1 : Error
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           Creaci¬øn
-  2022/04/06   Ronald Barreda           Modificaci¬øn : Mejora en variable de retorno p_cError
+  2022/03      Ronald Barreda           Creaciøn
+  2022/04/06   Ronald Barreda           Modificaciøn : Mejora en variable de retorno p_cError
   ----------------------------------------------------------------------------*/
 PROCEDURE FR_INVOCAR_DATOS_PARTICULARES(
   p_nIdePol               POLIZA.IdePol%TYPE,
@@ -2538,7 +2538,7 @@ BEGIN
   cMensajeRestriccionSAS:= pr_poliza_util.RESTRINGE_ENDOSO_POLIZA( p_nIdePol );
   dbms_output.put_line('cMensajeRestriccionSAS:'||cMensajeRestriccionSAS);
   IF NOT cMensajeRestriccionSAS IS NULL THEN --AND (NVL(:B01_4.CODCRIT,'XXXXX') NOT IN ('CERTIFICADO_SOAT','NRO_LOTE_SOAT') OR :SYSTEM.CURRENT_BLOCK != 'B01_4' )then
-   RAISE_APPLICATION_ERROR(-20101, 'Esta p¬øliza fue emitida en SAS MOBILE. S¬ølo puede editar el certificado SOAT y el N¬ømero de Lote.');
+   RAISE_APPLICATION_ERROR(-20101, 'Esta pøliza fue emitida en SAS MOBILE. Sølo puede editar el certificado SOAT y el Nømero de Lote.');
   END IF;
   --
   /*
@@ -2741,7 +2741,7 @@ FORM  EMI00137        Mantenimiento de Ramos por Certificado
 */
 /*-----------------------------------------------------------------------------
   Nombre      : MOD_DATPARTICULARES
-  Proposito   : Endoso de Modificaci¬øn de Numero de Trabajadores 3D
+  Proposito   : Endoso de Modificaciøn de Numero de Trabajadores 3D
   Referencias : Form                    EMI00137
                 When-Button-Pressed     C01.BT_DAT_PART
   Parametros  : p_nIdePol               Identificador de la poliza
@@ -2755,7 +2755,7 @@ FORM  EMI00137        Mantenimiento de Ramos por Certificado
                               0 : OK  , 1 : Error
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           <RTC 313092> Creaci¬øn
+  2022/03      Ronald Barreda           <RTC 313092> Creaciøn
   2022/04/06   Ronald Barreda           <RTC 313092> Mejora variable de Retorno p_cError
   ----------------------------------------------------------------------------*/
 PROCEDURE MOD_DATPARTICULARES(
@@ -2799,13 +2799,13 @@ BEGIN
   --
   -- Validacion del estado la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci¬øn de poliza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciøn de poliza'; RETURN; END IF;
   -- Validacion del estado de la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_ESTADO_POLIZA_ENDOSO( cStsPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci¬øn de estado de poliza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciøn de estado de poliza'; RETURN; END IF;
   -- Validar si existe el certificado
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_EXISTE_CERTIFICADO( p_nIdePol , p_nNumCert );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci¬øn de certificado'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciøn de certificado'; RETURN; END IF;
   --
   IF (p_dFecFinVig > dFecFinVigPol) OR (p_dFecIniVig > dFecFinVigPol) THEN
     p_cError := '1,Fecha de Endoso supera a fecha fin de vigencia de poliza'; RETURN;
@@ -2855,17 +2855,17 @@ BEGIN
   --
   dbms_output.put_line('nExist:' || TO_CHAR(nExist) || '|' || 'cIndPol : ' || cIndPol || '|' || 'nIndFac : ' || nIndFac);
   --
-  IF (cIndPol = 'S' AND nIndFac = 1 AND nExist > 0) THEN --  Es p¬øliza facultativa
+  IF (cIndPol = 'S' AND nIndFac = 1 AND nExist > 0) THEN --  Es pøliza facultativa
     dbms_output.put_line('MDPP : IF (cIndPol = S AND nIndFac = 1 AND nExist > 0) THEN');
     --
     --Validamos si usuario consulta o modifica
-    --cStr := 'Desea modificar los datos de la p¬øliza Facultativa?' || CHR(13) ||'( OK -> Modificar datos, NO -> Consulta)';
+    --cStr := 'Desea modificar los datos de la pøliza Facultativa?' || CHR(13) ||'( OK -> Modificar datos, NO -> Consulta)';
     --SET_ALERT_PROPERTY('CONSULTA',ALERT_MESSAGE_TEXT,cStr);   --  cambiar
     --nButton := SHOW_ALERT('CONSULTA'); -- cambiar
     --
   IF 1 = 1 THEN -- IF nButton = ALERT_BUTTON1 THEN -- OK
       -- Modifica datos
-      --cStr := 'Se borrar¬ø la colocaci¬øn temporal de reaseguro facultativo ' || CHR(13) || ' y las autorizaciones de la p¬øliza';
+      --cStr := 'Se borrarø la colocaciøn temporal de reaseguro facultativo ' || CHR(13) || ' y las autorizaciones de la pøliza';
       --SET_ALERT_PROPERTY('POLITICAS',ALERT_MESSAGE_TEXT,cStr);
       --nButton := SHOW_ALERT('POLITICAS');
       --
@@ -2877,7 +2877,7 @@ BEGIN
         --
         IF 1 = 1 THEN -- IF c_Error = 'N' THEN
           ----
-          -- Elimina datos de colocaci¬øn y politicas
+          -- Elimina datos de colocaciøn y politicas
           BEGIN
             DBMS_OUTPUT.PUT_LINE('MDPP antes de PR_EVALUA_POLITICA.Elimina_Politica(nIdePol)');
             --PR_EVALUA_POLITICA.Elimina_Politica(nIdePol);
@@ -2887,7 +2887,7 @@ BEGIN
               DBMS_OUTPUT.PUT_LINE('FRM-EMI00137 error al invocar PR_EVALUA_POLITICA.ELIMINA_POLITICA - '||SQLERRM);
           END;
           ----
-          -- Realiza la acci¬øn normal del bot¬øn.
+          -- Realiza la acciøn normal del botøn.
           IF p_cCodRamoCert IS NOT NULL THEN --:B01_2.CodRamoCert
             DBMS_OUTPUT.PUT_LINE('MDPP antes de RPP := PR_RAMO_PLAN_PROD.Datos_Ramo_Plan_Prodi');
             RPP := PR_RAMO_PLAN_PROD.Datos_Ramo_Plan_Prod(
@@ -2951,7 +2951,7 @@ END;
 
 /*-----------------------------------------------------------------------------
   Nombre      : Activar_Mod_Cobert
-  Proposito   : Endoso de Modificaci¬øn de Numero de Trabajadores 3D
+  Proposito   : Endoso de Modificaciøn de Numero de Trabajadores 3D
   Referencias : Form                    EMI00137
                 When-Button-Pressed     C01.BT_DAT_PART
   Parametros  : p_nIdePol               Identificador de la poliza
@@ -2959,10 +2959,10 @@ END;
                 p_cCodRamoCert          Ramo del certificado
                 p_dFecFinValid          fecha fin de vigencia
                 p_nIdeCobert            Id de Cobertura
-                p_nNumMod               Numero de Modificaci¬øn de Cobertura
+                p_nNumMod               Numero de Modificaciøn de Cobertura
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           Creaci¬øn
+  2022/03      Ronald Barreda           Creaciøn
   ----------------------------------------------------------------------------*/
 
 PROCEDURE Activar_Mod_Cobert(
@@ -3058,7 +3058,7 @@ END Activar_Mod_Cobert;
                 p_nNumcert              Numero del certificado
                 p_cCodProd              Codigo de producto
                 p_cCodPlan              Codigo de Plan
-                p_cRevPlan              Revisi¬øn del Plan
+                p_cRevPlan              Revisiøn del Plan
                 p_cCodRamoCert          Ramo del certificado
                 p_nTasa                 Tasa
                 p_nPrimaMoneda          Prima
@@ -3068,7 +3068,7 @@ END Activar_Mod_Cobert;
                 p_nTipTasa              Tipo de Tasa
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           Creaci¬øn
+  2022/03      Ronald Barreda           Creaciøn
   ----------------------------------------------------------------------------*/
   PROCEDURE Calcula_Montos (
     p_nIdePol              COBERT_CERT.IdePol%TYPE,
@@ -3127,7 +3127,7 @@ END Activar_Mod_Cobert;
                 p_nTasa                 Tasa
                 p_nSumaAseg             Suma Asegurada
                 p_nSumaAsegMoneda       Suma Asegurada
-                p_nNumMod               Numero de Modificaci¬øn de Cobertura
+                p_nNumMod               Numero de Modificaciøn de Cobertura
                 p_cCodCobert            Codigo de Cobertura
                 p_cCodCobert            Id de Cobertura
                 p_nIdePol               Identificador de la poliza
@@ -3135,7 +3135,7 @@ END Activar_Mod_Cobert;
                 p_cCodRamoCert          Ramo del certificado
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           Creaci¬øn
+  2022/03      Ronald Barreda           Creaciøn
   ----------------------------------------------------------------------------*/
 
   PROCEDURE Actualizar(
@@ -3188,16 +3188,16 @@ END Activar_Mod_Cobert;
                 p_nNumcert              Numero del certificado
                 p_cCodProd              Codigo de producto
                 p_cCodPlan              Codigo de Plan
-                p_cRevPlan              Revisi¬øn del Plan
+                p_cRevPlan              Revisiøn del Plan
                 p_cCodRamoCert          Ramo del certificado
                 p_cCodCobertRef         Codigo de Cobertura
                 p_nSumaAsegMonedaCob    Suma Asegurada
                 p_nPrimaMonedaCob       Prima
                 p_nTasa                 Tasa
-                p_nNumMod               Numero de Modificaci¬øn
+                p_nNumMod               Numero de Modificaciøn
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           Creaci¬øn
+  2022/03      Ronald Barreda           Creaciøn
   ----------------------------------------------------------------------------*/
   PROCEDURE Tarifa_M(
     p_nIdePol              COBERT_CERT.IdePol%TYPE,
@@ -3330,7 +3330,7 @@ END Activar_Mod_Cobert;
                 p_nNumcert              Numero del certificado
                 p_cCodProd              Codigo de producto
                 p_cCodPlan              Codigo de Plan
-                p_cRevPlan              Revisi¬øn del Plan
+                p_cRevPlan              Revisiøn del Plan
                 p_cCodRamoCert          Ramo del certificado
                 p_cCodCobertRef         Codigo de Cobertura
                 p_nSumaAsegMonedaCob    Suma Asegurada
@@ -3338,7 +3338,7 @@ END Activar_Mod_Cobert;
                 p_nTasa                 Tasa
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           Creaci¬øn
+  2022/03      Ronald Barreda           Creaciøn
   ----------------------------------------------------------------------------*/
   PROCEDURE Cobertura_Referencial(
     p_nIdePol              POLIZA.IdePol%TYPE,
@@ -3577,7 +3577,7 @@ END Activar_Mod_Cobert;
   END Cobertura_Referencial;
 /*-----------------------------------------------------------------------------
   Nombre      : ADD_COBERT_CERT
-  Proposito   : A¬øadir Coberturas del Certificado para Trabajadores 3D
+  Proposito   : Aøadir Coberturas del Certificado para Trabajadores 3D
   Referencias : Form                    MANTCOBC
                 When-Button-Pressed     TB_V02.BT_INCLUIRCOB
   Parametros  : p_nIdePol               Identificador de la poliza
@@ -3594,10 +3594,10 @@ END Activar_Mod_Cobert;
                               0 : OK  , 1 : Error
   LOGdeCAMBIO!
   Fecha        Autor                    Descripcion
-  2022/03      Ronald Barreda           <RTC 313092> Creaci¬øn
-  2022/04/06   Ronald Barreda           <RTC 313092> Modificaci¬øn : Mejora en variable de retorno p_cError
-  2022/05/24   Ronald Barreda           <RTC-313092> Actualizaci¬øn de par¬ømetros de procedimiento Add_Cobert_Cert
-  22/08/2022   Christian Bayona         <RTC-314183> Se adicion¬ø validaci¬øn de coberturas
+  2022/03      Ronald Barreda           <RTC 313092> Creaciøn
+  2022/04/06   Ronald Barreda           <RTC 313092> Modificaciøn : Mejora en variable de retorno p_cError
+  2022/05/24   Ronald Barreda           <RTC-313092> Actualizaciøn de parømetros de procedimiento Add_Cobert_Cert
+  22/08/2022   Christian Bayona         <RTC-314183> Se adicionø validaciøn de coberturas
   ----------------------------------------------------------------------------*/
 PROCEDURE Add_Cobert_Cert(
   p_nIdePol               POLIZA.IdePol%TYPE,
@@ -3697,9 +3697,9 @@ END;
 --
 --
 BEGIN
-  --<I RTC-313752> CBayona / 22-08-2022 / Se agreg¬ø validaci¬øn de Coberturas
+  --<I RTC-313752> CBayona / 22-08-2022 / Se agregø validaciøn de Coberturas
   p_cError := Valida_Cobertura(p_nIdePol, p_nNumCert, p_cCodRamoCert, p_cCodCobert);
-  DBMS_OUTPUT.Put_Line('>>>> Validaci¬øn de Cobertura: ' || p_cCodCobert || ' => ' || p_cError);
+  DBMS_OUTPUT.Put_Line('>>>> Validaciøn de Cobertura: ' || p_cCodCobert || ' => ' || p_cError);
   --
   IF p_cError != '0,OK' THEN
     RETURN;
@@ -3865,8 +3865,8 @@ BEGIN
   dbms_output.put_line('nExiste:'||nExiste);
   --
   IF nExiste > 0 THEN
-    dbms_output.put_line('go : PR_INTERFASE_AX_B2B.Cobertura_Referencial');
-    PR_INTERFASE_AX_B2B.Cobertura_Referencial( -- FR_Calc_Tar.Cobertura_Referencial;
+    dbms_output.put_line('go : PR_INTERFASE_AX.Cobertura_Referencial');
+    PR_INTERFASE_AX.Cobertura_Referencial( -- FR_Calc_Tar.Cobertura_Referencial;
       p_nIdePol,
       p_nNumCert,
       cCodProd,
@@ -3881,7 +3881,7 @@ BEGIN
   END IF;
   --
   dbms_output.put_line('go : Activar_Mod_Cobert');
-  PR_INTERFASE_AX_B2B.Activar_Mod_Cobert(
+  PR_INTERFASE_AX.Activar_Mod_Cobert(
       p_nIdePol,
       cCodProd,
       p_nNumCert,
@@ -3910,9 +3910,9 @@ END Add_Cobert_Cert;
   Retorno       p_cError      Codigo de Error en caso se encuentre un error
                               0 : OK  , 1 : Error
   Log de Cambios
-    Fecha         Autor                      Descripci¬øn
-    08/04/2022    Franklin Salinas           Creaci¬øn
-    20/04/2022    Jorge Benel                <RTC 313343> Actualizaci¬øn de parametros y logica integral del paquete
+    Fecha         Autor                      Descripciøn
+    08/04/2022    Franklin Salinas           Creaciøn
+    20/04/2022    Jorge Benel                <RTC 313343> Actualizaciøn de parametros y logica integral del paquete
   ----------------------------------------------------------------------------*/
 PROCEDURE Mod_Nuevo_Formato(  p_nIdePol                 IN Poliza.IdePol%TYPE,
                               p_TABLA_POLIZA_OPERACION  IN ACSELX.TDU_TABLA_POLIZA_OPERACION,
@@ -4221,7 +4221,7 @@ END Mod_Nuevo_Formato;
 --
 /*-----------------------------------------------------------------------
    Nombre     : INSERTA_ENDOSATARIO_CERT
-   Proposito  : Inserci√≥n de Endosatario a nivel de Certificado/Ramo
+   Proposito  : InserciÛn de Endosatario a nivel de Certificado/Ramo
    Referencia : Formulario EMI00012.FMB
    Parametro  : p_nIdePol          Numero Interno de poliza de seguros
                 p_nNumcert         Numero de certificado
@@ -4232,7 +4232,7 @@ END Mod_Nuevo_Formato;
                 p_cTxtEndoso       Texto de Endoso
                 p_cTipoEndoso      Tipo de Endoso
                 p_cCodTexto        Codigo de Texto del Endoso
-                p_nPorcPart        Porcentaje de Participaci¬øn del Monto de Endoso
+                p_nPorcPart        Porcentaje de Participaciøn del Monto de Endoso
                 p_cCodCli          Codigo de Cliente/Asegurado
                 p_Aprobado         Flag de Aprobacion
                 p_Sustento         Texto del sustento
@@ -4245,12 +4245,12 @@ END Mod_Nuevo_Formato;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   13/04/2022   Ronald Barreda      <RTC 313344> Creaci¬øn.
+   13/04/2022   Ronald Barreda      <RTC 313344> Creaciøn.
    20/04/2022   Ronald Barreda      <RTC 313344> Se quita TipoId y DvId como parametro
    22/08/2022   Christian Bayona    <RTC 314183> Se agregan validaciones
-   16/09/2022   Christian Bayona    <RTC 314175> Se agrega validaci√≥n
-   10/01/2023   Christian Bayona    <RTC 316106> Se actualiza validaci√≥n
-   26/05/2023   Manuel Navarro      <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B, Suma Asegurada VB Tech Core
+   16/09/2022   Christian Bayona    <RTC 314175> Se agrega validaciÛn
+   10/01/2023   Christian Bayona    <RTC 316106> Se actualiza validaciÛn
+   26/05/2023   Manuel Navarro      <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B, Suma Asegurada VB Tech Core
 -----------------------------------------------------------------------------*/
 PROCEDURE INSERTA_ENDOSATARIO_CERT (
   p_nIdePol     ENDOSATARIO_CERT.IdePol%TYPE,
@@ -4264,7 +4264,7 @@ PROCEDURE INSERTA_ENDOSATARIO_CERT (
   p_cCodTexto   ENDOSATARIO_CERT.CodTexto%TYPE,
   p_nPorcPart   ENDOSATARIO_CERT.PorcPart%TYPE   DEFAULT NULL,
   p_cCodCli     ENDOSATARIO_CERT.CodCli%TYPE     DEFAULT NULL,     -- Form Label Item : Asegurado
---<I RTC 316878> Manuel Navarro / 26-05-2023: CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B, Suma Asegurada VB Tech Core
+--<I RTC 316878> Manuel Navarro / 26-05-2023: CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B, Suma Asegurada VB Tech Core
   p_Aprobado    Varchar2,
   p_Sustento    Varchar2 ,
   p_usuarioaprob Varchar2 ,
@@ -4292,7 +4292,7 @@ dFecIniVigPol   POLIZA.FECINIVIG%TYPE;
 dFecFinVigPol   POLIZA.FECFINVIG%TYPE;
 bExiste         BOOLEAN := TRUE;
 
---<I RTC 316878> Manuel Navarro / 26-05-2023: CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B, Suma Asegurada VB Tech Core
+--<I RTC 316878> Manuel Navarro / 26-05-2023: CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B, Suma Asegurada VB Tech Core
 nFlagSustento        INTEGER:=0;
 n_nummod             NUMBER;
 --<F RTC 316878>
@@ -4305,20 +4305,20 @@ BEGIN
   --
   -- Validacion del estado la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de poliza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de poliza'; RETURN; END IF;
   -- Validacion del estado de la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_ESTADO_POLIZA_ENDOSO( cStsPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de estado de poliza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de estado de poliza'; RETURN; END IF;
   -- Validar si existe el certificado
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_EXISTE_CERTIFICADO( p_nIdePol , p_nNumCert );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de certificado'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de certificado'; RETURN; END IF;
   --
   IF (p_dFecFinVig > dFecFinVigPol) OR (p_dFecIniVig > dFecFinVigPol) THEN
     p_cError := '1,Fecha de Endoso supera a fecha fin de vigencia de poliza'; RETURN;
   END IF;
-  --<I RTC 313344> CBayona / 12-09-2022 / Se agrega validaci√≥n
+  --<I RTC 313344> CBayona / 12-09-2022 / Se agrega validaciÛn
   IF (p_dFecFinVig < dFecIniVigPol) OR (p_dFecIniVig < dFecIniVigPol) THEN
-    p_cError := '1,Fecha de Endoso es anterior a fecha inicio de vigencia de p√≥liza'; RETURN;
+    p_cError := '1,Fecha de Endoso es anterior a fecha inicio de vigencia de pÛliza'; RETURN;
   END IF;
   --<F RTC 313344>
   --
@@ -4338,12 +4338,12 @@ BEGIN
   --
 
 
-  --<I RTC 316878> Manuel Navarro: / 26-05-2023 CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B, Suma Asegurada VB Tech Core
+  --<I RTC 316878> Manuel Navarro: / 26-05-2023 CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B, Suma Asegurada VB Tech Core
   nFlagSustento := VALIDA_SUMAASEGURADA_SUSTENTO(p_nIdePol, p_nNumCert, p_nMtoEndoso, p_Aprobado, p_Sustento, p_usuarioaprob, p_cError);
   IF nFlagSustento = 1 THEN -- NECESITA APROBACION
-     DBMS_OUTPUT.PUT_LINE('Se Necesita Aprobaci√≥n y sustento cuando el Endoso es mayor a la Suma Asegurada');
+     DBMS_OUTPUT.PUT_LINE('Se Necesita AprobaciÛn y sustento cuando el Endoso es mayor a la Suma Asegurada');
   else
-      dbms_output.put_line('No necesita Aprobaci√≥n');
+      dbms_output.put_line('No necesita AprobaciÛn');
   END IF;
   IF p_cError <> '0,OK' THEN
      RETURN;
@@ -4377,7 +4377,7 @@ BEGIN
   --<F RTC 313344>
   --
   --<I RTC 313344> CBayona / 16-09-2022 / Validar que el CodTexto correspond al numId del Banco
-  SELECT NVL(MAX(tg.ValoRef3), '000015') AS "CodTexto" --<RTC 316106> CBayona / 10-01-2023 / Considerar valor por defecto cuando no este registrado en la configuraci√≥n
+  SELECT NVL(MAX(tg.ValoRef3), '000015') AS "CodTexto" --<RTC 316106> CBayona / 10-01-2023 / Considerar valor por defecto cuando no este registrado en la configuraciÛn
   INTO cCodTexto
   FROM Ent_Finan ef,
     Docs_Identidad de,
@@ -4424,7 +4424,7 @@ BEGIN
   --
   nSumaAseg := PR_GEN_REA_UTIL.SumaAseg_Total_X_Cert(p_nIdePol, cCodProd, p_nNumCert);
   --
-  /* <RTC 314951> / CBayona / 27-10-2022 / Se comenta validaci√≥n
+  /* <RTC 314951> / CBayona / 27-10-2022 / Se comenta validaciÛn
   IF p_nMtoEndoso > nSumaAseg THEN
      p_cError := '1,Monto de Endoso supera el de la suma asegurada';
      RETURN;
@@ -4449,7 +4449,7 @@ BEGIN
   );
   --
   PR_MOD_ENDOSATARIO_CERT.CREAR_MOD_ENDOSATARIO(nIdeEndCert);
-   --<I RTC 316878> Manuel Navarro: / 26-05-2023 CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B, Suma Asegurada VB Tech Core
+   --<I RTC 316878> Manuel Navarro: / 26-05-2023 CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B, Suma Asegurada VB Tech Core
   IF nFlagSustento = 1 THEN
      BEGIN
          SELECT NVL(MAX(c.NUMMOD),0)
@@ -4489,9 +4489,9 @@ END INSERTA_ENDOSATARIO_CERT;
                 p_nIdePol                 Id Poliza
                 p_nNumCert                Numero de Certificado
                 p_TABLA_ENDOSATARIO_CERT  Tabla de Endosatarios
-                p_dFecExc                 Fecha de exclusi¬øn
-                p_cCodMotExc              Codigo de Motivo de Exclusi¬øn
-                p_cTxtMotExc              Texto de Motivo de Exclusi¬øn
+                p_dFecExc                 Fecha de exclusiøn
+                p_cCodMotExc              Codigo de Motivo de Exclusiøn
+                p_cTxtMotExc              Texto de Motivo de Exclusiøn
 
    Retorno :    p_cError         Valor de retorno del proceso. En caso de error se concatena el mensaje de error.
                                    0, OK
@@ -4500,11 +4500,11 @@ END INSERTA_ENDOSATARIO_CERT;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   22/04/2022   Ronald Barreda      <RTC 313344> Creaci¬øn.
-   24/08/2022   Christian Bayona    <RTC 314183> Modificaci√≥n. Se agrega validaci√≥n
-   01/09/2022   Christian Bayona    <RTC 314183> Modificaci√≥n. Se modifica mensaje de error
-   12/09/2022   Christian Bayona    <RTC 314183> Modificaci√≥n. Se modifica condici√≥n y mensaje de error
-   06/02/2023   Christian Bayona    <RTC 316106> Modificaci√≥n. Se adiciona recepcionar el Identificador de Endosatario
+   22/04/2022   Ronald Barreda      <RTC 313344> Creaciøn.
+   24/08/2022   Christian Bayona    <RTC 314183> ModificaciÛn. Se agrega validaciÛn
+   01/09/2022   Christian Bayona    <RTC 314183> ModificaciÛn. Se modifica mensaje de error
+   12/09/2022   Christian Bayona    <RTC 314183> ModificaciÛn. Se modifica condiciÛn y mensaje de error
+   06/02/2023   Christian Bayona    <RTC 316106> ModificaciÛn. Se adiciona recepcionar el Identificador de Endosatario
 -----------------------------------------------------------------------------*/
 PROCEDURE EXCLUYE_ENDOSATARIO_CERT (
   p_nIdePol                        ENDOSATARIO_CERT.idePol%TYPE,
@@ -4540,13 +4540,13 @@ BEGIN
   --
   -- Validacion del estado la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de p√≥liza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de pÛliza'; RETURN; END IF;
   -- Validacion del estado de la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_ESTADO_POLIZA_ENDOSO( cStsPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de estado de p√≥liza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de estado de pÛliza'; RETURN; END IF;
   -- Validar si existe el certificado
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_EXISTE_CERTIFICADO( p_nIdePol , p_nNumCert );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de certificado'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de certificado'; RETURN; END IF;
   --
   DBMS_OUTPUT.PUT_LINE('Fin de validaciones');
   --
@@ -4565,12 +4565,12 @@ BEGIN
   IF (PR.EXISTE_LVAL('PRODEXCE', cCodProd)='S') THEN
     --<I RTC 313344> CBayona / 24-08-2022 / Agregar validaciones
     IF p_dFecExc IS NULL THEN
-      p_cError := '1,La Fecha de Exclusi√≥n no puede ser nula';
+      p_cError := '1,La Fecha de ExclusiÛn no puede ser nula';
       RETURN;
     END IF;
     --<F RTC 313344>
-    IF TRUNC(p_dFecExc) NOT BETWEEN dFecIniVigPol AND dFecFinVigPol THEN  --<RTC 313344> CBayona / 12-09-2022 / Se modifica condici√≥n de validaci√≥n
-       p_cError := '1,La Fecha de Exclusi√≥n del Endosatario no est√° dentro de la vigencia de la p√≥liza';  --<RTC 313344> CBayona / 12-09-2022 / Se modifica mensaje de validaci√≥n
+    IF TRUNC(p_dFecExc) NOT BETWEEN dFecIniVigPol AND dFecFinVigPol THEN  --<RTC 313344> CBayona / 12-09-2022 / Se modifica condiciÛn de validaciÛn
+       p_cError := '1,La Fecha de ExclusiÛn del Endosatario no est· dentro de la vigencia de la pÛliza';  --<RTC 313344> CBayona / 12-09-2022 / Se modifica mensaje de validaciÛn
        DBMS_OUTPUT.PUT_LINE('cError:'||p_cError);
        RETURN;
     END IF;
@@ -4589,7 +4589,7 @@ BEGIN
 
     IF nCantReg > 0 THEN
        FOR i in 1..p_TABLA_ENDOSATARIO_CERT.count loop
-          --<I RTC 316106> / CBayona / 06-02-2023 / S√≠ se remitio el Identificador en el TDU se obtiene para realizar la exclusi√≥n
+          --<I RTC 316106> / CBayona / 06-02-2023 / SÌ se remitio el Identificador en el TDU se obtiene para realizar la exclusiÛn
           DBMS_OUTPUT.PUT_LINE('p_TABLA_ENDOSATARIO_CERT(i).txtAdicional:'||p_Tabla_Endosatario_Cert(i).txtAdicional);
           IF p_Tabla_Endosatario_Cert(i).txtAdicional IS NOT NULL THEN
             p_nIdeEndCert := TO_NUMBER(p_Tabla_Endosatario_Cert(i).txtAdicional);
@@ -4649,7 +4649,7 @@ BEGIN
           END;
           DBMS_OUTPUT.PUT_LINE('Dummy:'||Dummy);
           IF Dummy = 1 THEN
-            --Dummy := FR_ALERTA('El proceso de Exclusi¬øn, eliminara las relaciones Ubicaci¬øn de bienes.');
+            --Dummy := FR_ALERTA('El proceso de Exclusiøn, eliminara las relaciones Ubicaciøn de bienes.');
             DELETE FROM ENDO_CERT_RIESGO WHERE IDEENDCERT = p_nIdeEndCert;
             DBMS_OUTPUT.PUT_LINE('DELETE:'||SQL%ROWCOUNT);
           END IF;
@@ -4713,11 +4713,11 @@ END EXCLUYE_ENDOSATARIO_CERT;
 
 /*-----------------------------------------------------------------------
    Nombre     : TramiteVincular
-   Proposito  : Vincular numero de Tramite a poliza por numero de operaci¬øn
+   Proposito  : Vincular numero de Tramite a poliza por numero de operaciøn
    Referencia : Formulario DISTREA.FMB
    Parametro  :
                 p_nIdePol                 Id Poliza
-                p_nNumOper                Numero de Operaci¬øn
+                p_nNumOper                Numero de Operaciøn
                 p_cNumTramite             Numero de Tramite
 
    Retorno :    p_cError         Valor de retorno del proceso. En caso de error se concatena el mensaje de error.
@@ -4727,7 +4727,7 @@ END EXCLUYE_ENDOSATARIO_CERT;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   05/05/2022   Ronald Barreda      <RTC 313344> Creaci¬øn.
+   05/05/2022   Ronald Barreda      <RTC 313344> Creaciøn.
 -----------------------------------------------------------------------------*/
 PROCEDURE TramiteVincular(
   p_nIdePol       POLIZA_TRAMITE.IdePol%TYPE,
@@ -4781,14 +4781,14 @@ BEGIN
     --
     -- Validacion del estado la poliza
     bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
-    IF NOT bExiste THEN p_cError := '1,Error en validaci¬øn de poliza'; RETURN; END IF;
+    IF NOT bExiste THEN p_cError := '1,Error en validaciøn de poliza'; RETURN; END IF;
     --
     IF p_cNumTramite IS NULL THEN
       p_cError := '1,Es obligatorio el numero de tramite para vincular ';
       RETURN;
     ELSE
       IF (NVL(p_nIdePol,0) = 0) OR (NVL(p_nNumOper,0) = 0) THEN
-        p_cError := '1,Es obligatorio el numero de poliza y operaci¬øn para vincular ';
+        p_cError := '1,Es obligatorio el numero de poliza y operaciøn para vincular ';
         RETURN;
       END IF;
       --
@@ -4803,7 +4803,7 @@ BEGIN
             RETURN;
          END IF;
       ELSE
-        dbms_output.put_line('Validaci¬øn en LOTUS NOTES no se realiza en package');
+        dbms_output.put_line('Validaciøn en LOTUS NOTES no se realiza en package');
       END IF;
       --
       SELECT COUNT(DISTINCT PT.NUMOPER)
@@ -4828,7 +4828,7 @@ BEGIN
       WHERE IDEOP = p_nNumOper;
     EXCEPTION
     WHEN OTHERS THEN
-      p_cError := '1,Numero de operaci¬øn (IdeOp) NO existe en OPERACION';
+      p_cError := '1,Numero de operaciøn (IdeOp) NO existe en OPERACION';
       dbms_output.put_line(p_cError);
       RETURN;
     END;
@@ -4861,7 +4861,7 @@ BEGIN
         FOR T IN cTramite LOOP cOperAsoc := cOperAsoc || T.NUMOPER || ', '; END LOOP;
         --
         SELECT SUBSTR(cOperAsoc,1,LENGTH(cOperAsoc)-1) INTO cOperAsoc FROM DUAL;
-        p_cError := 'El Tr¬ømite ingresado ya se encuentra asociado a la(s) operaci¬øn(es): ' || cOperAsoc;
+        p_cError := 'El Trømite ingresado ya se encuentra asociado a la(s) operaciøn(es): ' || cOperAsoc;
         dbms_output.put_line(p_cError);
       END IF;
     END IF;
@@ -4877,10 +4877,10 @@ END TramiteVincular;
 --
 /*-----------------------------------------------------------------------
    Nombre     : TramiteDesvincular
-   Proposito  : Desvincular numero de Tramite a poliza por numero de operaci¬øn
+   Proposito  : Desvincular numero de Tramite a poliza por numero de operaciøn
    Referencia : Formulario DISTREA.FMB
    Parametro  :
-                p_tTablaPolizaTramite   Tabla de Poliza Tramite (id poliza, numero de operaci¬øn, numero de tramite)
+                p_tTablaPolizaTramite   Tabla de Poliza Tramite (id poliza, numero de operaciøn, numero de tramite)
 
    Retorno :    p_cError            Valor de retorno del proceso. En caso de error se concatena el mensaje de error.
                         0,OK
@@ -4889,7 +4889,7 @@ END TramiteVincular;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   05/05/2022   Ronald Barreda      <RTC 313344> Creaci¬øn.
+   05/05/2022   Ronald Barreda      <RTC 313344> Creaciøn.
 -----------------------------------------------------------------------------*/
 PROCEDURE TramiteDesvincular(
   p_tTablaPolizaTramite   acselx.TDU_TABLA_POLIZA_TRAMITE
@@ -4923,7 +4923,7 @@ BEGIN
     -- Validacion del estado la poliza
     bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_tTablaPolizaTramite(i).IdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
     IF NOT bExiste THEN
-      p_cError := '1,Error en validaci¬øn de poliza';
+      p_cError := '1,Error en validaciøn de poliza';
       RETURN;
     END IF;
     --
@@ -4932,7 +4932,7 @@ BEGIN
   --
   --
   IF nCantSel = 0 THEN
-    p_cError := '1,Seleccione el o los tr¬ømites a desvincular (array vacio)';
+    p_cError := '1,Seleccione el o los trømites a desvincular (array vacio)';
     dbms_output.put_line(p_cError);
     RETURN;
   ELSE
@@ -4973,7 +4973,7 @@ BEGIN
       INTO cTramites
       FROM DUAL;
       --
-      p_cError := '1,El(los) tr¬ømite(s) '||cTramites||' no pudo(pudieron) ser desviculado(s) porque ya se encontraba(n) impreso(s)';
+      p_cError := '1,El(los) trømite(s) '||cTramites||' no pudo(pudieron) ser desviculado(s) porque ya se encontraba(n) impreso(s)';
       dbms_output.put_line(p_cError);
     END IF;
   END IF;
@@ -5117,7 +5117,7 @@ END TramiteDesvincular;
 
 /*-----------------------------------------------------------------------------
 Nombre      : AJUSTE_PORC_SUMA_LOCAL
-Proposito   : Actualizaci¬øn de los porcentajes por inclusi¬øn de nuevos locales
+Proposito   : Actualizaciøn de los porcentajes por inclusiøn de nuevos locales
 Referencias :
 
 Parametros  : p_nIdePol         Identificador de la poliza
@@ -5128,7 +5128,7 @@ Parametros  : p_nIdePol         Identificador de la poliza
 
 LOG de CAMBIO!
 Fecha        Autor                        Descripcion
-14/06/2022      Jorge Benel               <RTC 313742>  Creaci¬øn
+14/06/2022      Jorge Benel               <RTC 313742>  Creaciøn
 
 -------------------------------------------------------------------------------*/
 
@@ -5190,7 +5190,7 @@ Fecha        Autor                        Descripcion
 
 /*-----------------------------------------------------------------------------
 Nombre      : MODIFICACION DE LOCALES
-Proposito   : Inclusi¬øn de locales e exclusi¬øn e inserci¬øn de bienes del certificado
+Proposito   : Inclusiøn de locales e exclusiøn e inserciøn de bienes del certificado
 Referencias :
               program unit
 Parametros  : p_nIdePol         Identificador de la poliza
@@ -5208,12 +5208,12 @@ Parametros  : p_nIdePol         Identificador de la poliza
 
 LOG de CAMBIO!
 Fecha        Autor                        Descripcion
-06/06/2022      Jorge Benel               <RTC 313742>  Creaci¬øn
-14/06/2022      Jorge Benel               <RTC 313742>  Invocaci¬øn de funcion
-26/09/2022   Jorge Benel                  <RTC 313742>  Actualizaci√≥n de l√≥gica
-08/11/2022  David Yupanqui        <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
-20/01/2023   Christian Bayona             <RTC-316106>  Se actualiza procedimiento de recepci√≥n de archivos
-21/09/2023    Manuel Navarro              <DIGB2B03-2815> Inclusi√≥n Locales Legacy Dubai Masivo
+06/06/2022      Jorge Benel               <RTC 313742>  Creaciøn
+14/06/2022      Jorge Benel               <RTC 313742>  Invocaciøn de funcion
+26/09/2022   Jorge Benel                  <RTC 313742>  ActualizaciÛn de lÛgica
+08/11/2022  David Yupanqui        <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
+20/01/2023   Christian Bayona             <RTC-316106>  Se actualiza procedimiento de recepciÛn de archivos
+21/09/2023    Manuel Navarro              <DIGB2B03-2815> InclusiÛn Locales Legacy Dubai Masivo
 -------------------------------------------------------------------------------*/
 
 -- <I jbenel 26-09-2022>
@@ -5309,7 +5309,7 @@ Fecha        Autor                        Descripcion
 
    dbms_output.put_line('p_cError (datos particulares) -> '||p_cError);
 
-   -- modifica direcci¬øn de riesg --
+   -- modifica direcciøn de riesg --
 
    PR_INTERFASE_AX_SAS2.ENDOSO_DIREC_RIESGO2(p_nIdepol,
                       p_nNumCert,
@@ -5363,7 +5363,7 @@ Fecha        Autor                        Descripcion
     FOR i in 1..nCantRegBienes LOOP
         nIdeBien := p_tTABLA_BIENESXCERT(i).TxtAdicional;
         dbms_output.put_line('[ENDOSO_DIREC_Y_BIENES]-nIdeBien('||i||'): '||nIdeBien);
-        dbms_output.put_line('<3> N¬ø reg MOD_DIREC_RIESGO = '||n_MOD_DIREC_RIESGO(p_nIdePol));
+        dbms_output.put_line('<3> Nø reg MOD_DIREC_RIESGO = '||n_MOD_DIREC_RIESGO(p_nIdePol));
 
         PR_INTERFASE_AX_SAS2.ENDOSO_BIEN_CERT2(
             nIdeBien, --Idebien AX
@@ -5421,45 +5421,6 @@ PROCEDURE MODIFICACION_LOCALES ( p_nIDEPOL                IN POLIZA.IDEPOL%TYPE,
   cRuta VARCHAR2(4000);
   nCant NUMBER(2);
   nVal  NUMBER(1);
-
-
-FUNCTION DESGLOSA_BIEN  (
-    P_CodClase          Varchar2,
-    p_nMonto            DIREC_RIESGO_CERT.MTOVALDECLARDIREC%TYPE,
-    P_NumBien           IN OUT integer ,
-    p_nIdePol           POLIZA.IDEPOL%TYPE,
-    p_nNumCert          CERTIFICADO.NUMCERT%TYPE,
-    p_cCodProd          PRODUCTO.CODPROD%TYPE,
-    p_cCodRamo          BIEN_CERT.CODRAMOCERT%TYPE,
-    p_cCodPlan          PLAN_PROD.CODPLAN%TYPE,
-    p_cRevPlan          PLAN_PROD.REVPLAN%TYPE,
-    p_nIdeDirec         DIREC_RIESGO_CERT.IDEDIREC%TYPE,
-    p_cCodMoneda        POLIZA.CODMONEDA%TYPE,
-    p_dFecIniValid      BIEN_CERT.FECINIVALID%TYPE,
-    p_dFecFinValid      BIEN_CERT.FECFINVALID%TYPE
-  ) RETURN NUMBER IS
-BEGIN
-    IF P_CodClase IS NULL OR p_nMonto IS NULL THEN
-       RETURN 0;
-    END IF;
-    -- GENERAR BIENES
-    GENERA_BIEN_MASI3(p_nIDEPOL,
-                      P_nNumcert,
-                      p_cCODPROD,
-                      p_cCodRamo,
-                      p_cCodPlan,
-                      p_cRevPlan,
-                      p_nIdeDirec,
-                      substr(P_CodClase,1,3), --Clase BIen
-                      substr(P_CodClase,4,4), --Cod BIen
-                      p_nMonto,
-                      p_cCodMoneda,
-                      p_dFecIniValid,
-                      p_dFecFinValid);
-
-    P_NumBien := P_NumBien + 1;
-    return p_nMonto;
-END DESGLOSA_BIEN;
 
 FUNCTION FR_RECEPCIONAR_ARCHIVO RETURN NUMBER IS
 
@@ -5545,9 +5506,9 @@ BEGIN
       nNumLinea := 0;
       nNumBien  := 0;
       nMtoTotal := 0;
-      --<I RTC-316106> / CBayona / 20-01-2023 / Se realiza adaptaci√≥n al procedimiento en base al procedimiento de Valores Declarados
+      --<I RTC-316106> / CBayona / 20-01-2023 / Se realiza adaptaciÛn al procedimiento en base al procedimiento de Valores Declarados
       BEGIN
-    nCuentaLoc := P_TDU_TABLA_IMP_LOCAL.COUNT;--<RTC100678>
+	  nCuentaLoc := P_TDU_TABLA_IMP_LOCAL.COUNT;--<RTC100678>
       EXCEPTION
         WHEN OTHERS THEN
           nCuentaLoc := 0;
@@ -5581,18 +5542,14 @@ BEGIN
                                                                           NUMCERT         => NULL ,     IDEDIREC  => NULL   ,       INDRIESGOINS   => NULL,         INDINSPECCION  => NULL   ,
                                                                           NOTAINSPECCION  => NULL   ,   INDSININSPECCION => NULL  , USUAUTORIZADOR => NULL   ,      CLASETIPO      => NULL   ,
                                                                           PROPIEEDIFICACION  => NULL,
-                                                                          --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+                                                                          --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
                                                                           USOINMUEBLE => NULL, 
-                                                                          edificio => NULL, edificotro1 => NULL, edificotro2 => NULL, edificotro3 => NULL, edificotro4 => NULL,
+                                                                          edificio => NULL, edificOficina => NULL, edificotro1 => NULL, edificotro2 => NULL, edificotro3 => NULL,
                                                                           contExistencias => NULL, contMaquinFija => NULL, contMaqMovilAcces => NULL, contEquipoElec => NULL, contMobiliarioGral => NULL,
                                                                           contOtro1 => NULL, contOtro2 => NULL, contOtro3 => NULL, contOtro4 => NULL, contOtro5 => NULL,  contOtro6 => NULL,
-                                                                          benefBruto => NULL,  gastoEstable => NULL, 
-                                                                          codedificio => NULL, codedificotro1 => NULL, codedificotro2 => NULL, codedificotro3 => NULL, codedificotro4 => NULL,
-                                                                          codcontExistencias => NULL, codcontMaquinFija => NULL, codcontMaqMovilAcces => NULL, codcontEquipoElec => NULL, codcontMobiliarioGral => NULL,
-                                                                          codcontOtro1 => NULL, codcontOtro2 => NULL, codcontOtro3 => NULL, codcontOtro4 => NULL, codcontOtro5 => NULL,  codcontOtro6 => NULL,
-                                                                          codbenefBruto => NULL,  codgastoEstable => NULL
+                                                                          benefBruto => NULL,  gastosEstable => NULL
                                                                           ) ;
-                                                                          --<F DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+                                                                          --<F DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
 
               AUX_TDU_TABLA_IMP_LOCAL(i).CODPAIS    := c1.CODPAIS  ;
               AUX_TDU_TABLA_IMP_LOCAL(i).CODESTADO   := c1.CODESTADO  ;
@@ -5631,13 +5588,13 @@ BEGIN
               AUX_TDU_TABLA_IMP_LOCAL(i).USUAUTORIZADOR    := c1.USUAUTORIZADOR ;
               AUX_TDU_TABLA_IMP_LOCAL(i).PROPIEEDIFICACION    := c1.PROPIEEDIFICACION ;
               
-              --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+              --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
               AUX_TDU_Tabla_Imp_Local(i).usoinmueble := c1.USOINMUEBLE;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificio := NULL;
+              AUX_TDU_TABLA_IMP_LOCAL(i).edificOficina := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro1 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro2 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).edificotro4 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contExistencias := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contMaquinFija := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contMaqMovilAcces := NULL;
@@ -5650,26 +5607,7 @@ BEGIN
               AUX_TDU_TABLA_IMP_LOCAL(i).contOtro5 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contOtro6 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).benefBruto := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).gastoEstable := NULL;
-              
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificio := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro1 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro2 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro4 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontExistencias := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMaquinFija := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMaqMovilAcces := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontEquipoElec := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMobiliarioGral := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro1 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro2 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro4 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro5 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro6 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codbenefBruto := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codgastoEstable := NULL;
+              AUX_TDU_TABLA_IMP_LOCAL(i).gastosEstable := NULL;
               --<F DIGB2B03-2815> 
            END;
 
@@ -5840,7 +5778,6 @@ nIdeDirec :=   pr_interfase_AX.GRABA_LINEA_DIR_MASI2( p_nIDEPOL,
 
                   IF cIndBien = 'S' THEN
                        nMtoTotal  := 0;
-                     
                        DBMS_OUTPUT.Put_Line('>>> p_tTABLA_BIENESXCERT.COUNT: ' || p_tTABLA_BIENESXCERT.COUNT);
                       IF p_tTABLA_BIENESXCERT.COUNT > 0 THEN
                         FOR i in p_tTABLA_BIENESXCERT.First .. p_tTABLA_BIENESXCERT.Last LOOP
@@ -5882,113 +5819,6 @@ nIdeDirec :=   pr_interfase_AX.GRABA_LINEA_DIR_MASI2( p_nIDEPOL,
 
                         nNumBien := nNumBien + 1;
                       END LOOP; --
-                      --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo                        
-                      ELSE
-                         BEGIN 
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codedificio,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).edificio,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codEdificOtro1,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).EdificOtro1,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                                        
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codEdificOtro2,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).EdificOtro2,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codEdificOtro3,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).EdificOtro3,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codEdificOtro4,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).EdificOtro4,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContExistencias,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContExistencias,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContMaquinFija,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContMaquinFija,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContMaqMovilAcces,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContMaqMovilAcces,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContEquipoElec,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContEquipoElec,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContMobiliarioGral,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContMobiliarioGral,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContOtro1,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContOtro1,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContOtro2,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContOtro2,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContOtro3,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContOtro3,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContOtro4,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContOtro4,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContOtro5,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).ContOtro5,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codContOtro6,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).codContOtro6,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codBenefBruto,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).BenefBruto,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-
-                           nMtoTotal  := DESGLOSA_BIEN(AUX_TDU_TABLA_IMP_LOCAL(i).codGastoEstable,
-                                         AUX_TDU_TABLA_IMP_LOCAL(i).GastoEstable,
-                                         nNumBien, p_nIDEPOL, nNumcert, p_cCODPROD, X.CodRamoCert,
-                                         X.CodPlan, X.RevPlan, nIdeDirec, p_cCodMoneda, x.FecIniValid, x.FecFinValid);
-                           
-
-                          EXCEPTION
-                            WHEN OTHERS THEN
-
-                              cMensaje := cMensaje || ' ' || SQLERRM;
-                              cMensaje := ' al Procesar la Carga de Bienes : ' ||cMensaje ;
-                              p_cError := '1, '||cMensaje;
-                              RETURN 0;
-
-                          END;
-                          --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo                        
-                      
                     END IF;  -- p_tTABLA_BIENESXCERT.COUNT
                   END IF; -- cIndBien = 'S'
 
@@ -6074,10 +5904,10 @@ END MODIFICACION_LOCALES;
   Proposito   :  Actualiza los datos relacionados al cambio de Asegurado y/o Cambio de Responsable de pago.
   Referencias :  PR_INTERFASE_AX_SAS.CAMBIO_DATOS_GRALES_CERT
 
-  Parametros  :  p_nIdePol              Identificador de  la p¬øliza
+  Parametros  :  p_nIdePol              Identificador de  la pøliza
                  p_nNumcert             Numero del certificado
                  p_cTipoModif           Tipo de modificacion : 'I'-Inclusion  'E'-Exclusion
-                 p_TABLA_POLIZA_CLIENTE Arreglo con los contratantes de la p¬øliza a incluir o excluir
+                 p_TABLA_POLIZA_CLIENTE Arreglo con los contratantes de la pøliza a incluir o excluir
                  p_dFecExc              Fecha de exclusion del contratante
                  p_cCodMotvExc          Codigo del motivo de exclusion
                  p_TABLA_RESP_PAGO      Arreglo de los responsables de pago
@@ -6089,8 +5919,8 @@ END MODIFICACION_LOCALES;
 
 LOG de CAMBIO!
    Fecha           Autor                      Descripcion
-   06/06/2022      Jorge Benel                <RTC 313742>  Creaci¬øn
-   28/06/2022      Jorge Benel                <RTC 313343>  Actualizaci¬øn de logica de cambio de asegurado
+   06/06/2022      Jorge Benel                <RTC 313742>  Creaciøn
+   28/06/2022      Jorge Benel                <RTC 313343>  Actualizaciøn de logica de cambio de asegurado
   ----------------------------------------------------------------------------*/
 
   PROCEDURE CAMBIO_DATOS_GRALES_CERT2 (p_nIdePol     IN POLIZA.IDEPOL%type,
@@ -6113,7 +5943,7 @@ LOG de CAMBIO!
      cStsPolCli              POLIZA.STSPOL%TYPE;
      nNumMod                 MOD_POL_CERT_CLI.NUMMOD%TYPE;
      nEstaExcluido           NUMBER(5);
-     nEstaActivo             NUMBER(1):=0;    -- <RTC-313343> -- Jorge Benel / 28-06-2022 / Declaraci¬øn de variable
+     nEstaActivo             NUMBER(1):=0;    -- <RTC-313343> -- Jorge Benel / 28-06-2022 / Declaraciøn de variable
 
     -- Validaciones
     PROCEDURE VALIDAR  IS
@@ -6123,7 +5953,7 @@ LOG de CAMBIO!
        dFecFinVigPol   POLIZA.FECFINVIG%TYPE;
        bExiste         BOOLEAN;
     BEGIN
-       -- Eliminar los datos del Log de mensajes de validaci¬øn
+       -- Eliminar los datos del Log de mensajes de validaciøn
        LIMPIAR_LOG_MENSAJES;
        -- Obtenemos informacion de la poliza
        bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
@@ -6148,7 +5978,7 @@ LOG de CAMBIO!
      -- Validaciones Previas
      VALIDAR;
      -- Cargar el usuario de la APP
-     p_cError := '0,OK'; -- <RTC-313343> -- Jorge Benel / 28-06-2022 / Inicializaci¬øn de variable
+     p_cError := '0,OK'; -- <RTC-313343> -- Jorge Benel / 28-06-2022 / Inicializaciøn de variable
 
      FOR i in 1..p_TABLA_POLIZA_CLIENTE.Count  LOOP
          cCodCli := PR_ADA_EMI_QRY.EQUIV_NUMID_CLIENTE(p_TABLA_POLIZA_CLIENTE(i).NumIdCliente);
@@ -6224,7 +6054,7 @@ LOG de CAMBIO!
                   AND NumCert = p_nNumCert
                   AND CodCli = cCodCli;
 
-                  -- Insertando la modificaci¬øn
+                  -- Insertando la modificaciøn
 
 
                   INSERT INTO MOD_POL_CERT_CLI
@@ -6375,7 +6205,7 @@ LOG de CAMBIO!
         end;
 
         if l_stsanexo in ('ANU', 'EXC') then
-          -- No puede activar la modificaci¬øn de texto en el estado: :mx1 actual del Anexo :mx2
+          -- No puede activar la modificaciøn de texto en el estado: :mx1 actual del Anexo :mx2
           pr_interfase_ax_sas_util.insertar_log_errores('INCLUIR_ANEXO_CERTIFICADO.VALIDAR',
                                                         'VAL-1505',
                                                         l_stsanexo,
@@ -6452,7 +6282,7 @@ LOG de CAMBIO!
         p_cCodAgencia Codigo de agencia del corredor
         p_cCodOfiSusc Codigo de oficina/sucursal del corredor
         p_cIndLider   Indicador de lider S/N, predeterminadamente = S
-        p_nPorcPart   Porcentaje de participaci¬øn del corredor, , predeterminadamente = 100%
+        p_nPorcPart   Porcentaje de participaciøn del corredor, , predeterminadamente = 100%
 
    Retorno :    p_cError            Valor de retorno del proceso. En caso de error se concatena el mensaje de error.
                         0,OK
@@ -6461,7 +6291,7 @@ LOG de CAMBIO!
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   14/06/2022   Ronald Barreda      <RTC 313344> Creaci√≥n.
+   14/06/2022   Ronald Barreda      <RTC 313344> CreaciÛn.
    16/06/2022   Ronald Barreda      <RTC 313344> Se agrego parametros canal y tipo de canal a procedimiento ModificacionCorredor
    29/09/2022   Ronald Barreda      <RTC 313350> Se agrego validaciones
 -----------------------------------------------------------------------------*/
@@ -6638,12 +6468,12 @@ BEGIN
   --
   -- Validacion del estado la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de p√≥liza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de pÛliza'; RETURN; END IF;
   -- Validacion del estado de la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_ESTADO_POLIZA_ENDOSO( cStsPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de estado de p√≥liza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de estado de pÛliza'; RETURN; END IF;
   --
-  --<I RTC 313350> / CBayona / 29-09-2022 / Validaci√≥n de agencia correcta para nuevo corredor
+  --<I RTC 313350> / CBayona / 29-09-2022 / ValidaciÛn de agencia correcta para nuevo corredor
   SELECT COUNT(1)
   INTO nExiste
   FROM Agencias
@@ -6653,7 +6483,7 @@ BEGIN
     AND NumDetAgencia = p_cCodAgencia;
   --
   IF nExiste = 0 THEN
-    p_cError := '1,C√≥digo de agencia no corresponde al corredor';
+    p_cError := '1,CÛdigo de agencia no corresponde al corredor';
     RETURN;
   END IF;
   --<F RTC 313350>
@@ -6667,7 +6497,7 @@ BEGIN
   --
   ModCorredorInicio;
   --
-  --<I RTC 313350> / CBayona / 29-09-2022 / Validaci√≥n si nuevo corredor es v√°lido para la p√≥liza
+  --<I RTC 313350> / CBayona / 29-09-2022 / ValidaciÛn si nuevo corredor es v·lido para la pÛliza
   SELECT MAX(NumId)
   INTO nNumIdDest
   FROM Cliente
@@ -6705,7 +6535,7 @@ BEGIN
     AND i.TipoInter != 'D';
   --
   IF nExiste = 0 THEN
-    p_cError := '1,No puede utilizarse este corredor porque no est√° relacionado o ya esta registrado en la p√≥liza';
+    p_cError := '1,No puede utilizarse este corredor porque no est· relacionado o ya esta registrado en la pÛliza';
     RETURN;
   END IF;
   --<F RTC 313350>
@@ -6814,7 +6644,7 @@ END ModificacionCorredor;
     02/08/2022    Mauro Zegarra    Creacion
     14/09/2022    Mauro Zegarra    Adecuaciones para mas de un certificado
     26/09/2022    Mauro Zegarra    Uso de pr_sesion.usuario_app
-    02/06/2023    Christian Bayona <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+    02/06/2023    Christian Bayona <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
   ------------------------------------------------------------------------------------------------*/
   procedure revertir_emision(p_idepol oper_pol.idepol%type) is
     l_numoper oper_pol.numoper%type;
@@ -7101,7 +6931,7 @@ END ModificacionCorredor;
            and b.numcert = l_numcert + 0
            and b.numoper = p_numoper;
 
-      --<I RTC 316878> / Christian Bayona / 02-06-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+      --<I RTC 316878> / Christian Bayona / 02-06-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
       CURSOR c_ComEsp IS
         SELECT IdeComision
         FROM Comision_Especial
@@ -7218,7 +7048,7 @@ END ModificacionCorredor;
         end loop;
       end if;
 
-      --<I RTC 316878> / Christian Bayona / 02-06-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+      --<I RTC 316878> / Christian Bayona / 02-06-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
       FOR rCE IN c_ComEsp LOOP
         pr_Comision_Especial.Anular(rCE.IdeComision, 'ANULA');
       END LOOP;
@@ -7295,7 +7125,7 @@ END ModificacionCorredor;
       l_com_max := to_number(pr.busca_lval('COMITOPE', '01'));
 
       if p_porccom > l_com_max then
-        -- 'El porcentaje ingresado: :mx1% supera el m¬øximo permitido: :mx2%'
+        -- 'El porcentaje ingresado: :mx1% supera el møximo permitido: :mx2%'
         pr_interfase_ax_sas_util.insertar_log_errores('CAMBIAR_COMISION_VALIDAR',
                                                       'VAL-1520',
                                                       p_porccom,
@@ -7505,12 +7335,12 @@ END ModificacionCorredor;
   end;
   -- <F RTC 314182>
 
-  -- <I RTC 314175 > -- Jorge Benel / 24-06-2022 / Inicio proceso de modificaci¬øn de valores declarados
+  -- <I RTC 314175 > -- Jorge Benel / 24-06-2022 / Inicio proceso de modificaciøn de valores declarados
 
 
 /*-----------------------------------------------------------------------
    Nombre     : EXPORTA_ARCHIVO_LOCALES
-   Proposito  : Exporta de locales para su modificaci¬øn
+   Proposito  : Exporta de locales para su modificaciøn
    Referencia : Formulario MANTCERT.fmb
 
         :C04_1.BT_EXPORTA
@@ -7530,7 +7360,7 @@ END ModificacionCorredor;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   24/06/2022   Jorge Benel         <RTC-314175  > Creaci¬øn
+   24/06/2022   Jorge Benel         <RTC-314175  > Creaciøn
 -----------------------------------------------------------------------------*/
 
 
@@ -7554,13 +7384,13 @@ RETURN VARCHAR2
 
 IS
 
-   start_pos NUMBER; -- Posici¬øn inicial de cada substring
-   end_pos   NUMBER; -- Posici¬øn final de cada substring
+   start_pos NUMBER; -- Posiciøn inicial de cada substring
+   end_pos   NUMBER; -- Posiciøn final de cada substring
 
 BEGIN
 
    IF indice = 1 THEN
-         start_pos := 1; -- La posici¬øn inicial sera 1
+         start_pos := 1; -- La posiciøn inicial sera 1
    ELSE
          start_pos := instr(stringvalues, delim, 1, indice - 1);
 
@@ -7651,7 +7481,7 @@ BEGIN
                                             Lote  => NULL,
                                             Kilome  => NULL,
                                             Tipocha  => NULL,
-                                            --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√É¬≥n Locales Legacy Dubai Masivo
+                                            --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
                                             Nomcha  => NULL,
                                             Tiposdi  => NULL,
                                             --SUBDIV_CH   => NULL,
@@ -7671,7 +7501,7 @@ BEGIN
                                             Usoinmueblesbs  => NULL,
                                             Tep  => NULL,
                                             Tee  => NULL,
-                                            --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√É¬≥n Locales Legacy Dubai Masivo
+                                            --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
                                             Propieedificacion  => NULL,
                                             Subdiv_Ch  => NULL,
                                             Nombre_Subdiv_Ch  => NULL,
@@ -7717,7 +7547,7 @@ BEGIN
                                             Fecinspeccion  => NULL,
                                             Numcert  => NULL,
                                             Cod_Local  => NULL,
-                                            --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√É¬≥n Locales Legacy Dubai Masivo
+                                            --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
                                             Indriesgoins  => NULL, 
                                             --IndInspeccion     => NULL,
                                             --SUJETO_INSPECCION    => NULL,
@@ -7749,7 +7579,7 @@ BEGIN
                 p_TDU_TABLA_EXP_LOCAL(i).Kilome := GetToken(cLinea2,8,',');
                 p_TDU_TABLA_EXP_LOCAL(i).Tipocha := GetToken(cLinea2,9,',');
 
-                --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+                --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
                 --p_TDU_TABLA_EXP_LOCAL(i).nomsdi      := GetToken(cLinea2,10,',');
                 --p_TDU_TABLA_EXP_LOCAL(i).SUBDIV_CH   := GetToken(cLinea2,11,',');
                 --p_TDU_TABLA_EXP_LOCAL(i).NOMBRE_SUBDIV_CH    := GetToken(cLinea2,12,',');
@@ -7773,7 +7603,7 @@ BEGIN
                 p_TDU_TABLA_EXP_LOCAL(i).Tep := GetToken(cLinea2,24,',');
                 p_TDU_TABLA_EXP_LOCAL(i).Tee := GetToken(cLinea2,25,',');
                 
-                --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+                --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
                 /*
                 p_TDU_TABLA_EXP_LOCAL(i).DESCBIEN1     := GetToken(cLinea2,26,',');
                 p_TDU_TABLA_EXP_LOCAL(i).mtovaldeclardirec1  := GetToken(cLinea2,27,',');
@@ -7921,17 +7751,17 @@ END EXPORTA_ARCHIVO_LOCALES;
 
 /*-----------------------------------------------------------------------------
     Nombre      : GRABA_LINEA_DIR_MASI2
-    Proposito   : Importaci√≥n de Direcciones de Riesgo y Bienes Masivo
+    Proposito   : ImportaciÛn de Direcciones de Riesgo y Bienes Masivo
     Referencias : ACSELX.PR_BIEN_CERT_UTIL.GRABA_LINEA_DIR_MASI
     Parametros :
                  p_nNumCert     Identificador de Quiebre por Certificado
     Log de Cambios
 
     Fecha       Autor            Descripcion
-    24/06/2022  Jorge Benel      <RTC-314175> Digitalaci√≥n de Endoso de Valores Declarados
-    06/09/2022  Jorge Benel      <RTC-314175> Actualizaci√≥n logica
-    08/11/2022  David Yupanqui        <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
-    23/01/2023  Christian Bayona <RTC-316106> Agregar par√°metro para remitir error
+    24/06/2022  Jorge Benel      <RTC-314175> DigitalaciÛn de Endoso de Valores Declarados
+    06/09/2022  Jorge Benel      <RTC-314175> ActualizaciÛn logica
+    08/11/2022  David Yupanqui        <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
+    23/01/2023  Christian Bayona <RTC-316106> Agregar par·metro para remitir error
     29/08/2023  Christian Bayona <DIGB2B03-2877> TREC Mejoras
   ----------------------------------------------------------------------------*/
   FUNCTION GRABA_LINEA_DIR_MASI2 (
@@ -7972,10 +7802,10 @@ END EXPORTA_ARCHIVO_LOCALES;
       p_cINDSININSPECCION IN DIREC_RIESGO_CERT.INDSININSPECCION%TYPE,
       p_cUSUAUTORIZADOR    IN DIREC_RIESGO_CERT.USUAUTORIZADOR%TYPE,
       p_cCLASETIPO       IN   VARCHAR2,
-      p_cPropieedificacion IN DIREC_RIESGO_CERT.PROPIEEDIFICACION%TYPE, --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
+      p_cPropieedificacion IN DIREC_RIESGO_CERT.PROPIEEDIFICACION%TYPE, --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
       --
       p_nNumCert IN OUT DIREC_RIESGO_CERT.NumCert%TYPE,
-      p_cError IN OUT VARCHAR2 --<RTC-316106> / CBayona / 23-01-2023 / Nuevo par√°metro de salida
+      p_cError IN OUT VARCHAR2 --<RTC-316106> / CBayona / 23-01-2023 / Nuevo par·metro de salida
     ) RETURN NUMBER IS
 
     rDir      DIREC_RIESGO_CERT%ROWTYPE;
@@ -8054,7 +7884,7 @@ END EXPORTA_ARCHIVO_LOCALES;
        END IF;
 
     END IF;
-    --<I RTC-315519> David Yupanqui / 07-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
+    --<I RTC-315519> David Yupanqui / 07-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
     rDir.propieedificacion := p_cPropieedificacion;
     IF rDir.propieedificacion IS NOT NULL THEN
       IF PR.BUSCA_LVAL('PESBS', rDir.propieedificacion) = 'INVALIDO' THEN
@@ -8148,7 +7978,7 @@ END EXPORTA_ARCHIVO_LOCALES;
                  AND MDR.StsDirec IN ('VAL','INC');
 
              IF SQL%FOUND THEN
-                dbms_output.put_line('ELIMINO MOD direci√≥n 1: ' || SQL%ROWCOUNT);
+                dbms_output.put_line('ELIMINO MOD direciÛn 1: ' || SQL%ROWCOUNT);
               END IF;
             END;
             BEGIN
@@ -8157,7 +7987,7 @@ END EXPORTA_ARCHIVO_LOCALES;
                  AND DRC.Numcert = rDir.NumCert
                  AND drc.StsDirec IN ('VAL','INC');
               IF SQL%FOUND THEN
-                dbms_output.put_line('ELIMINO direci√≥n 1: ' || SQL%ROWCOUNT);
+                dbms_output.put_line('ELIMINO direciÛn 1: ' || SQL%ROWCOUNT);
               END IF;
             END;
           END IF;
@@ -8168,7 +7998,7 @@ END EXPORTA_ARCHIVO_LOCALES;
 
         -- incluir
         IF cStsCert = 'INC' THEN
-          dbms_output.put_line('INCLUSION direci√≥n 1: ' || cStsCert);
+          dbms_output.put_line('INCLUSION direciÛn 1: ' || cStsCert);
           PR_DIREC_RIESGO_CERT.INCLUIR(p_nIdePol, rDir.NumCert, rDir.Idedirec);
         END IF;
 
@@ -8239,7 +8069,7 @@ END EXPORTA_ARCHIVO_LOCALES;
          NOTAINSPECCION = p_cNOTAINSPECCION,
          INDSININSPECCION = p_cINDSININSPECCION,
          USUAUTORIZADOR = p_cUSUAUTORIZADOR
-         ,PROPIEEDIFICACION = p_cPropieedificacion --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
+         ,PROPIEEDIFICACION = p_cPropieedificacion --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
         WHERE  IdeDirec = rDir.Idedirec;
         -- < F RTC-314175> Jorge Benel / 31-08-2022
 
@@ -8250,7 +8080,7 @@ END EXPORTA_ARCHIVO_LOCALES;
       END IF;
     END IF;
 
-    PR_DIREC_RIESGO_CERT.ACTUALIZA_USOSBS_TREC(p_nIdePol,rDir.NumCert); --<N3040468> Noema Paredes / 13-02-2013 / Se agreg√≥ validaciones para ramo TREC - RQ: REA-01917
+    PR_DIREC_RIESGO_CERT.ACTUALIZA_USOSBS_TREC(p_nIdePol,rDir.NumCert); --<N3040468> Noema Paredes / 13-02-2013 / Se agregÛ validaciones para ramo TREC - RQ: REA-01917
 
     p_nNumCert := rDir.NumCert;
 
@@ -8259,7 +8089,7 @@ END EXPORTA_ARCHIVO_LOCALES;
   END GRABA_LINEA_DIR_MASI2;
 /*-----------------------------------------------------------------------
    Nombre     : MODICAR_VALORES_DECLARADOS
-   Proposito  : Endoso de modificaci√≥n de valores declarados
+   Proposito  : Endoso de modificaciÛn de valores declarados
    Referencia : Formulario MANTCERT.fmb
 
         :C04_1.BT_IMPORTA
@@ -8277,15 +8107,15 @@ END EXPORTA_ARCHIVO_LOCALES;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   24/06/2022   Jorge Benel         <RTC 314175> Creaci√≥n
-   06/09/2022   Jorge Benel         <RTC 314175> Actualizaci√≥n de l√≥gica
-   08/11/2022   David Yupanqui      <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
+   24/06/2022   Jorge Benel         <RTC 314175> CreaciÛn
+   06/09/2022   Jorge Benel         <RTC 314175> ActualizaciÛn de lÛgica
+   08/11/2022   David Yupanqui      <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
    14/11/2022   Jorge Benel         <RTC 314175> Carga los locales que no se modifican
    23-11-2022   Jorge Benel         <RTC 314185> Actualiza campos
-   25-11-2022   Jorge Benel         <RTC 314185> Actualiza logica para exclusi√≥n de locales.
-   23/01/2023   Christian Bayona    <RTC-316106> Modificaci√≥n de factor para calcular porcentaje de distribuci√≥n
-   03/02/2023   Christian Bayona    <RTC-316106> Modificaci√≥n se actualizaba m√°s de una vez los bienes
-   21/09/2023    Manuel Navarro     <DIGB2B03-2815> Inclusi√≥n Locales Legacy Dubai Masivo
+   25-11-2022   Jorge Benel         <RTC 314185> Actualiza logica para exclusiÛn de locales.
+   23/01/2023   Christian Bayona    <RTC-316106> ModificaciÛn de factor para calcular porcentaje de distribuciÛn
+   03/02/2023   Christian Bayona    <RTC-316106> ModificaciÛn se actualizaba m·s de una vez los bienes
+   21/09/2023    Manuel Navarro     <DIGB2B03-2815> InclusiÛn Locales Legacy Dubai Masivo
 -----------------------------------------------------------------------------*/
 PROCEDURE MODICAR_VALORES_DECLARADOS ( p_nIDEPOL              IN POLIZA.IDEPOL%TYPE,
                                      p_cCODPROD             IN POLIZA.CODPROD%TYPE,
@@ -8388,7 +8218,7 @@ BEGIN
       nMtoTotal := 0;
       --<I RTC 314175>  Jorge Benel 14-11-2022
       BEGIN
-    nCuentaLoc := P_TDU_TABLA_IMP_LOCAL.COUNT;--<RTC100678>
+	  nCuentaLoc := P_TDU_TABLA_IMP_LOCAL.COUNT;--<RTC100678>
       EXCEPTION
         WHEN OTHERS THEN
           nCuentaLoc := 0;
@@ -8426,17 +8256,13 @@ BEGIN
                                                                           NUMCERT         => NULL ,     IDEDIREC  => NULL   ,       INDRIESGOINS   => NULL,         INDINSPECCION  => NULL   ,
                                                                           NOTAINSPECCION  => NULL   ,   INDSININSPECCION => NULL  , USUAUTORIZADOR => NULL   ,      CLASETIPO      => NULL   ,
                                                                           PROPIEEDIFICACION  => NULL
-                                                                          --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+                                                                          --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
                                                                           ,USOINMUEBLE => NULL,
-                                                                          edificio => NULL,  edificotro1 => NULL, edificotro2 => NULL, edificotro3 => NULL, edificotro4 => NULL,
+                                                                          edificio => NULL,  edificOficina => NULL, edificotro1 => NULL, edificotro2 => NULL, edificotro3 => NULL,
                                                                           contExistencias => NULL, contMaquinFija => NULL, contMaqMovilAcces => NULL, contEquipoElec => NULL, contMobiliarioGral => NULL,
                                                                           contOtro1 => NULL, contOtro2 => NULL, contOtro3 => NULL, contOtro4 => NULL, contOtro5 => NULL, contOtro6 => NULL,
                                                                           benefBruto => NULL,
-                                                                          gastoEstable => NULL,
-                                                                          codedificio => NULL, codedificotro1 => NULL, codedificotro2 => NULL, codedificotro3 => NULL, codedificotro4 => NULL,
-                                                                          codcontExistencias => NULL, codcontMaquinFija => NULL, codcontMaqMovilAcces => NULL, codcontEquipoElec => NULL, codcontMobiliarioGral => NULL,
-                                                                          codcontOtro1 => NULL, codcontOtro2 => NULL, codcontOtro3 => NULL, codcontOtro4 => NULL, codcontOtro5 => NULL,  codcontOtro6 => NULL,
-                                                                          codbenefBruto => NULL,  codgastoEstable => NULL
+                                                                          gastosEstable => NULL
                                                                           ) ;
                                                                           --<F DIGB2B03-2815>
 
@@ -8478,13 +8304,13 @@ BEGIN
               AUX_TDU_TABLA_IMP_LOCAL(i).USUAUTORIZADOR    := c1.USUAUTORIZADOR ;
               AUX_TDU_TABLA_IMP_LOCAL(i).PROPIEEDIFICACION    := c1.PROPIEEDIFICACION ;
 
-              --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+              --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
               AUX_TDU_Tabla_Imp_Local(i).USOINMUEBLE := c1.USOINMUEBLE;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificio := NULL;
+              AUX_TDU_TABLA_IMP_LOCAL(i).edificOficina := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro1 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro2 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).edificotro4 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contExistencias := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contMaquinFija := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contMaqMovilAcces := NULL;
@@ -8497,26 +8323,7 @@ BEGIN
               AUX_TDU_TABLA_IMP_LOCAL(i).contOtro5 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contOtro6 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).benefBruto := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).gastoEstable := NULL;
-              
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificio := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro1 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro2 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro4 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontExistencias := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMaquinFija := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMaqMovilAcces := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontEquipoElec := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMobiliarioGral := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro1 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro2 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro4 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro5 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro6 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codbenefBruto := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codgastoEstable := NULL;
+              AUX_TDU_TABLA_IMP_LOCAL(i).gastosEstable := NULL;
               --<F DIGB2B03-2815> 
 
            END;
@@ -8614,7 +8421,7 @@ BEGIN
                                                                         P_TDU_TABLA_IMP_LOCAL(i).INDSININSPECCION,
                                                                         P_TDU_TABLA_IMP_LOCAL(i).USUAUTORIZADOR   ,
                                                                         P_TDU_TABLA_IMP_LOCAL(i).CLASETIPO   ,
-                                                                        P_TDU_TABLA_IMP_LOCAL(i).PROPIEEDIFICACION, --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
+                                                                        P_TDU_TABLA_IMP_LOCAL(i).PROPIEEDIFICACION, --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
                                                                         -- out
                                                                         nNumcert
                                                                        );
@@ -8721,7 +8528,7 @@ nIdeDirec :=   GRABA_LINEA_DIR_MASI2( p_nIDEPOL,
                   END;
                 END IF;
 
-                --<I RTC 314175>  Jorge Benel 06-09-2022 -- Se comenta la eliminaci√≥n de locales
+                --<I RTC 314175>  Jorge Benel 06-09-2022 -- Se comenta la eliminaciÛn de locales
                 /*
 
                 IF cStsCert IN ('MOD') THEN -- NUEVO CONSIDERAR LA ELIMINACION DE TODAS LAS DIRECCIONES ASOCIADAS A LOS BIENES
@@ -8759,7 +8566,7 @@ nIdeDirec :=   GRABA_LINEA_DIR_MASI2( p_nIDEPOL,
                       cIndBien := 'N';
                   END;
 
-                  -- <I RTC 314175>  Jorge Benel 06-09-2022  Actualizaci√≥n e logica
+                  -- <I RTC 314175>  Jorge Benel 06-09-2022  ActualizaciÛn e logica
 /*
                   IF cIndBien = 'S' THEN
                     --nPosIniAnt := nPosIni;
@@ -8820,7 +8627,7 @@ nIdeDirec :=   GRABA_LINEA_DIR_MASI2( p_nIDEPOL,
                             -- PASO 2.3 GENERAR BIENES
                             --- PR_BIEN_CERT_UTIL. -- jbenel se comenta para hacerlo local
 
-                            IF nIdeDirec_aux = 0 THEN  --<RTC 316106> / CBayona / 03-02-2023 / Condici√≥n de quiebre
+                            IF nIdeDirec_aux = 0 THEN  --<RTC 316106> / CBayona / 03-02-2023 / CondiciÛn de quiebre
                               GENERA_BIEN_MASI2(p_nIDEPOL,
                                                 nNumcert,
                                                 p_cCODPROD,
@@ -8834,7 +8641,7 @@ nIdeDirec :=   GRABA_LINEA_DIR_MASI2( p_nIDEPOL,
                                                 p_cCodMoneda,
                                                 p_tTABLA_BIENESXCERT(i).Fecinivalid,
                                                 p_tTABLA_BIENESXCERT(i).Fecfinvalid);
-                            END IF;  --<RTC 316106> / CBayona / 03-02-2023 / Fin condici√≥n
+                            END IF;  --<RTC 316106> / CBayona / 03-02-2023 / Fin condiciÛn
 
                           EXCEPTION
                             WHEN OTHERS THEN
@@ -8854,7 +8661,7 @@ nIdeDirec :=   GRABA_LINEA_DIR_MASI2( p_nIDEPOL,
                 END LOOP; -- X -- c_Ramos
                 nIdeDirec_aux := nIdeDirec;  --<RTC 316106> / CBayona / 03-02-2023 / Asignar valor a var quiebre
 
-                ---- <I RTC-314175> Jorge Benel / 12-09-2022 / implementa logica de actualizaci√≥n
+                ---- <I RTC-314175> Jorge Benel / 12-09-2022 / implementa logica de actualizaciÛn
 
                 nMtoTotal  := 0;
                 IF p_tabla_bien_cert_riesgo.COUNT > 0 THEN
@@ -8931,7 +8738,7 @@ END MODICAR_VALORES_DECLARADOS;
 PROCEDURE ACT_DATOS_PARTICULARES_VALDEC (  p_nIdePol               POLIZA.IdePol%TYPE,
                                            p_nNumCert              CERT_RAMO.NumCert%TYPE,
                                            p_cCodRamoCert          CERT_RAMO.CodRamoCert%TYPE,
-                                           --<I RTC-316106> / CBayona / 23-01-2023 / Nuevos par√°metros
+                                           --<I RTC-316106> / CBayona / 23-01-2023 / Nuevos par·metros
                                            p_dFecIniVig            DATE,
                                            p_dFecFinVig            DATE,
                                            --<F RTC-316106> / CBayona / 23-01-2023
@@ -9009,10 +8816,10 @@ PROCEDURE ACT_DATOS_PARTICULARES_VALDEC (  p_nIdePol               POLIZA.IdePol
 /*-----------------------------------------------------------------------------
   Nombre      : VALIDA_CONTRATANTE2
   Proposito   : Validar la existencia del contratante o titular en la tabla cliente / Verificar si el Contratante se encuentra Activo
-  Referencias : PR_INTERFASE_AX_B2B.ENDOSO_CONTRATANTES
-  Parametros  : p_nIdepol              Identificador de la p¬øliza
+  Referencias : PR_INTERFASE_AX.ENDOSO_CONTRATANTES
+  Parametros  : p_nIdepol              Identificador de la pøliza
                 p_cTipoModif           Tipo de modificacion : 'I'-Inclusion  'E'-Exclusion
-                p_TABLA_POLIZA_CLIENTE Arreglo con los contratantes de la p¬øliza a incluir o excluir
+                p_TABLA_POLIZA_CLIENTE Arreglo con los contratantes de la pøliza a incluir o excluir
 
   Retorno       p_cursorMsgValida   Cursor con los mensajes de validacion
                 p_cError            Codigo de Error en caso se encuentre un error
@@ -9020,7 +8827,7 @@ PROCEDURE ACT_DATOS_PARTICULARES_VALDEC (  p_nIdePol               POLIZA.IdePol
 
     Fecha        Autor                        Descripcion
     21/06/2022   Jorge Benel                  <RTC-313346 > Creacion
-    20/07/2022   Jorge Benel                  <RTC-313346 > Actualizaci¬øn con logica de exclusion de contratante
+    20/07/2022   Jorge Benel                  <RTC-313346 > Actualizaciøn con logica de exclusion de contratante
 
   ----------------------------------------------------------------------------*/
   PROCEDURE VALIDA_CONTRATANTE2 ( p_nIdePol              IN poliza.idepol%type,
@@ -9059,7 +8866,7 @@ PROCEDURE ACT_DATOS_PARTICULARES_VALDEC (  p_nIdePol               POLIZA.IdePol
             p_cError := '1,Error';
 
          END IF;
-      -- <I RTC-313346> Jorge Benel / 20-07-2022 / incluye logica exclusi¬øn
+      -- <I RTC-313346> Jorge Benel / 20-07-2022 / incluye logica exclusiøn
       ELSIF  p_cTipoModif = 'E'  THEN
          IF cStsPolCli = 'INC' THEN
             PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('VALIDA_CONTRATANTE', 'VALIDACION','EL CONTRATANTE '||cCodCli ||' NO SE ENCUENTRA REGISTRADO EN LA POLIZA');
@@ -9092,7 +8899,7 @@ PROCEDURE ACT_DATOS_PARTICULARES_VALDEC (  p_nIdePol               POLIZA.IdePol
       PROCEDURE REVERTIR_AUTORIZA         -- :AUTORIZA.BT_OK      When-Button-Pressed
       PROCEDURE REVERTIR_PROCESAR         -- :C06.BT_ACEPTAR      When-Button-Pressed
  Parametro  :
-      p_nNumOper    Numero de Operaci¬øn
+      p_nNumOper    Numero de Operaciøn
       p_nIdePol     Id de la poliza
       p_nNumCert    Numero de Certificado
 
@@ -9103,7 +8910,7 @@ PROCEDURE ACT_DATOS_PARTICULARES_VALDEC (  p_nIdePol               POLIZA.IdePol
  Log de Cambios
  Fecha        Autor               Descripcion
  -------      --------            --------------
- 30/06/2022   Ronald Barreda      <RTC 313344> Creaci¬øn.
+ 30/06/2022   Ronald Barreda      <RTC 313344> Creaciøn.
 
  */
 PROCEDURE REVERTIR_OPERACION(
@@ -9225,13 +9032,13 @@ BEGIN
   cIndNo       := 'N';
   cIndDirRie   := 'N';
   cIndDirRieOP := 'N';
-  -- Validando que la operaci¬øn a revertir no tenga Direcciones de Riesgo activas
+  -- Validando que la operaciøn a revertir no tenga Direcciones de Riesgo activas
   cIndDirRie := EXISTE_DIRECCION_RIESGO(p_nNumOper);
   -- Validando Operaciones posterirores que incluyen al(los) certificado(s)
   FOR X IN CERTIFICADO_Q LOOP
     FOR Y IN OPER_POL_POST_Q(X.NUMCERT) LOOP
       IF Y.TIPOOP <> 'ESV' THEN
-        cDatos_Rever := CHR(10) || '** ADVERTENCIA ** Usted no puede revertir esta operaci¬øn porque posee operaciones posteriores de tipo diferente a ESV ' || CHR(10) || CHR(10);
+        cDatos_Rever := CHR(10) || '** ADVERTENCIA ** Usted no puede revertir esta operaciøn porque posee operaciones posteriores de tipo diferente a ESV ' || CHR(10) || CHR(10);
         cIndNo := 'S';
         EXIT;
       END IF;
@@ -9239,7 +9046,7 @@ BEGIN
       IF cIndDirRie = 'S' THEN
         cIndDirRieOP := EXISTE_DIRECCION_RIESGO(Y.NUMOPER);
         IF cIndDirRieOP = 'S' THEN
-          cDatos_Rever := CHR(10) || '** ADVERTENCIA ** Usted no puede revertir esta operaci¬øn porque posee Direcciones de Riesgo en estado ACT al igual que sus posteriores ' || CHR(10) || CHR(10);
+          cDatos_Rever := CHR(10) || '** ADVERTENCIA ** Usted no puede revertir esta operaciøn porque posee Direcciones de Riesgo en estado ACT al igual que sus posteriores ' || CHR(10) || CHR(10);
           cIndNo := 'S';
           EXIT;
         END IF;
@@ -9307,7 +9114,7 @@ BEGIN
   --
   cDatos_Rever:=cDatos_Rever||CHR(10);
   IF rOper_Pol.TipoOp ='ESC' THEN
-       cDatos_Rever:=cDatos_Rever||'Reversi¬øn de Endoso de Coaseguro: '||CHR(10);
+       cDatos_Rever:=cDatos_Rever||'Reversiøn de Endoso de Coaseguro: '||CHR(10);
   END IF;
   cDatos_Rever:=cDatos_Rever||CHR(10);
   cDatos_Rever:=cDatos_Rever||'Certificados Afectados en la Operacion: '||CHR(10);
@@ -9588,7 +9395,7 @@ BEGIN
       /*
       Se guardara un registro historico del proceso que va a ejecutar - Si no esta seguro del proceso por favor consulte'
       --
-      Reversar OPERACION Este proceso anulara las facturas/Obligaciones relacionas a la Operaci¬øn anulada y modifica la poliza
+      Reversar OPERACION Este proceso anulara las facturas/Obligaciones relacionas a la Operaciøn anulada y modifica la poliza
       */
       IF bOK THEN --ret_button = ALERT_BUTTON1
         REVERTIR_REVER_DOCS(rOper_Pol.Idepol,p_nNumOper,rOper_Pol.TipoOp); -- FR_REVER_DOCS
@@ -9674,7 +9481,7 @@ BEGIN
   DBMS_OUTPUT.PUT_LINE('~~~~~REVERTIR_ANULA ini');
   --
   IF rOper_Pol.TipoOp = 'EXC' AND rOper_Pol.MtoOper = 0 THEN
-    cError := '1,No se puede revertir una Operacion de EXCLUSION con Monto de Prima en Cero, Generar¬øa inconsistencia de Estatus en los Ramos del Certificado';
+    cError := '1,No se puede revertir una Operacion de EXCLUSION con Monto de Prima en Cero, Generarøa inconsistencia de Estatus en los Ramos del Certificado';
     DBMS_OUTPUT.PUT_LINE('cError I:'||cError);
     RETURN;
   ELSE
@@ -9686,7 +9493,7 @@ BEGIN
     CLOSE c_RemesaBco;
     --
     IF nIdeRemesa IS NOT NULL AND cIndProc = 'S' THEN
-      cError := '1,No se puede revertir la operaci¬øn, pues ya se genero Remesa del Bco. Continental asociada a la misma';
+      cError := '1,No se puede revertir la operaciøn, pues ya se genero Remesa del Bco. Continental asociada a la misma';
       DBMS_OUTPUT.PUT_LINE('cError J:'||cError);
     ELSE
       p_P := PR_POLIZA.Datos_Poliza(rOper_Pol.IdePol);
@@ -9709,7 +9516,7 @@ BEGIN
             DBMS_OUTPUT.PUT_LINE('cError L:'||cError);
         END;
       ELSE
-        REVERTIR_GEN_DAT_REVER; -- FR_Genera_Datos_Rever; -- ventana 'Datos de la Operaci¬øn'
+        REVERTIR_GEN_DAT_REVER; -- FR_Genera_Datos_Rever; -- ventana 'Datos de la Operaciøn'
       END IF;
     END IF;
   END IF;
@@ -9746,7 +9553,7 @@ BEGIN
       WHEN NO_DATA_FOUND THEN
         cDescOper := 'INVALIDO';
     END;
-    cError := '1,Debe ingresar correctamente la palabra clave para la operaci¬øn: 464 - ' || InitCap(cDescOper);
+    cError := '1,Debe ingresar correctamente la palabra clave para la operaciøn: 464 - ' || InitCap(cDescOper);
     DBMS_OUTPUT.PUT_LINE('cError M:'||cError);
     RETURN;
   ELSE
@@ -9822,7 +9629,7 @@ BEGIN
     FROM   POLIZA
     WHERE  IdePol=rOper_Pol.IdePol;
   END;
-  --<I RTC-150906> Gianpiere Morales / 28-12-2018 /  Proyecto Redise¬øo de Procesos de Reaseguros - Pagos al exterior
+  --<I RTC-150906> Gianpiere Morales / 28-12-2018 /  Proyecto Rediseøo de Procesos de Reaseguros - Pagos al exterior
         BEGIN
           SELECT 1
             INTO LN_ExistePrv
@@ -9844,7 +9651,7 @@ BEGIN
         END;
 
   IF LN_ExistePrv > 0 THEN
-    cError := '1,No se puede revertir la operaci¬øn, pues tiene liquidaciones de Reaseguros con Abono en Proceso, comunicarse con el ¬ørea de Reaseguros/Tesorer¬øa';
+    cError := '1,No se puede revertir la operaciøn, pues tiene liquidaciones de Reaseguros con Abono en Proceso, comunicarse con el ørea de Reaseguros/Tesorerøa';
     DBMS_OUTPUT.PUT_LINE('cError O:'||cError);
     RETURN;
   END IF;
@@ -9888,7 +9695,7 @@ BEGIN
       ELSE
         cValid := 'S'; --FR_Invocar_Autorizacion('035',USER);
         IF cValid = 'N' THEN
-          cError := '1,Usted no posee autorizaci¬øn para realizar este tipo de operaciones';
+          cError := '1,Usted no posee autorizaciøn para realizar este tipo de operaciones';
           DBMS_OUTPUT.PUT_LINE('cError Q:'||cError);
           RETURN;
         ELSE
@@ -9899,7 +9706,7 @@ BEGIN
   ELSIF cIndFacult='N' THEN
     cValid := 'S'; --FR_Invocar_Autorizacion('035',USER);
     IF cValid = 'N' THEN
-      cError := '1,Usted no posee autorizaci¬øn para realizar este tipo de operaciones';
+      cError := '1,Usted no posee autorizaciøn para realizar este tipo de operaciones';
       DBMS_OUTPUT.PUT_LINE('cError R:'||cError);
       RETURN;
     ELSE
@@ -9926,10 +9733,10 @@ BEGIN
   --
   -- Validacion del estado la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( rOper_Pol.IdePol, cStsPol, cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
-  IF NOT bExiste THEN cError := '1,Error en validaci¬øn de poliza'; RETURN; END IF;
+  IF NOT bExiste THEN cError := '1,Error en validaciøn de poliza'; RETURN; END IF;
   -- Validacion del estado de la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_ESTADO_POLIZA_ENDOSO( cStsPol );
-  IF NOT bExiste THEN cError := '1,Error en validaci¬øn de estado de poliza'; RETURN; END IF;
+  IF NOT bExiste THEN cError := '1,Error en validaciøn de estado de poliza'; RETURN; END IF;
   --
   cRestricSAS := pr_poliza_util.RESTRINGE_ENDOSO_POLIZA(rOper_Pol.IdePol);
   --
@@ -9950,7 +9757,7 @@ BEGIN
       nNumTramite := null;
     WHEN TOO_MANY_ROWS THEN
       nNumTramite := 'INVALIDO';
-      cError := '1,Existen m¬øs de dos tramites para la operaci¬øn '|| p_nNumOper ||' en la tabla POLIZA_TRAMITE, comuniquese con Sistemas';
+      cError := '1,Existen møs de dos tramites para la operaciøn '|| p_nNumOper ||' en la tabla POLIZA_TRAMITE, comuniquese con Sistemas';
     WHEN OTHERS THEN
       nNumTramite := null;
       cError := '1,FRM-DISTREA Error OTHERS en Query a POLIZA_TRAMITE';
@@ -10168,7 +9975,7 @@ END REVERTIR_OPERACION;
         ELSIF cStsBien IN( 'ACT', 'MOD' ) THEN
           IF nExiste <> 0 THEN
             -- PR_BIEN_CERT_UTIL.ELIMINAR_BIEN_RIESGO(nIdeBien, p_nIdeDirec); -- <N3039087> Franck Ponte T. / 29-05-2012 / Proyecto Mejoras Acselx MEJ-001-II
-            -- PR_BIEN_CERT_UTIL.INSERTA_BIEN_RIESGO(nIdeBien, p_nIdeDirec, p_nMtoDeclar); --  <RTC 314175> Jorge Benel / 06-09-2022 / Se implementa la actualizaci√≥n
+            -- PR_BIEN_CERT_UTIL.INSERTA_BIEN_RIESGO(nIdeBien, p_nIdeDirec, p_nMtoDeclar); --  <RTC 314175> Jorge Benel / 06-09-2022 / Se implementa la actualizaciÛn
             BEGIN
               UPDATE BIEN_CERT A
                  SET AnoFab = -1,
@@ -10303,7 +10110,7 @@ END REVERTIR_OPERACION;
 
     Log de Cambios
       Fecha       Autor            Descripcion
-      20/01/2023  Christian Bayona <RTC 316106> Creaci√≥n
+      20/01/2023  Christian Bayona <RTC 316106> CreaciÛn
       31/01/2023  Christian Bayona <RTC 316106> Se agrega VD a campo faltante
   ----------------------------------------------------------------------------*/
 PROCEDURE GENERA_BIEN_MASI3 (
@@ -10560,7 +10367,7 @@ PROCEDURE GENERA_BIEN_MASI3 (
    Fecha        Autor               Descripcion
    -------      --------            --------------
    12/07/2022   Jorge Benel      <RTC 314179> Creacion
-   08/11/2022  David Yupanqui        <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
+   08/11/2022  David Yupanqui        <RTC-315519>  Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
 -----------------------------------------------------------------------------*/
 
 
@@ -10698,7 +10505,7 @@ BEGIN
                                                                         P_TDU_TABLA_IMP_LOCAL(i).INDSININSPECCION,
                                                                         P_TDU_TABLA_IMP_LOCAL(i).USUAUTORIZADOR   ,
                                                                         P_TDU_TABLA_IMP_LOCAL(i).CLASETIPO   ,
-                                                                        P_TDU_TABLA_IMP_LOCAL(i).PROPIEEDIFICACION, --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versi√≥n Carga SBS
+                                                                        P_TDU_TABLA_IMP_LOCAL(i).PROPIEEDIFICACION, --<RTC-315519> David Yupanqui / 08-11-2022 / Mejoras en Acsel/x para soportar cambios nueva versiÛn Carga SBS
                                                                         -- out
                                                                         nNumcert,
                                                                         p_cError --<RTC-316106> / CBayona / 23-01-2023 / Mensaje de error
@@ -11130,30 +10937,30 @@ END ENDOSO_TRASLADO_BIENES;
 
 /*-----------------------------------------------------------------------------
   Nombre      : ExisteBien
-  Proposito   : Funci¬øn que valida que exista un bien en una p¬øliza
-  Referencias : <RTC-314184> Endosos Declaraci¬øn de Existencias Tipo A y B
+  Proposito   : Funciøn que valida que exista un bien en una pøliza
+  Referencias : <RTC-314184> Endosos Declaraciøn de Existencias Tipo A y B
   Parametros  :
-                p_nIdePol          NUMBER     Identificador de P¬øliza
-                p_nNumCert         NUMBER     N¬ømero de Certificado
-                p_cDescBien        VARCHAR2   Descripci¬øn del Bien
+                p_nIdePol          NUMBER     Identificador de Pøliza
+                p_nNumCert         NUMBER     Nømero de Certificado
+                p_cDescBien        VARCHAR2   Descripciøn del Bien
   Retorno     :                    BOOLEAN    TRUE si existe el Bien, caso contrario FALSE
 
 
   Log de Cambios
-    Fecha         Autor                      Descripci¬øn
-    14/07/2022    Christian Bayona           Creaci¬øn
-    02/08/2022    Christian Bayona           <RTC-313091> Modificaci¬øn, se adicion¬ø registro de LOG
+    Fecha         Autor                      Descripciøn
+    14/07/2022    Christian Bayona           Creaciøn
+    02/08/2022    Christian Bayona           <RTC-313091> Modificaciøn, se adicionø registro de LOG
   ----------------------------------------------------------------------------*/
 FUNCTION ExisteBien (p_nIdePol IN NUMBER,
                      p_nNumCert IN NUMBER,
                      p_cDescBien IN VARCHAR2 DEFAULT 'EXISTENCIAS')
                      RETURN BOOLEAN IS
 --
-nSec    Log_Poliza_SAS_AX.Secuencia%TYPE; --<RTC-314184> CBayona / 02-08-2022 /  Se agreg¬ø registro de log
+nSec    Log_Poliza_SAS_AX.Secuencia%TYPE; --<RTC-314184> CBayona / 02-08-2022 /  Se agregø registro de log
 nCount  NUMBER(3);
 --
 BEGIN
-  pr_Interfase_AX_SAS_Util.Grabar_Log_Poliza_SAS_AX('I', p_nIdePol, NULL, NULL, 'LOG', NULL, SYSDATE, SYSDATE, 'ExisteBien', '', nSec); --<RTC-314184> CBayona / 02-08-2022 /  Se agreg¬ø registro de log
+  pr_Interfase_AX_SAS_Util.Grabar_Log_Poliza_SAS_AX('I', p_nIdePol, NULL, NULL, 'LOG', NULL, SYSDATE, SYSDATE, 'ExisteBien', '', nSec); --<RTC-314184> CBayona / 02-08-2022 /  Se agregø registro de log
   --
   SELECT COUNT(1)
   INTO nCount
@@ -11167,10 +10974,10 @@ BEGIN
     AND bc.StsBien = 'ACT'
     AND b.DescBien = p_cDescBien;
   --
-  pr_Interfase_AX_SAS_Util.Grabar_Log_Poliza_SAS_AX('F', p_nIdePol, NULL, NULL, 'LOG', 'OK', SYSDATE, SYSDATE, 'ExisteBien', '', nSec); --<RTC-314184> CBayona / 02-08-2022 /  Se agreg¬ø registro de log
+  pr_Interfase_AX_SAS_Util.Grabar_Log_Poliza_SAS_AX('F', p_nIdePol, NULL, NULL, 'LOG', 'OK', SYSDATE, SYSDATE, 'ExisteBien', '', nSec); --<RTC-314184> CBayona / 02-08-2022 /  Se agregø registro de log
   RETURN (nCount > 0);
 
---<I RTC-314184> CBayona / 02-08-2022 /  Se agreg¬ø excepci¬øn y registro de log
+--<I RTC-314184> CBayona / 02-08-2022 /  Se agregø excepciøn y registro de log
 EXCEPTION
   WHEN OTHERS THEN
     pr_Interfase_AX_SAS_Util.Grabar_Log_Poliza_SAS_AX('F', p_nIdePol, NULL, NULL, 'LOG', 'ERR', SYSDATE, SYSDATE, 'ExisteBien', '', nSec);
@@ -11191,8 +10998,8 @@ END ExisteBien;
     Fecha         Autor                      Descripcion
     19/07/2022    Mauro Zegarra              Creacion
     24/10/2022    Mauro Zegarra              <RTC 314951> Soporte para polizas con varios certificados
-    10/01/2023   Christian Bayona            <RTC 316106> Se actualiza excepci√≥n
-    17/04/2023   Christian Bayona            <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+    10/01/2023   Christian Bayona            <RTC 316106> Se actualiza excepciÛn
+    17/04/2023   Christian Bayona            <RTC 316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
   -----------------------------------------------------------------------------*/
   function modificar_prima(p_idepol poliza.idepol%type, p_prima oper_pol.mtooper%type)
     return oper_pol.numoper%type is
@@ -11275,13 +11082,13 @@ END ExisteBien;
         into l_numcert
         from certificado t
        where t.idepol = p_idepol
-         --and t.stscert = pr_interfase_ax_sas_util.kestmod; --<RTC 316878> / Christian Bayona / 17-04-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B / Se reemplaza esta l√≠nea
-         and t.stscert IN ('INC', 'MOD'); --<RTC 316878> / Christian Bayona / 17-04-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+         --and t.stscert = pr_interfase_ax_sas_util.kestmod; --<RTC 316878> / Christian Bayona / 17-04-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B / Se reemplaza esta lÌnea
+         and t.stscert IN ('INC', 'MOD'); --<RTC 316878> / Christian Bayona / 17-04-2023 / CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
 
       return l_numcert;
     exception
       when others then
-        return 1;  --<RTC 316106> CBayona / 10-01-2023 / Considerar valor por omisi√≥n para el certificado
+        return 1;  --<RTC 316106> CBayona / 10-01-2023 / Considerar valor por omisiÛn para el certificado
     end;
     ----------------------------------------------
   begin
@@ -11376,7 +11183,7 @@ END ExisteBien;
 
       if l_cobert_config = 'N' then
         if l_codprod <> '3001' then
-          -- 'No existen Coberturas Configuradas para su aplicaci¬øn'
+          -- 'No existen Coberturas Configuradas para su aplicaciøn'
           pr_interfase_ax_sas_util.insertar_log_errores('VALIDAR', 'VAL-1525');
           raise_application_error(-20100, 'COBERTURA NO CONFIGURADA');
         end if;
@@ -11572,7 +11379,7 @@ END ExisteBien;
     Fecha         Autor                      Descripci?n
     20/07/2022    Jorge Benel                Creacion
     29/08/2022    Jorge Benel                <RTC 313349> Complementa logica de actualizacion de la tabla PORC_DER_EMI.
-    19/09/2022    Jorge Benel                <RTC 313349> Inclusi√≥n de cursor de salida
+    19/09/2022    Jorge Benel                <RTC 313349> InclusiÛn de cursor de salida
  -----------------------------------------------------------------------------*/
 
  PROCEDURE CAMBIO_RESP_PAGO(p_nIdePol     IN POLIZA.IDEPOL%type,
@@ -11580,7 +11387,7 @@ END ExisteBien;
                             p_TABLA_RESP_PAGO IN TDU_TABLA_RESP_PAGO,
                             p_cCodUsuario     IN  Varchar2,
                             --
-                            p_cursorMsgValida      OUT sys_refcursor , -- <RTC 313349> jorge benel / 19-09-2022 / Inclusi√≥n de cursor de salida
+                            p_cursorMsgValida      OUT sys_refcursor , -- <RTC 313349> jorge benel / 19-09-2022 / InclusiÛn de cursor de salida
                             p_cError          OUT VARCHAR2) IS
 
      nExisteValidacion       NUMBER(1):= 0;
@@ -11604,7 +11411,7 @@ END ExisteBien;
        dFecFinVigPol   POLIZA.FECFINVIG%TYPE;
        bExiste         BOOLEAN;
     BEGIN
-       -- Eliminar los datos del Log de mensajes de validaci¬øn
+       -- Eliminar los datos del Log de mensajes de validaciøn
        LIMPIAR_LOG_MENSAJES;
        -- Obtenemos informacion de la poliza
        bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
@@ -11621,14 +11428,14 @@ END ExisteBien;
        IF PR_INTERFASE_AX_SAS_UTIL.EXISTE_LOG_MENSAJES = 'S' THEN
           nExisteValidacion := 1;
           p_cError := '1,'||'Existen validaciones encontradas.';
-          p_cursorMsgValida := pr_interfase_ax_sas.MOSTRAR_CURSOR_MENSAJES;  -- <RTC 313349> jorge benel / 19-09-2022 / Inclusi√≥n de cursor de salida
+          p_cursorMsgValida := pr_interfase_ax_sas.MOSTRAR_CURSOR_MENSAJES;  -- <RTC 313349> jorge benel / 19-09-2022 / InclusiÛn de cursor de salida
           RAISE_APPLICATION_ERROR(-20100,'Existen validaciones encontradas.');
        END IF;
     END VALIDAR;
 
   BEGIN
      p_cError := '0,OK';
-     PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('I',p_nIdePol,p_nNumcert,NULL,'LOG',NULL ,SYSDATE,SYSDATE,'PR_INTERFASE_AX_B2B.CAMBIO_RESP_PAGO','',nSecuencia );
+     PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('I',p_nIdePol,p_nNumcert,NULL,'LOG',NULL ,SYSDATE,SYSDATE,'PR_INTERFASE_AX.CAMBIO_RESP_PAGO','',nSecuencia );
      -- Validaciones Previas
      VALIDAR;
 
@@ -11694,25 +11501,25 @@ END ExisteBien;
          --<F RTC 313349> Jorge Benel / 29-08-2022
      END IF;
 
-     p_cursorMsgValida := pr_interfase_ax_sas.MOSTRAR_CURSOR_MENSAJES;   -- <RTC 313349> jorge benel / 19-09-2022 / Inclusi√≥n de cursor de salida
-     PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('F',p_nIdePol,p_nNumcert,NULL,'LOG','OK' ,SYSDATE,SYSDATE,'PR_INTERFASE_AX_B2B.CAMBIO_RESP_PAGO','',nSecuencia );
+     p_cursorMsgValida := pr_interfase_ax_sas.MOSTRAR_CURSOR_MENSAJES;   -- <RTC 313349> jorge benel / 19-09-2022 / InclusiÛn de cursor de salida
+     PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('F',p_nIdePol,p_nNumcert,NULL,'LOG','OK' ,SYSDATE,SYSDATE,'PR_INTERFASE_AX.CAMBIO_RESP_PAGO','',nSecuencia );
 
   EXCEPTION
      WHEN OTHERS THEN
          p_cError := '1,'|| SQLERRM;
          IF nExisteValidacion > 0 THEN   -- Insertar el ultimo mensaje de error en el LOG.
-            PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('PR_INTERFASE_AX_B2B.CAMBIO_RESP_PAGO', kCodMsgValidacion ,SQLERRM );
+            PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('PR_INTERFASE_AX.CAMBIO_RESP_PAGO', kCodMsgValidacion ,SQLERRM );
          ELSE
-            PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('PR_INTERFASE_AX_B2B.CAMBIO_RESP_PAGO', kCodMsgError , SQLERRM );
+            PR_INTERFASE_AX_SAS_UTIL.INSERTAR_LOG_ERRORES('PR_INTERFASE_AX.CAMBIO_RESP_PAGO', kCodMsgError , SQLERRM );
          END IF;
          -- Devolver los mensajes de validacion
-         p_cursorMsgValida := pr_interfase_ax_sas.MOSTRAR_CURSOR_MENSAJES;   -- <RTC 313349> jorge benel / 19-09-2022 / Inclusi√≥n de cursor de salida
-         PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('F',p_nIdePol,p_nNumcert,NULL,'LOG','ERR',SYSDATE,SYSDATE,'PR_INTERFASE_AX_B2B.CAMBIO_RESP_PAGO','',nSecuencia );
+         p_cursorMsgValida := pr_interfase_ax_sas.MOSTRAR_CURSOR_MENSAJES;   -- <RTC 313349> jorge benel / 19-09-2022 / InclusiÛn de cursor de salida
+         PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('F',p_nIdePol,p_nNumcert,NULL,'LOG','ERR',SYSDATE,SYSDATE,'PR_INTERFASE_AX.CAMBIO_RESP_PAGO','',nSecuencia );
   END CAMBIO_RESP_PAGO;
   /*-----------------------------------------------------------------------------
   Nombre      : modificar_deducible
   Proposito   : Procedimiento para modificacion de deducibles
-  Referencias : <RTC-314181> Modificaci¬øn de Deducible
+  Referencias : <RTC-314181> Modificaciøn de Deducible
   Parametros  :
                 p_idepol        NUMBER                      Identificador de Poliza
                 p_numcert       NUMBER                      Identificador de Certificado
@@ -11730,7 +11537,7 @@ END ExisteBien;
     13/09/2022    Mauro Zegarra              Obtener certificado
     20/09/2022    Mauro Zegarra              Validaciones/Mejoras
     26/09/2022    Mauro Zegarra              Mejoras
-    27/06/2023    Christian Bayona           <RTC 317178> Error en la obtenci√≥n de datos para impresi√≥n para los casos con varios responsables de pago no est√° obteniendo todos los datos requeridos
+    27/06/2023    Christian Bayona           <RTC 317178> Error en la obtenciÛn de datos para impresiÛn para los casos con varios responsables de pago no est· obteniendo todos los datos requeridos
   -----------------------------------------------------------------------------*/
   procedure modificar_deducible(p_idepol       poliza.idepol%type,
                                 p_numcert      certificado.numcert%type,
@@ -12022,7 +11829,7 @@ END ExisteBien;
 
     pr_interfase_ax_sas.incluir_deducible_cobert(p_nidepol                => p_idepol,
                                                  p_nnumcert               => p_numcert,
-                                                 --<I RTC 317178> / Christian Bayona / 27-06-2023 / Error en la obtenci√≥n de datos para impresi√≥n para los casos con varios responsables de pago no est√° obteniendo todos los datos requeridos
+                                                 --<I RTC 317178> / Christian Bayona / 27-06-2023 / Error en la obtenciÛn de datos para impresiÛn para los casos con varios responsables de pago no est· obteniendo todos los datos requeridos
                                                  -- p_dfecinivig             => r_certificado.fecing,
                                                  -- p_dfecfinvig             => r_certificado.fecfin,
                                                  p_dfecinivig             => NVL(p_fecini, r_certificado.fecing),
@@ -12074,19 +11881,19 @@ END ExisteBien;
 
 /*-----------------------------------------------------------------------------
   Nombre      : Valida_Cobertura
-  Proposito   : Funci√≥n que valida que exista un bien en una p√≥liza
-  Referencias : <RTC-313752> Endosos Modificaci√≥n INCREMENTO de suma asegurada y sub l¬ømites
+  Proposito   : FunciÛn que valida que exista un bien en una pÛliza
+  Referencias : <RTC-313752> Endosos ModificaciÛn INCREMENTO de suma asegurada y sub lømites
   Parametros  :
-                p_nIdePol          NUMBER     Identificador de P√≥liza
-                p_nNumCert         NUMBER     N√∫mero de Certificado
-                p_cCodRamo         VARCHAR2   C√≥digo del Ramo
-                p_cCodCobert       VARCHAR2   C√≥digo de la Cobertura
+                p_nIdePol          NUMBER     Identificador de PÛliza
+                p_nNumCert         NUMBER     N˙mero de Certificado
+                p_cCodRamo         VARCHAR2   CÛdigo del Ramo
+                p_cCodCobert       VARCHAR2   CÛdigo de la Cobertura
   Retorno     :                    VARCHAR2   Si es correcta 0,OK, caso contrario retorna un mensaje de error
 
 
   Log de Cambios
-    Fecha         Autor                      Descripci¬øn
-    22/08/2022    Christian Bayona           <RTC-314183> Creaci√≥n
+    Fecha         Autor                      Descripciøn
+    22/08/2022    Christian Bayona           <RTC-314183> CreaciÛn
   ----------------------------------------------------------------------------*/
   FUNCTION Valida_Cobertura (p_nIdePol IN Poliza.IdePol%TYPE,
                              p_nNumCert IN Certificado.NumCert%TYPE,
@@ -12159,17 +11966,17 @@ END ExisteBien;
 
 /*-----------------------------------------------------------------------------
  Nombre     : EXISTE_NUMOPER
- Proposito  : Validar Existencia de Numero de operaci√≥n de Poliza
+ Proposito  : Validar Existencia de Numero de operaciÛn de Poliza
  Referencia :
  Parametro  : p_nIdePol     Id de la poliza
-              p_nNumOper    Numero de Operaci√≥n
+              p_nNumOper    Numero de OperaciÛn
 
  Retorno :
 
  Log de Cambios
  Fecha        Autor               Descripcion
  -------      --------            --------------
- 12/09/2022   Jorge Benel        <RTC 314951> Creaci√≥n.
+ 12/09/2022   Jorge Benel        <RTC 314951> CreaciÛn.
 
 
  ----------------------------------------------------------------------------- */
@@ -12208,12 +12015,12 @@ END ExisteBien;
 
 /*-----------------------------------------------------------------------------
  Nombre     : Anular_Endoso
- Proposito  : Anulaci√≥n de Endoso
+ Proposito  : AnulaciÛn de Endoso
  Referencia :
  Parametro  :
-              p_nNumOper    Numero de Operaci√≥n
+              p_nNumOper    Numero de OperaciÛn
               p_nIdePol     Id de la poliza
-              p_cTextoAnexo Texto del Anexo por la anulaci√≥n
+              p_cTextoAnexo Texto del Anexo por la anulaciÛn
 
  Retorno :    p_cError            Valor de retorno del proceso. En caso de error se concatena el mensaje de error.
                       0,OK
@@ -12222,7 +12029,7 @@ END ExisteBien;
  Log de Cambios
  Fecha        Autor               Descripcion
  -------      --------            --------------
- 12/09/2022   Jorge Benel        <RTC 314951> Creaci√≥n.
+ 12/09/2022   Jorge Benel        <RTC 314951> CreaciÛn.
 
 
  ----------------------------------------------------------------------------- */
@@ -12268,7 +12075,7 @@ FUNCTION LEE_ANEXO_OPERACION RETURN MOD_TEXTO_ANEXO_POL.TEXTOANEXO%TYPE AS
       WHEN TOO_MANY_ROWS THEN
         cText := '*** La consulta devuelve mas de un registro ***';
       WHEN OTHERS THEN
-         cText := 'Error al leer el anexo de la operaci√≥n'|| sqlerrm;
+         cText := 'Error al leer el anexo de la operaciÛn'|| sqlerrm;
     END;
     RETURN cText;
 
@@ -12281,17 +12088,17 @@ BEGIN -- main
   PR_INTERFASE_AX_SAS_UTIL.GRABAR_LOG_POLIZA_SAS_AX('I',p_nIdepol,NULL,NULL,'LOG',NULL ,SYSDATE,SYSDATE,'Anular_Endoso','',nSecuencia );
   --
 
-  -- Validaci√≥n de texto vacio
-  IF p_cTextoAnexo IS NULL THEN p_cError := '1,Error en validaci√≥n del texto del anulaci√≥n, no deber ser vacio'; RETURN; END IF; --  <RTC 314185> Jorge Benel 07-12-2022
+  -- ValidaciÛn de texto vacio
+  IF p_cTextoAnexo IS NULL THEN p_cError := '1,Error en validaciÛn del texto del anulaciÛn, no deber ser vacio'; RETURN; END IF; --  <RTC 314185> Jorge Benel 07-12-2022
   -- Validacion del estado la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_POLIZA_XIDEPOL( p_nIdePol ,cStsPol , cCodProd , nNumPol, dFecIniVigPol , dFecFinVigPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de p√≥liza'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de pÛliza'; RETURN; END IF;
   -- Validacion del estado de la poliza
   bExiste := PR_INTERFASE_AX_SAS_UTIL.VALIDA_ESTADO_POLIZA_ENDOSO( cStsPol );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de estado de p√≥liza'; RETURN; END IF;
-  -- Validacion del numero de operaci√≥n
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de estado de pÛliza'; RETURN; END IF;
+  -- Validacion del numero de operaciÛn
   bExiste := EXISTE_NUMOPER(p_nIdePol, p_nNumOper );
-  IF NOT bExiste THEN p_cError := '1,Error en validaci√≥n de existencia del numero de operaci√≥n'; RETURN; END IF;
+  IF NOT bExiste THEN p_cError := '1,Error en validaciÛn de existencia del numero de operaciÛn'; RETURN; END IF;
 
 
   v_Texto_Anexo  := ANULAR_ENDOSO.p_cTextoAnexo;
@@ -12331,7 +12138,7 @@ END ANULAR_ENDOSO;
   procedure val_certificado(p_numcert certificado.numcert%type) is
   begin
     if p_numcert is null then
-      -- 'El n√∫mero del certificado es obligatorio.'
+      -- 'El n˙mero del certificado es obligatorio.'
       pr_interfase_ax_sas_util.insertar_log_errores('val_certificado', 'VAL-0048');
       raise_application_error(-20100, 'CERTIFICADO OBLIGATORIO');
     end if;
@@ -12539,20 +12346,20 @@ END ANULAR_ENDOSO;
 
 /*------------------------------------------------------------------------
   Nombre     : Actualizar_Cert_Relacionados
-  Prop√≥sito  : Actualizar las fechas de inicio y fin de vigencia los relacionados despues
+  PropÛsito  : Actualizar las fechas de inicio y fin de vigencia los relacionados despues
                de hacer la copia de un certificado.
-  Referencias: <RTC-314184> Endosos de Declaraci√≥n de existencias tipo "A y B"
-  Par√°metros :
-                 p_nIdePolOrig     NUMBER       Identificador de P√≥liza
-                 p_nNumCertOrig    NUMBER       N√∫mero de Certificado
+  Referencias: <RTC-314184> Endosos de DeclaraciÛn de existencias tipo "A y B"
+  Par·metros :
+                 p_nIdePolOrig     NUMBER       Identificador de PÛliza
+                 p_nNumCertOrig    NUMBER       N˙mero de Certificado
                  p_dFecIni         DATE         Fecha de Inicio del Certificado
                  p_dFecFin         DATE         Fecha de Fin del Certificado
-                 p_nNumCertMax     NUMBER       N√∫mero M√°ximo del Certificado
+                 p_nNumCertMax     NUMBER       N˙mero M·ximo del Certificado
   Retorno    :
 
   Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    12/08/2022    Christian Bayona    Creaci√≥n
+    Fecha         Autor               DescripciÛn
+    12/08/2022    Christian Bayona    CreaciÛn
  -----------------------------------------------------------------------------*/
 PROCEDURE Actualizar_Cert_Relacionados (p_nIdePolOrig  IN Poliza.IdePol%TYPE,
                                         p_nNumCertOrig IN Certificado.NumCert%TYPE,
@@ -12714,21 +12521,21 @@ END Actualizar_Cert_Relacionados;
 
 /*------------------------------------------------------------------------
   Nombre     : CopiaCertificado
-  Prop√≥sito  : Procedimiento para hacer la copia de un certificado.
-  Referencias: <RTC-314184> Endosos de Declaraci√≥n de existencias tipo "A y B"
-  Par√°metros :
-                 p_nIdePol         NUMBER       Identificador de P√≥liza
-                 p_nNumCert        NUMBER       N√∫mero de Certificado
-                 p_cCodCli         VARCHAR2     C√≥digo del Cliente
+  PropÛsito  : Procedimiento para hacer la copia de un certificado.
+  Referencias: <RTC-314184> Endosos de DeclaraciÛn de existencias tipo "A y B"
+  Par·metros :
+                 p_nIdePol         NUMBER       Identificador de PÛliza
+                 p_nNumCert        NUMBER       N˙mero de Certificado
+                 p_cCodCli         VARCHAR2     CÛdigo del Cliente
                  p_dFecIniVig      DATE         Fecha de Inicio de Vigencia
                  p_dFecFinVig      DATE         Fecha de Fin de Vigencia
-                 p_nNumCopias      NUMBER       N√∫mero de copias del Certificado
-  Retorno    :   p_nNewNumCert     NUMBER       N√∫mero de Certificado inicial generedo
+                 p_nNumCopias      NUMBER       N˙mero de copias del Certificado
+  Retorno    :   p_nNewNumCert     NUMBER       N˙mero de Certificado inicial generedo
                  p_cError          VARCHAR2     Retorno de resultado del proceso (OK = 0,OK / ERROR = 1,DescError)
 
   Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    10/08/2022    Christian Bayona    Creaci√≥n
+    Fecha         Autor               DescripciÛn
+    10/08/2022    Christian Bayona    CreaciÛn
  -----------------------------------------------------------------------------*/
 PROCEDURE CopiaCertificado(
   p_nIdePol IN Poliza.IdePol%TYPE,
@@ -12797,17 +12604,17 @@ END CopiaCertificado;
 
 /*------------------------------------------------------------------------
   Nombre     : Existe_Cert_DE_Tipo_B
-  Prop√≥sito  : Funci√≥n que valida que existe un certificado existente de Tipo B (vigencia mensual).
-  Referencias: <RTC-314184> Endosos de Declaraci√≥n de existencias tipo "A y B"
-  Par√°metros :
-                 p_nIdePol         NUMBER       Identificador de P√≥liza
-                 p_nNumCert        NUMBER       N√∫mero de Certificado
+  PropÛsito  : FunciÛn que valida que existe un certificado existente de Tipo B (vigencia mensual).
+  Referencias: <RTC-314184> Endosos de DeclaraciÛn de existencias tipo "A y B"
+  Par·metros :
+                 p_nIdePol         NUMBER       Identificador de PÛliza
+                 p_nNumCert        NUMBER       N˙mero de Certificado
                  p_cStsCert        VARCHAR2     Estado del Certificado
-  Retorno    :                     NUMBER       N√∫mero de Certificado con vigencia mensual; -1 Si error
+  Retorno    :                     NUMBER       N˙mero de Certificado con vigencia mensual; -1 Si error
 
   Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    14/09/2022    Christian Bayona    Creaci√≥n
+    Fecha         Autor               DescripciÛn
+    14/09/2022    Christian Bayona    CreaciÛn
  -----------------------------------------------------------------------------*/
 FUNCTION Existe_Cert_DE_Tipo_B(p_nIdePol IN Poliza.IdePol%TYPE,
                                p_nNumCert IN Certificado.NumCert%TYPE DEFAULT NULL,
@@ -12831,16 +12638,16 @@ END Existe_Cert_DE_Tipo_B;
 
 /*------------------------------------------------------------------------
   Nombre     : CodAutorizador
-  Prop√≥sito  : Funci√≥n que devuelve el c√≥digo del usuario autorizador
-  Referencias: <RTC-316106> Actualizaci√≥n Endoso Modificaci√≥n de Locales
-  Par√°metros :
-                 p_nIdePol         NUMBER       Identificador de P√≥liza
-                 p_nNumOper        NUMBER       N√∫mero de Certificado
-  Retorno    :                     VARCHAR2     C√≥digo de Usuario
+  PropÛsito  : FunciÛn que devuelve el cÛdigo del usuario autorizador
+  Referencias: <RTC-316106> ActualizaciÛn Endoso ModificaciÛn de Locales
+  Par·metros :
+                 p_nIdePol         NUMBER       Identificador de PÛliza
+                 p_nNumOper        NUMBER       N˙mero de Certificado
+  Retorno    :                     VARCHAR2     CÛdigo de Usuario
 
   Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    31/01/2023    Christian Bayona    Creaci√≥n
+    Fecha         Autor               DescripciÛn
+    31/01/2023    Christian Bayona    CreaciÛn
  -----------------------------------------------------------------------------*/
 FUNCTION CodAutorizador(p_nIdePol POLIZA.IdePol%TYPE,
                         p_nNumOper OPERACION.IdeOp%TYPE)
@@ -12888,23 +12695,23 @@ END CodAutorizador;
 
 /*------------------------------------------------------------------------
   Nombre     : Obtener_Firma
-  Prop√≥sito  : Procedimiento que devuelve la firma en base al reporte indicado
-  Referencias: <RTC-316449> Endoso Declaraci√≥n de existencias tipo "A y B"
+  PropÛsito  : Procedimiento que devuelve la firma en base al reporte indicado
+  Referencias: <RTC-316449> Endoso DeclaraciÛn de existencias tipo "A y B"
 
-  Par√°metros :
-                 p_nIdePol         NUMBER       Identificador de P√≥liza
-                 p_cNomRpt         VARCHAR2     N√∫mero de Certificado
-                 p_cCodFirma       VARCHAR2     C√≥digo de Firma
+  Par·metros :
+                 p_nIdePol         NUMBER       Identificador de PÛliza
+                 p_cNomRpt         VARCHAR2     N˙mero de Certificado
+                 p_cCodFirma       VARCHAR2     CÛdigo de Firma
   Retorno    :   p_cFirma          CLOB         Firma obtenia en BASE64
 
   Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    17/02/2023    Christian Bayona    Creaci√≥n
-    22/02/2023    Christian Bayona    Modificaci√≥n, se agrega nuevo par√°metro
+    Fecha         Autor               DescripciÛn
+    17/02/2023    Christian Bayona    CreaciÛn
+    22/02/2023    Christian Bayona    ModificaciÛn, se agrega nuevo par·metro
  -----------------------------------------------------------------------------*/
 PROCEDURE Obtener_Firma(p_nIdePol IN Poliza.IdePol%TYPE,
                         p_cNomRpt IN VARCHAR2,
-                        p_cCodFirma IN VARCHAR2, --<RTC 316449> / CBayona / 22-02-2023 / Se agrega nuevo par√°metro
+                        p_cCodFirma IN VARCHAR2, --<RTC 316449> / CBayona / 22-02-2023 / Se agrega nuevo par·metro
                         --
                         p_cFirma OUT NOCOPY CLOB) IS
 --
@@ -12971,17 +12778,17 @@ END Obtener_Firma;
 
 /*------------------------------------------------------------------------
   Nombre     : Corregir_Coberturas
-  Prop√≥sito  : Procedimiento que corrige las coberturas que no debieron ser movidas por los datos particulares (simil a lo que hace el emisor)
-  Referencias: <RTC-316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de Declaraci√≥n de Existencias Tipo B
+  PropÛsito  : Procedimiento que corrige las coberturas que no debieron ser movidas por los datos particulares (simil a lo que hace el emisor)
+  Referencias: <RTC-316878> CORRECTIVO: Error al aplicar recargo/descuento en el Endoso de DeclaraciÛn de Existencias Tipo B
 
-  Par√°metros :
-                 p_nIdePol         NUMBER       Identificador de P√≥liza
-                 p_cNumCert        NUMBER       N√∫mero de Certificado
+  Par·metros :
+                 p_nIdePol         NUMBER       Identificador de PÛliza
+                 p_cNumCert        NUMBER       N˙mero de Certificado
   Retorno    :
 
   Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    12/05/2023    Christian Bayona    Creaci√≥n
+    Fecha         Autor               DescripciÛn
+    12/05/2023    Christian Bayona    CreaciÛn
  -----------------------------------------------------------------------------*/
 PROCEDURE Corregir_Coberturas (p_nIdePol IN Poliza.IdePol%TYPE, p_nNumCert IN Certificado.NumCert%TYPE) IS
 --
@@ -13035,8 +12842,8 @@ END Corregir_Coberturas;
    Log de Cambios
    Fecha        Autor               Descripcion
    -------      --------            --------------
-   07/07/2022   Christian Bayona    <RTC 317178> Error en la obtenci√≥n de datos para impresi√≥n para los casos con varios responsables de pago no est√° obteniendo todos los datos requeridos
-   21/09/2023   Manuel Navarro      <DIGB2B03-2815> Inclusi√≥n Locales Legacy Dubai Masivo
+   07/07/2022   Christian Bayona    <RTC 317178> Error en la obtenciÛn de datos para impresiÛn para los casos con varios responsables de pago no est· obteniendo todos los datos requeridos
+   21/09/2023   Manuel Navarro      <DIGB2B03-2815> InclusiÛn Locales Legacy Dubai Masivo
 -----------------------------------------------------------------------------*/
 PROCEDURE Endoso_Traslado_Bienes ( p_nIdePol                IN Poliza.IdePol%TYPE,
                                    p_cCodProd               IN Poliza.CodProd%TYPE,
@@ -13163,17 +12970,13 @@ BEGIN
                 Numcert         => NULL,  Idedirec  => NULL,         Indriesgoins   => NULL, Indinspeccion => NULL,
                 Notainspeccion  => NULL,  Indsininspeccion => NULL,  Usuautorizador => NULL, Clasetipo     => NULL,
                 Propieedificacion  => NULL
-                --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+                --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
                 ,USOINMUEBLE => NULL, 
-                edificio => NULL, edificotro1 => NULL, edificotro2 => NULL, edificotro3 => NULL, edificotro4 => NULL,
+                edificio => NULL, edificOficina => NULL, edificotro1 => NULL, edificotro2 => NULL, edificotro3 => NULL,
                 contExistencias => NULL, contMaquinFija => NULL, contMaqMovilAcces => NULL, contEquipoElec => NULL, contMobiliarioGral => NULL, 
                 contOtro1 => NULL, contOtro2 => NULL, contOtro3 => NULL, contOtro4 => NULL, contOtro5 => NULL, contOtro6 => NULL,
                 benefBruto => NULL,
-                gastoEstable => NULL,
-                codedificio => NULL, codedificotro1 => NULL, codedificotro2 => NULL, codedificotro3 => NULL, codedificotro4 => NULL,
-                codcontExistencias => NULL, codcontMaquinFija => NULL, codcontMaqMovilAcces => NULL, codcontEquipoElec => NULL, codcontMobiliarioGral => NULL,
-                codcontOtro1 => NULL, codcontOtro2 => NULL, codcontOtro3 => NULL, codcontOtro4 => NULL, codcontOtro5 => NULL,  codcontOtro6 => NULL,
-                codbenefBruto => NULL,  codgastoEstable => NULL
+                gastosEstable => NULL
                 ) ;
                 --<F DIGB2B03-2815> 
 
@@ -13215,13 +13018,13 @@ BEGIN
               AUX_TDU_Tabla_Imp_Local(i).UsuAutorizador    := c1.UsuAutorizador;
               AUX_TDU_Tabla_Imp_Local(i).PropieEdificacion := c1.PropieEdificacion;
               
-              --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / Inclusi√≥n Locales Legacy Dubai Masivo
+              --<I DIGB2B03-2815> / Manuel Navarro / 21-09-2023 / InclusiÛn Locales Legacy Dubai Masivo
               AUX_TDU_Tabla_Imp_Local(i).USOINMUEBLE := c1.USOINMUEBLE;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificio := NULL;
+              AUX_TDU_TABLA_IMP_LOCAL(i).edificOficina := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro1 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro2 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).edificotro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).edificotro4 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contExistencias := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contMaquinFija := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contMaqMovilAcces := NULL;
@@ -13234,26 +13037,7 @@ BEGIN
               AUX_TDU_TABLA_IMP_LOCAL(i).contOtro5 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).contOtro6 := NULL;
               AUX_TDU_TABLA_IMP_LOCAL(i).benefBruto := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).gastoEstable := NULL;
-              
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificio := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro1 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro2 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codedificotro4 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontExistencias := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMaquinFija := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMaqMovilAcces := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontEquipoElec := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontMobiliarioGral := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro1 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro2 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro3 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro4 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro5 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codcontOtro6 := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codbenefBruto := NULL;
-              AUX_TDU_TABLA_IMP_LOCAL(i).codgastoEstable := NULL;
+              AUX_TDU_TABLA_IMP_LOCAL(i).gastosEstable := NULL;
               --<F DIGB2B03-2815> 
               
            END;
@@ -13506,7 +13290,7 @@ END Endoso_Traslado_Bienes;
 /*--------------------------------------------------------------------
   Nombre      : Caract_Extran_Trec
   Proposito   : Valida que los caracteres dentro del texto sean validos en los campos de maquinarias TREC
-  Referencias : DIGB2B03-2877 Mejora en Registro y Validaci√≥n de Maquinaria TREC
+  Referencias : DIGB2B03-2877 Mejora en Registro y ValidaciÛn de Maquinaria TREC
   Parametros  :
                 p_Valor            VARCHAR2                  Texto a validar
   Fecha         Autor             Descripcion
@@ -13538,15 +13322,15 @@ END Caract_Extran_Trec;
 /*--------------------------------------------------------------------
   Nombre      : NumOper_Update_Trec
   Proposito   : Actualiza el nro. de operacion despues de activar la poliza de maquinarias TREC
-  Referencias : DIGB2B03-2877 Mejora en Registro y Validaci√≥n de Maquinaria TREC
+  Referencias : DIGB2B03-2877 Mejora en Registro y ValidaciÛn de Maquinaria TREC
   Parametros  :
                 p_cTag             VARCHAR2                  Etiqueta XML principal
-                p_cXMLInput        XML (CLob)                con los par√°metros de entrada necesario para crear el endoso
-                p_nIdePol          NUMBER                    Identificador de P√≥liza
-                p_nNumCert         NUMBER                    N√∫mero de Certificado
+                p_cXMLInput        XML (CLob)                con los par·metros de entrada necesario para crear el endoso
+                p_nIdePol          NUMBER                    Identificador de PÛliza
+                p_nNumCert         NUMBER                    N˙mero de Certificado
                 p_datos_maquinaria TDU_TABLA_MAQUINARIA_TREC Arreglo de Datos Maquinarias
-                p_cCodUsr          VARCHAR2                  C√≥digo de Usuario
-                p_proceso          VARCHAR2                  Tipo de operaci√≥n (I-Inclusion, E-Exclusion, M-Modificacion)
+                p_cCodUsr          VARCHAR2                  CÛdigo de Usuario
+                p_proceso          VARCHAR2                  Tipo de operaciÛn (I-Inclusion, E-Exclusion, M-Modificacion)
                 p_error            VARCHAR2                  Error
   Fecha       Autor             Descripcion
   11/08/2023    Manuel Navarro             Creacion
@@ -13688,7 +13472,7 @@ PROCEDURE NumOper_Update_Trec(p_cTag IN VARCHAR2,
                       AND INDINCLUIDO = vIndIncluido;
                END IF;
            EXCEPTION WHEN OTHERS THEN
-               p_error := P_PROCESO || ', No se pudo actualizar el n√∫mero de operaci√≥n '|| sqlerrm;
+               p_error := P_PROCESO || ', No se pudo actualizar el n˙mero de operaciÛn '|| sqlerrm;
                EXIT;
            END;
        END LOOP;
@@ -13698,10 +13482,10 @@ PROCEDURE NumOper_Update_Trec(p_cTag IN VARCHAR2,
 /*--------------------------------------------------------------------
   Nombre      : DATOS_MAQ_MARCA_TREC
   Proposito   : Devuelve el codigo o descripcion de la maquinaria o Marca de TREC
-  Referencias : DIGB2B03-2877 Mejora en Registro y Validaci√≥n de Maquinaria TREC
-  Parametros  : p_cBuscarPor    VARCHAR2(1)    Porque campo buscar  ('C' por c√≥digo, 'D' por descripci√≥n)
-                p_cCodCrit      VARCHAR2(100)  Criterio de b√∫squeda ('EQUIPOS_TREC' Maquinarias, 'MARCAS_TREC' Marca)
-                p_cvalorBuscado VARCHAR2(2000) C√≥digo de Producto
+  Referencias : DIGB2B03-2877 Mejora en Registro y ValidaciÛn de Maquinaria TREC
+  Parametros  : p_cBuscarPor    VARCHAR2(1)    Porque campo buscar  ('C' por cÛdigo, 'D' por descripciÛn)
+                p_cCodCrit      VARCHAR2(100)  Criterio de b˙squeda ('EQUIPOS_TREC' Maquinarias, 'MARCAS_TREC' Marca)
+                p_cvalorBuscado VARCHAR2(2000) CÛdigo de Producto
   Fecha       Autor             Descripcion
   11/08/2023    Manuel Navarro             Creacion
 --------------------------------------------------------------------*/
@@ -13725,7 +13509,7 @@ BEGIN
           cValor := null;
       END;
    END IF;
-   IF p_cBuscarPor = 'D' THEN --Buscar por Descripci√≥n
+   IF p_cBuscarPor = 'D' THEN --Buscar por DescripciÛn
       BEGIN
           SELECT TR.CODTRASF
             INTO cValor
@@ -13742,17 +13526,17 @@ END Datos_Maq_Marca_trec;
 
 /*-----------------------------------------------------------------------------
   Nombre      : inc_exc_maquinaria_trec
-  Proposito   : Procedimiento para registrar la inclusi√≥n/exclusi√≥n de los datos maquinarias TREC
-  Referencias : DIGB2B03-2877 Mejora en Registro y Validaci√≥n de Maquinaria TREC
+  Proposito   : Procedimiento para registrar la inclusiÛn/exclusiÛn de los datos maquinarias TREC
+  Referencias : DIGB2B03-2877 Mejora en Registro y ValidaciÛn de Maquinaria TREC
   Parametros  :
-                p_nIdePol          NUMBER                    Identificador de P√≥liza
-                p_nNumCert         NUMBER                    N√∫mero de Certificado
+                p_nIdePol          NUMBER                    Identificador de PÛliza
+                p_nNumCert         NUMBER                    N˙mero de Certificado
                 p_datos_maquinaria TDU_TABLA_MAQUINARIA_TREC Arreglo de Datos Maquinarias
-                p_cCodUsr          VARCHAR2                  C√≥digo de Usuario
-                p_proceso          VARCHAR2                  Tipo de operaci√≥n (I-Inclusion, E-Exclusion, M-Modificacion)
+                p_cCodUsr          VARCHAR2                  CÛdigo de Usuario
+                p_proceso          VARCHAR2                  Tipo de operaciÛn (I-Inclusion, E-Exclusion, M-Modificacion)
                 p_error            VARCHAR2                  Error
   Log de Cambios
-    Fecha         Autor                      Descripci√≥n
+    Fecha         Autor                      DescripciÛn
     11/08/2023    Manuel Navarro             Creacion
   ----------------------------------------------------------------------------*/
 PROCEDURE inc_exc_maquinaria_trec(p_idepol             POLIZA.IDEPOL%TYPE,
@@ -13804,11 +13588,11 @@ PROCEDURE inc_exc_maquinaria_trec(p_idepol             POLIZA.IDEPOL%TYPE,
         vFecIni       := P_DATOS_MAQUINARIA(i).FecIni;
 
         IF vDescMaqui IS NULL THEN
-           p_error := '1, C√≥digo de M√°quina ' || vNumMaqui || ' no existe en la tabla Transformador';
+           p_error := '1, CÛdigo de M·quina ' || vNumMaqui || ' no existe en la tabla Transformador';
            exit;
         END IF;
         IF vDescMarca IS NULL THEN
-           p_error := '1, C√≥digo de Marca ' || vCodMarca || ' no existe en la tabla Transformador';
+           p_error := '1, CÛdigo de Marca ' || vCodMarca || ' no existe en la tabla Transformador';
            exit;
         END IF;
         IF vCodSerie is null THEN
@@ -13816,15 +13600,15 @@ PROCEDURE inc_exc_maquinaria_trec(p_idepol             POLIZA.IDEPOL%TYPE,
            exit;
         END IF;
         IF vNumMotor is null THEN
-           p_error := '1, El n√∫mero de motor no puede ser nulo';
+           p_error := '1, El n˙mero de motor no puede ser nulo';
            exit;
         END IF;
         IF vNumPlaca is null THEN
-           p_error := '1, El n√∫mero de placa no puede ser nulo';
+           p_error := '1, El n˙mero de placa no puede ser nulo';
            exit;
         END IF;
         IF vAnnoFabr is null THEN
-           p_error := '1, El a√±o de fabricaci√≥n no puede ser nulo';
+           p_error := '1, El aÒo de fabricaciÛn no puede ser nulo';
            exit;
         END IF;
         --
@@ -13919,17 +13703,17 @@ PROCEDURE inc_exc_maquinaria_trec(p_idepol             POLIZA.IDEPOL%TYPE,
 /*-----------------------------------------------------------------------------
   Nombre      : mod_maquinaria_trec
   Proposito   : Procedimiento para registrar las modificaciones de datos maquinarias TREC
-  Referencias : DIGB2B03-2877 Mejora en Registro y Validaci√≥n de Maquinaria TREC
+  Referencias : DIGB2B03-2877 Mejora en Registro y ValidaciÛn de Maquinaria TREC
   Parametros  :
-                p_nIdePol          NUMBER                    Identificador de P√≥liza
-                p_nNumCert         NUMBER                    N√∫mero de Certificado
+                p_nIdePol          NUMBER                    Identificador de PÛliza
+                p_nNumCert         NUMBER                    N˙mero de Certificado
                 p_datos_maquinaria TDU_TABLA_MAQUINARIA_TREC Arreglo de Datos Maquinarias
-                p_cCodUsr          VARCHAR2                  C√≥digo de Usuario
-                p_proceso          VARCHAR2                  Tipo de operaci√≥n (I-Inclusion, E-Exclusion, M-Modificacion)
+                p_cCodUsr          VARCHAR2                  CÛdigo de Usuario
+                p_proceso          VARCHAR2                  Tipo de operaciÛn (I-Inclusion, E-Exclusion, M-Modificacion)
                 p_error            VARCHAR2                  Error
 
   Log de Cambios
-    Fecha         Autor                      Descripci√≥n
+    Fecha         Autor                      DescripciÛn
     11/08/2023    Manuel Navarro             Creacion
 ----------------------------------------------------------------------------*/
 
@@ -14008,19 +13792,19 @@ BEGIN
        vFecIni_new       := P_DATOS_MAQUINARIA(i).FecIni_new;
 
        IF vDescMaqui IS NULL THEN
-          p_error := '1, C√≥digo de M√°quina ' || vNumMaqui || ' en la tabla Transformador';
+          p_error := '1, CÛdigo de M·quina ' || vNumMaqui || ' en la tabla Transformador';
           exit;
        end if;
        IF vDescMarca IS NULL THEN
-          p_error := '1, C√≥digo de Marca ' || vCodMarca || ' en la tabla Transformador';
+          p_error := '1, CÛdigo de Marca ' || vCodMarca || ' en la tabla Transformador';
           exit;
        end if;
        IF vDescMaqui_new IS NULL THEN
-           p_error := '1, C√≥digo de M√°quina ' || vNumMaqui || ' en la tabla Transformador';
+           p_error := '1, CÛdigo de M·quina ' || vNumMaqui || ' en la tabla Transformador';
            exit;
        end if;
        IF vDescMarca_new IS NULL THEN
-          p_error := '1, C√≥digo de Marca ' || vCodMarca || ' en la tabla Transformador';
+          p_error := '1, CÛdigo de Marca ' || vCodMarca || ' en la tabla Transformador';
           exit;
        end if;
 
@@ -14029,15 +13813,15 @@ BEGIN
            exit;
         END IF;
         IF vNumMotor_new is null THEN
-           p_error := '1, El n√∫mero de motor no puede ser nulo';
+           p_error := '1, El n˙mero de motor no puede ser nulo';
            exit;
         END IF;
         IF vNumPlaca_new is null THEN
-           p_error := '1, El n√∫mero de placa no puede ser nulo';
+           p_error := '1, El n˙mero de placa no puede ser nulo';
            exit;
         END IF;
         IF vAnnoFabr_new is null THEN
-           p_error := '1, El a√±o de fabricaci√≥n no puede ser nulo';
+           p_error := '1, El aÒo de fabricaciÛn no puede ser nulo';
            exit;
         END IF;
 
@@ -14098,9 +13882,9 @@ END mod_maquinaria_trec;
 /*--------------------------------------------------------------------
   Nombre      : Valida_Suma_Trec
   Proposito   : Validar el valor declarado contra monto ingreso maquinarias TREC
-  Referencias : DIGB2B03-2877 Mejora en Registro y Validaci√≥n de Maquinaria TREC
-  Parametros  : p_nIdepol   NUMBER   N√∫mero de Idepol
-                p_cCodProd  VARCHAR  C√≥digo de Producto
+  Referencias : DIGB2B03-2877 Mejora en Registro y ValidaciÛn de Maquinaria TREC
+  Parametros  : p_nIdepol   NUMBER   N˙mero de Idepol
+                p_cCodProd  VARCHAR  CÛdigo de Producto
   Fecha       Autor             Descripcion
   11/08/2023  Manuel Navarro    Creacion
 --------------------------------------------------------------------*/
@@ -14233,3206 +14017,7 @@ BEGIN
    END IF;
 END Valida_Suma_Trec;
 
---------------------------------------------------------------------------------------------------------------
--- CLAUSULA C
-/*------------------------------------------------------------------------
-  Nombre     : SP_MNT_COBERT_CERT_C
-  Prop√≥sito  : Procedimiento para eliminar coberturas y agregar la nueva cobertura con clausula C
-  Referencia : Formulario MANTCOBC.fmb
-  Par√°metros :
-               Par√°metros :
-               p_nIdePol      NUMBER    Identificador de P√≥liza
-               p_nNumCert     NUMBER    N√∫mero de Certificado
-               p_cCodRamoCert VARCHAR2  Codigo de ramo asociado al certificado de una poliza.
-               p_cTipo        VARCHAR2  Tipo PA√çSES EXCLUIDOS(P) o RETROACTIVIDAD(R)
-  Retorno    : p_cError       VARCHAR2  Retorno de resultado del proceso (OK = 0,OK / ERROR = 1,DescError)
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n 
-    22/09/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_MNT_COBERT_CERT_C(
-  p_nIdePol      IN Poliza.IdePol%TYPE,
-  p_nNumCert     IN Certificado.NumCert%TYPE,
-  p_cCodRamoCert IN CERT_RAMO.CODRAMOCERT%TYPE,
-  p_cTipo        IN CHAR(1),
-  p_cError       OUT VARCHAR2(3000)
-) IS
-    -- ---------------
-  TYPE Cursor_Cobert IS REF CURSOR;
-  c_Cobert Cursor_Cobert;
-  
-  P   POLIZA%ROWTYPE;
-  R   CERT_RAMO%ROWTYPE;
-  CPP COBERT_PLAN_PROD%ROWTYPE;
-  
-  TYPE COBERTCERT IS TABLE OF COBERT_CERT%ROWTYPE INDEX BY PLS_INTEGER;
-  rB01_1 COBERTCERT;
-  POSICION PLS_INTEGER := 1;
-  
-  nTipTasa NUMBER(4);
-  -- ------------------------------------------------------------------
-  n_Existe NUMBER;  
-
-  -- CPPD COBERT_PLAN_PROD%ROWTYPE;
-  cMensajeRestriccionSAS VARCHAR2(400);
-
-  CURSOR C_COBERTCERT IS
-    SELECT * FROM COBERT_CERT CC
-    WHERE CC.IDEPOL    = p_nIdePol
-    AND CC.NUMCERT     = p_nNumCert
-    AND CC.CODRAMOCERT = p_cCodRamoCert;
-    
-  CP COBERT_CERT%ROWTYPE;
-
-  cCodCobertDep VARCHAR2(4);
-  nPORCPRIMADEP NUMBER(11);
-
-  nTasaCambio    NUMBER(30);
-  nTasaCambioPol NUMBER(30);
-  cEliminar      CHAR(1) := 'N';
-  cCODCOBERT     COBERT_PLAN_PROD.CODCOBERT%TYPE := 'TR12';
-
-DECLARE
-    p_cError := '0,OK';
-    
-    P := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF P.IdePol IS NULL THEN
-       p_cError := '1,'||'No existe la P√≥liza '||P.IdePol;
-       DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||P.IdePol);
-       RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||P.IdePol);
-    END IF;
-
-    R := PR_CERT_RAMO.Datos_Cert_Ramo(p_nIdePol,p_nNumCert,p_cCodRamoCert);
-    IF R.CodRamoCert IS NULL THEN
-       p_cError := '1,'||'No existe el Ramo :'||p_cCodRamoCert;
-       DBMS_OUTPUT.PUT_LINE('No existe el Ramo :'||p_cCodRamoCert);
-       RAISE_APPLICATION_ERROR(-20100,'No existe el Ramo '||p_cCodRamoCert);
-    END IF;
-
-    
-  -- ============================================================
-  -- ELIMINAR LAS COBERTURAS
-  -- ============================================================
-  cMensajeRestriccionSAS := pr_poliza_util.RESTRINGE_ENDOSO_POLIZA(p_nIdePol);
-   
-  IF NOT cMensajeRestriccionSAS IS NULL THEN    
-      p_cError := '1,'||cMensajeRestriccionSAS;
-      DBMS_OUTPUT.PUT_LINE(cMensajeRestriccionSAS);
-     -- RAISE_APPLICATION_ERROR(-20104,cMensajeRestriccionSAS);
-  END IF;
-  
-  OPEN C_COBERTCERT;
-  FETCH C_COBERTCERT INTO CP;
-  WHILE C_COBERTCERT%FOUND LOOP
-    IF CP.STSCOBERT IN ('VAL','INC') THEN       
-       IF CP.STSCOBERT = 'VAL' THEN
-            BEGIN
-              SELECT NVL(MAX(1),0)
-              INTO   n_Existe
-              FROM   DUAL
-              WHERE  EXISTS ( SELECT 1 
-                              FROM   MOD_COBERT
-                              WHERE  IdeCobert  = CP.IdeCobert
-                              AND    StsModCobert NOT IN ('VAL'));                        
-            EXCEPTION
-              WHEN NO_DATA_FOUND THEN
-                n_Existe := 0;
-            END;
-       END IF;
-       IF n_Existe = 1 THEN
-            p_cError := '1,'||'Hay registros de modificaciones de la cobertura ,NO debe ser eliminada...';
-            DBMS_OUTPUT.PUT_LINE('Hay registros de modificaciones de la cobertura ,NO debe ser eliminada...');
-            RAISE_APPLICATION_ERROR(-20104,'Hay registros de modificaciones de la cobertura ,NO debe ser eliminada...');
-       END IF;
-
-       CPP := PR_Cobert_Plan_Prod.Datos_Cobert_Plan_Prod(P.codprod,CP.CodPlan,CP.RevPlan,CP.CodRamoCert,CP.CodCobert);
-       
-       IF CPP.CodCobert IS NOT NULL AND CPP.IndCobertOblig = 'S' THEN
-              p_cError := '1,'||' La Cobertura '||CP.CodCobert||' esta CONFIGURADA como obligatoria por lo cual NO puede ser eliminada...';
-              DBMS_OUTPUT.PUT_LINE(' La Cobertura '||CP.CodCobert||' esta CONFIGURADA como obligatoria por lo cual NO puede ser eliminada...');
-              RAISE_APPLICATION_ERROR(-20104,' La Cobertura '||CP.CodCobert||' esta CONFIGURADA como obligatoria por lo cual NO puede ser eliminada...');
-       END IF;
-
-       IF p_cTipo = 'P' THEN
-            cEliminar := 'S';
-       ELSIF p_cTipo = 'R' AND CP.CODCOBERT NOT IN('TR13','TR14') THEN
-            cEliminar := 'S';
-       END IF;
-
-       IF cEliminar = 'S' THEN
-          DELETE FROM COBERT_CERT C
-          WHERE C.IDECOBERT = CP.IDECOBERT
-          AND C.STSCOBERT IN('INC','VAL');
-      
-          PR_CERT_RAMO.GENERAR_CLAUSULAS_ASOCIADAS(CP.IdePol,CP.NumCert, P.codprod,
-                                              R.CodPlan,R.RevPlan,CP.CodRamoCert,
-                                               CP.FecIniValid,CP.FecFinValid);
-       
-          cEliminar := 'N';
-       END IF;
-       
-    END IF;
-    FETCH C_COBERTCERT INTO CP;
-  END LOOP;
-  CLOSE C_COBERTCERT;
-  -- ============================================================
-  -- FIN ELIMINAR LAS COBERTURAS
-  -- ============================================================
-    
-    OPEN c_Cobert FOR
-        SELECT * FROM COBERT_PLAN_PROD 
-        WHERE CodProd   = P.CodProd 
-        AND CodPlan     = R.CodPlan
-        AND RevPlan     = R.RevPlan
-        AND CodRamoPlan =  p_cCodRamoCert
-        AND TipoCobert  = 'G'
-        AND CODCOBERT   = cCODCOBERT
-        AND (IndCobPoliza <> 'S' OR IndCobPoliza IS NULL)
-        AND NOT EXISTS (SELECT 1 
-                        FROM COBERT_CERT
-                        WHERE IdePol     = p_nIdePol
-                        AND  NumCert     = p_nNumCert
-                        AND  CodRamoCert = p_cCodRamoCert
-                        AND  CodCobert   = COBERT_PLAN_PROD.CodCobert )
-                        AND NOT EXISTS  (SELECT 1
-                                        FROM  RAMO_PLAN_PROD RPP
-                                        WHERE RPP.CodProd     = P.CodProd
-                                        AND   RPP.CodPlan     = R.CodPlan
-                                        AND   RPP.RevPlan     = R.RevPlan
-                                        AND   RPP.CodRamoPlan = p_cCodRamoCert
-                                        AND   NVL(RPP.CodCobertDec,'*')   = COBERT_PLAN_PROD.CodCobert
-                                        UNION
-                                        SELECT 1
-                                        FROM  RAMO_PLAN_PROD RPP
-                                        WHERE RPP.CodProd     = P.CodProd
-                                        AND   RPP.CodPlan     = R.CodPlan
-                                        AND   RPP.RevPlan     = R.RevPlan
-                                        AND   RPP.CodRamoPlan = p_cCodRamoCert
-                                        AND   NVL(RPP.CodCobertDep,'*') = COBERT_PLAN_PROD.CodCobert
-                                        UNION
-                                        SELECT 1
-                                        FROM  RAMO_PLAN_PROD RPP
-                                        WHERE RPP.CodProd    = P.CodProd
-                                        AND   RPP.CodPlan     = R.CodPlan
-                                        AND   RPP.RevPlan     = R.RevPlan
-                                        AND   RPP.CodRamoPlan = p_cCodRamoCert
-                                        AND   NVL(RPP.CodCobertLiq,'*') = COBERT_PLAN_PROD.CodCobert);
- 
-    
-    FETCH c_Cobert INTO CPP;
-    CLOSE c_Cobert;
-
-  -----------------------------------------------------------------------  
-  -- .:. FIN DE SELECCIONAR LA COBERTURA DEL CERTIFICADO "C"
-  -----------------------------------------------------------------------
-    
-    rB01_1(POSICION).codcobert  := CPP.CodCobert;
-    rB01_1(POSICION).porcded    := CPP.PorcDed;
-    rB01_1(POSICION).mtodedmin  := CPP.MtoDedMin;
-    rB01_1(POSICION).mtodedmax  := CPP.MtoDedMax;
-    rB01_1(POSICION).baseded    := CPP.BaseDed;
-    rB01_1(POSICION).indsumaded := CPP.IndSumaDed;
-    rB01_1(POSICION).numordvis  := CPP.NumOrdVis;
-    
-    BEGIN 
-        PR_CERT_RAMO.GENERA_CLAUSULAS_X_COBERTURA(p_nIdePol,p_nNumCert,p_cCodRamoCert,
-                                                  rB01_1(POSICION).codcobert,R.fecinivalid,
-                                                  R.fecfinvalid,R.stscertramo,P.codprod,
-                                                  R.codplan,R.revplan);                           
-    EXCEPTION
-         WHEN OTHERS THEN
-          p_cError := '1,'||SQLERRM;
-         DBMS_OUTPUT.PUT_LINE('1,'||SQLERRM);
-         RAISE_APPLICATION_ERROR(-20100,SQLERRM);
-    END;
-    
-    BEGIN
-        SELECT CodCobertDep
-        INTO   cCodCobertDep
-        FROM   RAMO_PLAN_PROD
-        WHERE  CodProd   = P.codprod
-        AND  CodPlan     = R.codplan 
-        AND  RevPlan     = R.revplan 
-        AND  CodRamoPlan = p_cCodRamoCert;
-    EXCEPTION
-          WHEN NO_DATA_FOUND THEN 
-            NULL;
-    END;
-    -- :C00.nPorcPrimaDep := NVL(R.PorcPrimaDep,0);
-    IF cCodCobertDep = rB01_1(POSICION).codcobert THEN
-          nPORCPRIMADEP := NVL(R.PorcPrimaDep,0);
-    ELSE
-          nPORCPRIMADEP :=0;
-    END IF;
-
-    BEGIN
-      SELECT SQ_COBERT.NEXTVAL
-      INTO   rB01_1(POSICION).idecobert
-      FROM   SYS.DUAL;
-    END;
-  -----------------------------------------------------------------------  
-  -- .:. FIN DEL EVENTO DEL BOTON ACEPTAR SELECCI√ìN MULTIPLE
-  -----------------------------------------------------------------------
-
-  rB01_1(POSICION).idepol       := p_nIdePol;
-  rB01_1(POSICION).numcert      := p_nNumCert;
-  rB01_1(POSICION).codramocert  := p_cCodRamoCert;
-  rB01_1(POSICION).codplan      := R.CodPlan;
-  rB01_1(POSICION).revplan      := R.RevPlan;
-  rB01_1(POSICION).stscobert    := 'VAL';
-  rB01_1(POSICION).codmonedacob := P.CodMoneda;
-  rB01_1(POSICION).codmoneda    := P.CodMoneda;
-  rB01_1(POSICION).fecinivalid  := R.FecIniValid;
-  rB01_1(POSICION).fecfinvalid  := R.FecFinValid;
-  
-  PR_ANEXO_CERT.ANEXO_X_COBERTURA(p_nIdePol, p_nNumCert, P.CodProd, R.CodPlan, R.RevPlan,
-      p_cCodRamoCert, rB01_1(POSICION).codcobert, R.FecIniValid, R.FecFinValid);
-
-    -- FR_TARIFA_MULT
-    CPP := PR_Cobert_Plan_Prod.Datos_Cobert_Plan_Prod(P.CodProd,R.CodPlan,R.RevPlan,p_cCodRamoCert,rB01_1(POSICION).codcobert);                  
-    IF CPP.ParamPreCobert IS NOT NULL THEN
-        rB01_1(POSICION).sumaasegmonedacob := NVL(PR_PRE_COBERT.PRE_SUMA(p_nIdePol,p_nNumCert,P.CodProd,R.CodPlan,
-                                                            R.RevPlan,p_cCodRamoCert,rB01_1(POSICION).codcobert,
-                                                            CPP.ParamPreCobert,NULL),0);
-        rB01_1(POSICION).tasa := NVL(PR_PRE_COBERT.PRE_TASA(p_nIdePol,p_nNumCert,P.CodProd,R.CodPlan,
-                                                R.RevPlan,p_cCodRamoCert,rB01_1(POSICION).codcobert,
-                                                CPP.ParamPreCobert,NULL),0);
-        rB01_1(POSICION).primamonedacob := NVL(PR_PRE_COBERT.PRE_PRIMA(p_nIdePol,p_nNumCert,P.CodProd,R.CodPlan,
-                                                            R.RevPlan,p_cCodRamoCert,rB01_1(POSICION).CodCobert,
-                                                            CPP.ParamPreCobert,NULL),0);        
-    END IF;
-    
-    IF CPP.SumaAsegMax = CPP.SumaAsegMin AND CPP.SumaAsegMax != 0 THEN
-       rB01_1(POSICION).sumaasegmonedacob := CPP.SumaAsegMin;
-    END IF;
-
-    IF CPP.TasaMax = CPP.TasaMin AND CPP.TasaMax != 0 THEN
-        rB01_1(POSICION).tasa := CPP.TasaMin;
-    END IF;
-
-    IF CPP.PrimaMax = CPP.PrimaMin AND CPP.PrimaMax != 0 THEN
-        rB01_1(POSICION).primamonedacob := CPP.PrimaMin;
-    END IF; -- mtodeducible
-    
-    IF rB01_1(POSICION).sumaasegmonedacob > 0 AND rB01_1(POSICION).tasa > 0 THEN
-        nTipTasa := PR.BUSCA_TIPO_TASA_PROD(P.CodProd,p_cCodRamoCert,R.CodPlan,R.RevPlan,rB01_1(POSICION).codcobert); 
-        rB01_1(POSICION).primamonedacob := rB01_1(POSICION).sumaasegmonedacob * rB01_1(POSICION).Tasa / nTipTasa;
-    END IF;
-
-  nTasaCambio    := PR.TASA_CAMBIO(RB01_1(POSICION).codmonedacob,PR_VINISUSC.CODIGO_MONEDA,SYSDATE,'D');
-  nTasaCambioPol := PR.TASA_CAMBIO(RB01_1(POSICION).codmonedacob,P.codmoneda,SYSDATE,'D');
-
-  RB01_1(POSICION).prima          := RB01_1(POSICION).primamonedacob * nTasaCambio;
-  RB01_1(POSICION).sumaaseg       := RB01_1(POSICION).sumaasegmonedacob * nTasaCambio;
-  RB01_1(POSICION).sumaasegmoneda := RB01_1(POSICION).sumaasegmonedacob * nTasaCambioPol;
-  RB01_1(POSICION).primamoneda    := RB01_1(POSICION).primamonedacob * nTasaCambioPol;
-    
-    INSERT INTO COBERT_CERT(
-        tasa, -- 1
-        prima, -- 2
-        indmod, -- 3
-        indsumaded, -- 4 
-        idecobert, -- 5
-        idepol, -- 6
-        numcert, -- 7
-        codramocert, -- 8 
-        codplan, -- 9
-        revplan, -- 10
-        codcobert, -- 11
-        stscobert, -- 12
-        sumaasegmoneda, -- 13 
-        primamoneda, -- 14
-        mtototrecamoneda, -- 15 
-        mtototdctomoneda, -- 16
-        codmoneda, -- 17
-        sumaaseg, -- 18
-        mtototreca, -- 19
-        mtototdcto, -- 20
-        fecinivalid, -- 21
-        fecfinvalid, -- 22
-        indincren, -- 23
-        indplazoespera, -- 24 
-        feciniplazoespera, -- 25 
-        fecfinplazoespera, -- 26
-        fecexc, -- 27
-        codmotvexc, -- 28 
-        text1motvexc, -- 29
-        text2motvexc, -- 30
-        text3motvexc, -- 31
-        text4motvexc, -- 32
-        porcded, -- 33
-        mtodedmin, -- 34
-        baseded, -- 35
-        porcdesc, -- 36
-        mtodeducible, -- 37 
-        mtodedmax, -- 38
-        numdiaiden, -- 39
-        numdiatemp, -- 40
-        indpriper, -- 41
-        indcobesp, -- 42
-        mtodedmincob, -- 43
-        mtodedmaxcob, -- 44
-        mtodeduciblecob, -- 45 
-        mtodedminlocal, -- 46
-        mtodedmaxlocal, -- 47
-        mtodeduciblelocal, -- 48 
-        numordvis, -- 49
-        codmonedacob, -- 50 
-        sumaasegmonedacob, -- 51 
-        primamonedacob, --  52
-        mtototrecamonedacob, -- 53 
-        mtototdctomonedacob, -- 54
-        indcobpoliza -- 55
-    )VALUES (
-        NVL(rB01_1(POSICION).tasa,0), -- 1
-        NVL(rB01_1(POSICION).prima,0), -- 2
-        NVL(rB01_1(POSICION).indmod,'*'), -- 3
-        rB01_1(POSICION).indsumaded, -- 4 
-        rB01_1(POSICION).idecobert, -- 5
-        rB01_1(POSICION).idepol, -- 6
-        rB01_1(POSICION).numcert, -- 7
-        rB01_1(POSICION).codramocert, -- 8 
-        rB01_1(POSICION).codplan, -- 9
-        rB01_1(POSICION).revplan, -- 10
-        rB01_1(POSICION).codcobert, -- 11
-        rB01_1(POSICION).stscobert, -- 12
-        NVL(rB01_1(POSICION).sumaasegmoneda,0), -- 13 
-        NVL(rB01_1(POSICION).primamoneda,0), -- 14
-        rB01_1(POSICION).mtototrecamoneda, -- 15 
-        rB01_1(POSICION).mtototdctomoneda, -- 16
-        rB01_1(POSICION).codmoneda, -- 17
-        NVL(rB01_1(POSICION).sumaaseg,0), -- 18
-        NVL(rB01_1(POSICION).mtototreca,0), -- 19
-        NVL(rB01_1(POSICION).mtototdcto,0), -- 20
-        rB01_1(POSICION).fecinivalid, -- 21
-        rB01_1(POSICION).fecfinvalid, -- 22
-        rB01_1(POSICION).indincren, -- 23
-        rB01_1(POSICION).indplazoespera, -- 24 
-        rB01_1(POSICION).feciniplazoespera, -- 25 
-        rB01_1(POSICION).fecfinplazoespera, -- 26
-        rB01_1(POSICION).fecexc, -- 27
-        rB01_1(POSICION).codmotvexc, -- 28 
-        rB01_1(POSICION).text1motvexc, -- 29
-        rB01_1(POSICION).text2motvexc, -- 30
-        rB01_1(POSICION).text3motvexc, -- 31
-        rB01_1(POSICION).text4motvexc, -- 32
-        rB01_1(POSICION).porcded, -- 33
-        rB01_1(POSICION).mtodedmin, -- 34
-        rB01_1(POSICION).baseded, -- 35
-        rB01_1(POSICION).porcdesc, -- 36
-        NVL(rB01_1(POSICION).mtodeducible, 0), -- 37 indpriper    
-        rB01_1(POSICION).mtodedmax, -- 38
-        rB01_1(POSICION).numdiaiden, -- 39
-        rB01_1(POSICION).numdiatemp, -- 40
-        NVL(rB01_1(POSICION).indpriper, 'N'), -- 41
-        rB01_1(POSICION).indcobesp, -- 42
-        rB01_1(POSICION).mtodedmincob, -- 43
-        rB01_1(POSICION).mtodedmaxcob, -- 44
-        rB01_1(POSICION).mtodeduciblecob, -- 45 
-        rB01_1(POSICION).mtodedminlocal, -- 46
-        rB01_1(POSICION).mtodedmaxlocal, -- 47
-        rB01_1(POSICION).mtodeduciblelocal, -- 48 
-        rB01_1(POSICION).numordvis, -- 49
-        rB01_1(POSICION).codmonedacob, -- 50 
-        NVL(rB01_1(POSICION).sumaasegmonedacob,0), -- 51 
-        NVL(rB01_1(POSICION).primamonedacob,0), --  52
-        rB01_1(POSICION).mtototrecamonedacob, -- 53 
-        rB01_1(POSICION).mtototdctomonedacob, -- 54
-        rB01_1(POSICION).indcobpoliza -- 55
-    );
-    
-    
-    BEGIN
-         PR_DED_COBERT.CARGA_DEDUCIBLES(p_nIdePol,p_nNumCert,p_cCodRamoCert,
-                                        rB01_1(POSICION).codcobert,CPP.RevPlan,CPP.CodPlan,
-                                        CPP.CodProd,rB01_1(POSICION).idecobert);
-    EXCEPTION
-         WHEN OTHERS THEN            
-          p_cError := '1,'||SQLERRM;
-          DBMS_OUTPUT.PUT_LINE('1,'||SQLERRM);
-          RAISE_APPLICATION_ERROR(-20101,SQLERRM);
-    END;
-
-END SP_MNT_COBERT_CERT_C;
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_ELIM_CLAU_CERT_C
-  Prop√≥sito  : Procedimiento para agregar nueva cobertura con clausula C
-  Par√°metros :
-               Par√°metros :
-               p_nIdePol      NUMBER    Identificador de P√≥liza
-               p_nNumCert     NUMBER    N√∫mero de Certificado
-               p_cCodRamoCert VARCHAR2  Codigo de ramo asociado al certificado de una poliza.
-               p_cTipo        VARCHAR2  Tipo PA√çSES EXCLUIDOS(P) o RETROACTIVIDAD(R)
-  Retorno    : p_cError       VARCHAR2  Retorno de resultado del proceso (OK = 0,OK / ERROR = 1,DescError)
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    02/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_ELIM_CLAU_CERT_C(
-  p_nIdePol      IN Poliza.IdePol%TYPE,
-  p_nNumCert     IN Certificado.NumCert%TYPE,
-  p_cCodRamoCert IN CERT_RAMO.CODRAMOCERT%TYPE,
-  p_cTipo        IN CHAR(1),
-  p_cError       OUT VARCHAR2(3000)
-) IS
-  cIndAsoc               NUMBER(1);
-  nRowsClau              NUMBER(1) := 0;  
-  cMensajeRestriccionSAS VARCHAR2(400);
-
-    CURSOR C_CLAUCERT IS
-        SELECT * FROM CLAU_CERT CC
-        WHERE CC.IDEPOL    = p_nIdePol
-        AND CC.NUMCERT     = p_nNumCert
-        AND CC.CODRAMOCERT = p_cCodRamoCert
-        AND CC.CODCLAU IN('TRA382','TRA385','TRA386','TRA257');
-
-    CLC CLAU_CERT%ROWTYPE;
-
-    P   POLIZA%ROWTYPE;
-    R   CERT_RAMO%ROWTYPE;
-
-DECLARE
-    p_cError := '0,OK';
-    -- CLAU_CERT --> CLC
-   P := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF P.IdePol IS NULL THEN
-       p_cError := '1,'||'No existe la P√≥liza '||P.IdePol;
-       DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||P.IdePol);
-       RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||P.IdePol);
-    END IF;
-
-    R := PR_CERT_RAMO.Datos_Cert_Ramo(p_nIdePol,p_nNumCert,p_cCodRamoCert);
-    IF R.CodRamoCert IS NULL THEN
-       p_cError := '1,'||'No existe el Ramo :'||p_cCodRamoCert;
-       DBMS_OUTPUT.PUT_LINE('No existe el Ramo :'||p_cCodRamoCert);
-       RAISE_APPLICATION_ERROR(-20100,'No existe el Ramo '||p_cCodRamoCert);
-    END IF;
-
-    cMensajeRestriccionSAS:= pr_poliza_util.RESTRINGE_ENDOSO_POLIZA(P.IdePol);
-    if not cMensajeRestriccionSAS is null then
-            p_cError := '1,'||cMensajeRestriccionSAS;
-            DBMS_OUTPUT.PUT_LINE(cMensajeRestriccionSAS);
-            RAISE_APPLICATION_ERROR(-20100,cMensajeRestriccionSAS);  
-    end if;
-   
-   OPEN C_CLAUCERT;
-   FETCH C_CLAUCERT INTO CLC;
-   WHILE C_CLAUCERT%FOUND LOOP
-     IF p_cTipo = 'P' THEN
-        IF CLC.CODCLAU IN('TRA382','TRA385','TRA386') THEN
-
-            IF CLC.INDPROCLA IN ('U','I') THEN              
-                    BEGIN
-                        SELECT 1 
-                        INTO  nRowsClau
-                        FROM  CLAU_CERT CC
-                        WHERE CC.Idepol  = CLC.idepol
-                            AND CC.NumCert = CLC.numcert
-                            AND CC.CodClau = CLC.codclau
-                            AND CC.CodClau = PR_CLAU_CERT.CLAUREP_VALIDO       
-                            AND CC.NumVers = PR_CLAU_CERT.VERSION_CLAUSULA(CLC.idepol, PR_CLAU_CERT.CLAUREP_VALIDO, CLC.numcert)
-                            AND ROWNUM = 1;
-                    EXCEPTION
-                        WHEN NO_DATA_FOUND THEN
-                            nRowsClau := 0;
-                    END;
-                    
-                    IF nRowsClau = 1 THEN     
-                        INSERT INTO OPER_CLAU_GARANTIA
-                        (IdePol, NumCert, CodRamoCert, CodClau, NumOper, Fecha, CodUsr)
-                        VALUES (CLC.IdePol, CLC.NumCert, CLC.CodRamoCert, CLC.CodClau, 0, SYSDATE, USER);
-                    END IF;
-
-                    DELETE FROM CLAU_CERT CC
-                    WHERE CC.IDEPOL = p_nIdePol
-                    AND CC.NUMCERT  = p_nNumCert
-                    AND CC.CODCLAU  =  CLC.CODCLAU
-                    AND CC.CODRAMOCERT = p_cCodRamoCert;
-
-            ELSE
-                    IF CLC.INDPROCLA = 'O' THEN
-                    -- MESSAGE('No se puede Eliminar, es una Cl√°usula Obligatoria');
-                        p_cError := '1,'||'No se puede Eliminar, es una Cl√°usula Obligatoria';
-                        DBMS_OUTPUT.PUT_LINE('No se puede Eliminar, es una Cl√°usula Obligatoria');
-                        RAISE_APPLICATION_ERROR(-20100,'No se puede Eliminar, es una Cl√°usula Obligatoria');
-                    ELSIF CLC.indprocla = 'C' THEN
-                        BEGIN
-                            SELECT 1
-                            INTO cIndAsoc 
-                            FROM CLAU_COBERT CC
-                            WHERE CodProd   = P.codprod
-                                AND CodPlan = R.codplan
-                                AND RevPlan = R.revplan
-                                AND CodClau = CLC.codclau
-                                AND CodRamo = CLC.codramocert
-                                AND EXISTS (SELECT 1 FROM COBERT_CERT
-                                            WHERE IdePol        = CLC.IDEPOL
-                                                AND NumCert     = CLC.NUMCERT
-                                                AND CodRamoCert = CLC.CODRAMOCERT  
-                                                AND CodCobert   = CC.CODCOBERT);
-                        EXCEPTION
-                            WHEN NO_DATA_FOUND THEN
-                                cIndAsoc := 0;
-                        END;
-
-                        IF cIndAsoc = 1 THEN
-                            --    MESSAGE('No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura');
-                            p_cError := '1,'||'No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura';
-                            DBMS_OUTPUT.PUT_LINE('No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura');
-                            RAISE_APPLICATION_ERROR(-20100,'No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura');
-                        ELSE
-                            DELETE FROM CLAU_CERT CC
-                            WHERE CC.IDEPOL = p_nIdePol
-                            AND CC.NUMCERT  = p_nNumCert
-                            AND CC.CODCLAU  =  CLC.CODCLAU
-                            AND CC.CODRAMOCERT = p_cCodRamoCert;
-                        END IF;
-
-                    ELSIF CLC.INDPROCLA = 'E' THEN
-                        --  MESSAGE('No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica');
-                        p_cError := '1,'||'No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica';
-                        DBMS_OUTPUT.PUT_LINE('No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica');
-                        RAISE_APPLICATION_ERROR(-20100,'No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica');
-                    
-                    ELSIF CLC.INDPROCLA = 'D' THEN
-                        
-                        BEGIN
-                            SELECT 1
-                                INTO cIndAsoc           
-                                FROM CLAU_VALCRIT  CV
-                                WHERE CodProd   = P.codprod
-                                AND CodPlan     = R.codplan
-                                AND RevPlan     = R.revplan
-                                AND CodRamoPlan = CLC.CodRamoCert
-                                AND CodClau     = CLC.CodClau
-                                AND EXISTS (SELECT 1 FROM DATOS_PARTICULARES
-                                            WHERE IdePol      = CLC.IdePol
-                                                AND NumCert     = CLC.NumCert
-                                                AND CodRamoCert = CLC.CodRamoCert
-                                                AND CodCrit     = CV.CodCrit
-                                                AND CodTrasf    = CV.CodTrasf);   
-                        EXCEPTION
-                            WHEN NO_DATA_FOUND THEN
-                                cIndAsoc := 0;
-                        END;       
-
-                        IF cIndAsoc = 1 THEN
-                            -- MESSAGE('No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular');
-                            p_cError := '1,'||'No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular';
-                            DBMS_OUTPUT.PUT_LINE('No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular');
-                            RAISE_APPLICATION_ERROR(-20100,'No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular');
-                        ELSE
-                                IF CLC.STSCLAU = 'ACT' THEN
-                                    PR_CLAU_CERT.STATUS_CLAU_CERT(CLC.IdePol,CLC.NumCert,CLC.CodRamoCert,
-                                                                CLC.CodClau,'EXCLU');    
-                                    -- COMMIT;
-                                END IF;
-                        END IF;
-
-                        DELETE FROM CLAU_CERT CC
-                        WHERE CC.IDEPOL = p_nIdePol
-                        AND CC.NUMCERT  = p_nNumCert
-                        AND CC.CODCLAU  =  CLC.CODCLAU
-                        AND CC.CODRAMOCERT = p_cCodRamoCert;
-                    
-                    ELSIF CLC.STSCLAU = 'VAL' THEN
-                        DELETE FROM CLAU_CERT CC
-                        WHERE CC.IDEPOL = p_nIdePol
-                        AND CC.NUMCERT  = p_nNumCert
-                        AND CC.CODCLAU  =  CLC.CODCLAU
-                        AND CC.CODRAMOCERT = p_cCodRamoCert;
-                    END IF;
-            END IF;
-            
-        END IF;
-           
-     ELSIF p_cTipo = 'R' THEN
-        IF CLC.CODCLAU IN('TRA382','TRA257') THEN
-
-                IF CLC.INDPROCLA IN ('U','I') THEN              
-                        BEGIN
-                            SELECT 1 
-                            INTO  nRowsClau
-                            FROM  CLAU_CERT CC
-                            WHERE CC.Idepol  = CLC.idepol
-                                AND CC.NumCert = CLC.numcert
-                                AND CC.CodClau = CLC.codclau
-                                AND CC.CodClau = PR_CLAU_CERT.CLAUREP_VALIDO       
-                                AND CC.NumVers = PR_CLAU_CERT.VERSION_CLAUSULA(CLC.idepol, PR_CLAU_CERT.CLAUREP_VALIDO, CLC.numcert)
-                                AND ROWNUM = 1;
-                        EXCEPTION
-                            WHEN NO_DATA_FOUND THEN
-                                nRowsClau := 0;
-                        END;
-                        
-                        IF nRowsClau = 1 THEN     
-                            INSERT INTO OPER_CLAU_GARANTIA
-                            (IdePol, NumCert, CodRamoCert, CodClau, NumOper, Fecha, CodUsr)
-                            VALUES (CLC.IdePol, CLC.NumCert, CLC.CodRamoCert, CLC.CodClau, 0, SYSDATE, USER);
-                        END IF;
-
-                        DELETE FROM CLAU_CERT CC
-                        WHERE CC.IDEPOL = p_nIdePol
-                        AND CC.NUMCERT  = p_nNumCert
-                        AND CC.CODCLAU  =  CLC.CODCLAU
-                        AND CC.CODRAMOCERT = p_cCodRamoCert;
-
-                ELSE
-                        IF CLC.INDPROCLA = 'O' THEN
-                        -- MESSAGE('No se puede Eliminar, es una Cl√°usula Obligatoria');
-                            p_cError := '1,'||'No se puede Eliminar, es una Cl√°usula Obligatoria';
-                            DBMS_OUTPUT.PUT_LINE('No se puede Eliminar, es una Cl√°usula Obligatoria');
-                            RAISE_APPLICATION_ERROR(-20100,'No se puede Eliminar, es una Cl√°usula Obligatoria');
-                        ELSIF CLC.indprocla = 'C' THEN
-                            BEGIN
-                                SELECT 1
-                                INTO cIndAsoc 
-                                FROM CLAU_COBERT CC
-                                WHERE CodProd   = P.codprod
-                                    AND CodPlan = R.codplan
-                                    AND RevPlan = R.revplan
-                                    AND CodClau = CLC.codclau
-                                    AND CodRamo = CLC.codramocert
-                                    AND EXISTS (SELECT 1 FROM COBERT_CERT
-                                                WHERE IdePol        = CLC.IDEPOL
-                                                    AND NumCert     = CLC.NUMCERT
-                                                    AND CodRamoCert = CLC.CODRAMOCERT  
-                                                    AND CodCobert   = CC.CODCOBERT);
-                            EXCEPTION
-                                WHEN NO_DATA_FOUND THEN
-                                    cIndAsoc := 0;
-                            END;
-
-                            IF cIndAsoc = 1 THEN
-                                --    MESSAGE('No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura');
-                                p_cError := '1,'||'No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura';
-                                DBMS_OUTPUT.PUT_LINE('No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura');
-                                RAISE_APPLICATION_ERROR(-20100,'No se puede Eliminar, es una Cl√°usula Asociada a una Cobertura');
-                            ELSE
-                                DELETE FROM CLAU_CERT CC
-                                WHERE CC.IDEPOL = p_nIdePol
-                                AND CC.NUMCERT  = p_nNumCert
-                                AND CC.CODCLAU  =  CLC.CODCLAU
-                                AND CC.CODRAMOCERT = p_cCodRamoCert;
-                            END IF;
-
-                        ELSIF CLC.INDPROCLA = 'E' THEN
-                            --  MESSAGE('No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica');
-                            p_cError := '1,'||'No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica';
-                            DBMS_OUTPUT.PUT_LINE('No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica');
-                            RAISE_APPLICATION_ERROR(-20100,'No se puede Eliminar, es una Cl√°usula Asociada a una Estad√≠stica');
-                        
-                        ELSIF CLC.INDPROCLA = 'D' THEN
-                            
-                            BEGIN
-                                SELECT 1
-                                    INTO cIndAsoc           
-                                    FROM CLAU_VALCRIT  CV
-                                    WHERE CodProd   = P.codprod
-                                    AND CodPlan     = R.codplan
-                                    AND RevPlan     = R.revplan
-                                    AND CodRamoPlan = CLC.CodRamoCert
-                                    AND CodClau     = CLC.CodClau
-                                    AND EXISTS (SELECT 1 FROM DATOS_PARTICULARES
-                                                WHERE IdePol      = CLC.IdePol
-                                                    AND NumCert     = CLC.NumCert
-                                                    AND CodRamoCert = CLC.CodRamoCert
-                                                    AND CodCrit     = CV.CodCrit
-                                                    AND CodTrasf    = CV.CodTrasf);   
-                            EXCEPTION
-                                WHEN NO_DATA_FOUND THEN
-                                    cIndAsoc := 0;
-                            END;       
-
-                            IF cIndAsoc = 1 THEN
-                                -- MESSAGE('No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular');
-                                p_cError := '1,'||'No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular';
-                                DBMS_OUTPUT.PUT_LINE('No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular');
-                                RAISE_APPLICATION_ERROR(-20100,'No se puede Excluir, es una Cl√°usula Asociada a un Dato Particular');
-                            ELSE
-                                    IF CLC.STSCLAU = 'ACT' THEN
-                                        PR_CLAU_CERT.STATUS_CLAU_CERT(CLC.IdePol,CLC.NumCert,CLC.CodRamoCert,
-                                                                    CLC.CodClau,'EXCLU');    
-                                        -- COMMIT;
-                                    END IF;
-                            END IF;
-
-                            DELETE FROM CLAU_CERT CC
-                            WHERE CC.IDEPOL = p_nIdePol
-                            AND CC.NUMCERT  = p_nNumCert
-                            AND CC.CODCLAU  =  CLC.CODCLAU
-                            AND CC.CODRAMOCERT = p_cCodRamoCert;
-                        
-                        ELSIF CLC.STSCLAU = 'VAL' THEN
-                            DELETE FROM CLAU_CERT CC
-                            WHERE CC.IDEPOL = p_nIdePol
-                            AND CC.NUMCERT  = p_nNumCert
-                            AND CC.CODCLAU  =  CLC.CODCLAU
-                            AND CC.CODRAMOCERT = p_cCodRamoCert;
-                        END IF;
-                END IF;
-            
-        END IF;   
-     END IF;
-     FETCH C_CLAUCERT INTO CLC; 
-   END LOOP;
-   CLOSE C_CLAUCERT;
-
-END SP_ELIMINAR_CLAU_CERT_C;
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_INCLUIR_CERTI_CLAU_C
-  Prop√≥sito  : Procedimiento para cambiar de estado al certificado con clausula C
-  Par√°metros :
-               Par√°metros :
-               p_nIdePol      NUMBER    Identificador de P√≥liza
-               p_nNumCert     NUMBER    N√∫mero de Certificado
-  Retorno    : p_cError       VARCHAR2  Retorno de resultado del proceso (OK = 0,OK / ERROR = 1,DescError)
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    02/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_INCLUIR_CERTI_CLAU_C( 
-  p_nIdePol      IN Poliza.IdePol%TYPE,
-  p_nNumCert     IN Certificado.NumCert%TYPE,
-  p_cError       OUT VARCHAR2(3000)
-) IS
-  bExisteSelec BOOLEAN;
-  n_IDLogLote  NUMBER;
-  WSESION      NUMBER;
-  cEmiPro      INTEGER;
-  cEsMsv       INTEGER;
-  nExiste      NUMBER := 0;
-  nVal         NUMBER := 0;
-
-  cMensajeRestriccionSAS VARCHAR2(400);
-
-  P   POLIZA%ROWTYPE;
-  cStsCert  CERTIFICADO.STSCERT%TYPE;
-
-DECLARE
-       
-       BEGIN
-        SELECT C.Stscert
-        INTO cStsCert
-        FROM CERTIFICADO C
-        WHERE C.IDEPOL = p_nIdePol
-        AND C.NUMCERT  = p_nNumCert;
-    EXCEPTION
-      WHEN NO_DATA_FOUND THEN
-        p_cError := '1,'||'La p√≥liza o el certificado no valido';
-        DBMS_OUTPUT.PUT_LINE('La p√≥liza o el certificado no valido');
-        RAISE_APPLICATION_ERROR(-20100,'La p√≥liza o el certificado no valido');
-    END;
-
-    P := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF P.IDEPOL IS NULL THEN
-       p_cError := '1,'||'No existe la P√≥liza '||P.IdePol;
-       DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||P.IdePol);
-       RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||P.IdePol);
-    END IF;
-
-    cMensajeRestriccionSAS:= pr_poliza_util.RESTRINGE_ENDOSO_POLIZA(p_nIdePol);
-  if not cMensajeRestriccionSAS is null then
-        p_cError := '1,'||cMensajeRestriccionSAS;
-        DBMS_OUTPUT.PUT_LINE(cMensajeRestriccionSAS);
-        RAISE_APPLICATION_ERROR(-20100,cMensajeRestriccionSAS);   
-  end if;
-
-    -- PR_VAL_BLOQ_SOAT(nExiste);    
-    BEGIN
-        SELECT NVL(MAX(1),0)
-        INTO nVal
-        FROM DUAL
-        WHERE EXISTS ( SELECT 1
-                       FROM POLIZA PO
-                       WHERE PO.CodProd = P.CODPROD -- :C01_1.CCODPROD
-                            AND PO.NumPol  = P.NUMPOL -- :C01_1.NNUMPOL
-                            AND EXISTS ( SELECT 1
-                                        FROM POL_BLOQUEO_ENDOSO B
-                                        WHERE PO.IdePol   = B.IdePol
-                                        AND B.indbloqEnd = 'S')
-                        ) ;
-    EXCEPTION
-        WHEN OTHERS THEN
-            nVal := 0;
-    END;
-    nExiste := nVal;
-
-    -- FIN  PR_VAL_BLOQ_SOAT(nExiste);
-
-    IF NVL(nExiste ,0) = 1 THEN
-        p_cError := '1,'||'Opci√≥n Bloqueada por impresi√≥n de Padr√≥n de Certificados';
-        DBMS_OUTPUT.PUT_LINE('Opci√≥n Bloqueada por impresi√≥n de Padr√≥n de Certificados');
-        RAISE_APPLICATION_ERROR(-20100,'Opci√≥n Bloqueada por impresi√≥n de Padr√≥n de Certificados');
-    ELSE
-        -- FR_Validar_Coaseguro(:B01_1.IdePol);
-        DECLARE
-            kListaEstadoModificable CONSTANT VARCHAR2(8) := 'INC,MOD';
-            kSI                     CONSTANT VARCHAR2(1) := 'S';
-          cExiste                 VARCHAR2(1);
-        BEGIN
-            cExiste := PR_MOD_DIST_COA.Existe_Mod_Dist_Coa_Estado(p_nIdePol,kListaEstadoModificable);
-            IF (cExiste = kSI AND P.STSPOL = 'MOD') THEN
-                cExiste := PR_POLIZA_UTIL.Existe_Oper_Pol(p_nIdePol);
-                IF cExiste = kSI THEN
-                    -- R_Error('Se han realizado Movimientos de Coaseguro. No es posible Incluir el Certificado');  
-                    p_cError := '1,'||'Se han realizado Movimientos de Coaseguro. No es posible Incluir el Certificado';
-                    DBMS_OUTPUT.PUT_LINE('Se han realizado Movimientos de Coaseguro. No es posible Incluir el Certificado');
-                    RAISE_APPLICATION_ERROR(-20100,'Se han realizado Movimientos de Coaseguro. No es posible Incluir el Certificado');
-                END IF; 
-            END IF; 
-        END;
-        -- FIN
-        cEmiPro := 0;
-      cEsMsv  := 0;
-        BEGIN
-      SELECT 1
-      INTO cEsMsv
-      FROM DUAL
-      WHERE EXISTS (SELECT 1
-            FROM VNNT_CONTROL_POLIZA PE
-            WHERE PE.Idepol = p_nIdePol);
-    EXCEPTION
-      WHEN OTHERS THEN
-      cEsMsv := 0;
-    END;
-        IF cEsMsv = 1 THEN
-      BEGIN
-        SELECT 1
-        INTO cEmiPro
-        FROM DUAL 
-        WHERE EXISTS (SELECT 1
-                FROM VNNT_CONTROL_LEGACY CL
-                WHERE (CL.NUMCARGA) IN
-                  (SELECT DISTINCT NUMCARGA
-                    FROM DATOS_EXT_POLIZA
-                    WHERE (IDEPOL, NUMPOL, NUMCERT) IN
-                      (SELECT PV.IDEPOL, PV.NUMPOL, C.NUMCERT
-                       FROM POLIZA PV, CERTIFICADO C
-                       WHERE PV.IDEPOL = C.IDEPOL
-                       AND PV.Idepol = p_nIdePol))
-                AND EXISTS (SELECT 1 
-                      FROM VNNT_LOG_CONTROL_LEGACY CY 
-                      WHERE CY.Id_Transf = CL.ID_TRANSF 
-                      AND CY.Proceso = 'EMI' 
-                      AND CY.Resultado IN ('PRO')));
-      EXCEPTION
-        WHEN OTHERS THEN
-        cEmiPro := 0;
-      END;
-      IF cEmiPro = 1 THEN
-        -- nButton := LR_Alerta('La p√≥liza se encuentra en Proceso de Emisi√≥n Autom√°tica. Favor de ejecutar la inclusi√≥n cuando finalice.');
-                p_cError := '1,'||'La p√≥liza se encuentra en Proceso de Emisi√≥n Autom√°tica. Favor de ejecutar la inclusi√≥n cuando finalice.';
-                DBMS_OUTPUT.PUT_LINE('La p√≥liza se encuentra en Proceso de Emisi√≥n Autom√°tica. Favor de ejecutar la inclusi√≥n cuando finalice.');
-                RAISE_APPLICATION_ERROR(-20100,'La p√≥liza se encuentra en Proceso de Emisi√≥n Autom√°tica. Favor de ejecutar la inclusi√≥n cuando finalice.');
-      ELSE
-        SELECT SQ_NUMCESION.NEXTVAL INTO WSESION FROM SYS.DUAL;
-      END IF;
-    END IF;
-
-        IF cEmiPro = 0 THEN
-            
-            IF cStsCert = 'VAL' THEN
-              PR_CERTIFICADO.Incluir(p_nIdePol,p_nNumCert);
-              
-              PR_POL_CERT_ELECT.Incluir(p_nIdePol,p_nNumCert);
-        
-              IF cEsMsv = 1 AND cEmiPro = 0 THEN
-                INSERT INTO TMP_CERTIF VALUES (WSESION,p_nIdePol,p_nNumCert);
-              END IF;
-            ELSE
-                      p_cError := '1,'||'No se incluir√° el certificado '||p_nNumCert||', no se encuentra en estado V√°lido.';
-                      DBMS_OUTPUT.PUT_LINE('No se incluir√° el certificado '||p_nNumCert||', no se encuentra en estado V√°lido.');
-                      RAISE_APPLICATION_ERROR(-20100,'No se incluir√° el certificado '||p_nNumCert||', no se encuentra en estado V√°lido.');
-            END IF;
-
-        END IF;
-
-    END IF;
-
-END SP_INCLUIR_CERTI_CLAU_C;
---
- /*-------------------------------------------------------------------------
-  Nombre      : SP_VALIDA_COBERT_PROV
-  Proposito   : Verificar si la poliza se encuentra con cobertura provisional
-  Referencia : Formulario MANTPOL.fmb - Tribu Empresas Bloqueo en la Emisi√≥n Vehicular que tengan Coberturas Provisionales Activas
-  Par√°metros : p_nIdePol     NUMBER    Identificador de P√≥liza
-  Retorno    : p_cMsjCobProv VARCHAR2  Retorno de resultado del mensaje Valida Cobertura
-  Log de Cambios
-    Fecha          Autor            Descripcion
-  11/10/2023    Robinzon Santana   Creacion
----------------------------------------------------------------------------*/
-PROCEDURE SP_VALIDA_COBERT_PROV(p_nIdePol     IN POLIZA.Idepol%TYPE,
-                                p_cMsjCobProv OUT VARCHAR2 ) IS
-
-  cNumPlaca  VARCHAR2(40)  := NULL;
-  cNumSerie  VARCHAR2(100) := NULL;
-  cNumMotor  VARCHAR2(100) := NULL;
-  nSinPlaca  NUMBER:= 0;
-  cMsjError  VARCHAR2(1000) := NULL;
-  
-  CURSOR C_Certificado IS
-    SELECT CE.Numcert
-      FROM CERTIFICADO CE
-     WHERE CE.IDEPOL = p_nIdePol
-       AND EXISTS (SELECT 1
-                       FROM LVAL LV
-                       WHERE LV.Tipolval = 'ESACPOCP'
-                        AND LV.Codlval LIKE 'CDP%' 
-                        AND LV.DESCRIP = CE.Stscert);
-
-BEGIN
-  FOR rC IN C_Certificado LOOP
-    BEGIN  
-            SELECT DISTINCT DP.Valtrasf
-            INTO cNumSerie
-            FROM POLIZA PO, 
-                CERTIFICADO CE, 
-                CERT_RAMO CR, 
-                DATOS_PARTICULARES DP
-            WHERE PO.IdePol      = p_nIdePol
-            AND PO.IdePol      = CE.IdePol
-            AND CE.IdePol      = CR.IdePol
-            AND CE.NumCert     = CR.NumCert
-            AND CR.IdePol      = DP.IdePol
-            AND CR.NumCert     = DP.NumCert
-            AND CR.CodRamoCert = DP.CodRamoCert
-            AND CE.Numcert     = rC.Numcert
-            AND DP.CodCrit     = 'NUMERO_DE_SERIE'
-                AND EXISTS (SELECT 1
-                            FROM LVAL LV
-                            WHERE LV.Tipolval = 'ESACPOCP'
-                            AND LV.Codlval LIKE 'CDP%' 
-                            AND LV.DESCRIP = CE.Stscert
-                            )
-            AND EXISTS (SELECT 1
-                        FROM LVAL LV
-                        WHERE LV.Tipolval = 'PROVEHCP'
-                        AND LV.Codlval = PO.Codprod);
-
-    EXCEPTION
-      WHEN TOO_MANY_ROWS THEN
-        DBMS_OUTPUT.PUT_LINE('Error en PR_VALIDA_COBERT_PROV - Se tiene m√°s de un N√∫mero de Serie para el certificado.');
-                RAISE_APPLICATION_ERROR(-20100,'Error en PR_VALIDA_COBERT_PROV - Se tiene m√°s de un N√∫mero de Serie para el certificado.');
-        WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error en PR_VALIDA_COBERT_PROV - N√∫mero de Serie: '||SQLCODE||' - '||SQLERRM);
-                RAISE_APPLICATION_ERROR(-20100,'Error en PR_VALIDA_COBERT_PROV - N√∫mero de Serie: '||SQLCODE||' - '||SQLERRM);
-      END;
-    BEGIN  
-        SELECT DISTINCT DP.Valtrasf
-        INTO cNumMotor
-        FROM POLIZA PO, 
-             CERTIFICADO CE, 
-             CERT_RAMO CR, 
-             DATOS_PARTICULARES DP
-       WHERE PO.IdePol      = p_nIdePol
-         AND PO.IdePol      = CE.IdePol
-         AND CE.IdePol      = CR.IdePol
-         AND CE.NumCert     = CR.NumCert
-         AND CR.IdePol      = DP.IdePol
-         AND CR.NumCert     = DP.NumCert
-         AND CR.CodRamoCert = DP.CodRamoCert
-         AND CE.Numcert     = rC.Numcert
-         AND EXISTS (SELECT 1
-                         FROM LVAL LV
-                         WHERE LV.Tipolval = 'ESACPOCP'
-                         AND LV.Codlval LIKE 'CDP%' 
-                         AND LV.DESCRIP = CE.Stscert)
-         AND DP.CodCrit     = 'NUMERO_DE_MOTOR'
-         AND EXISTS (SELECT 1
-                     FROM LVAL LV
-                     WHERE LV.Tipolval = 'PROVEHCP'
-                     AND LV.Codlval = PO.Codprod);
-    
-    EXCEPTION
-      WHEN TOO_MANY_ROWS THEN
-        DBMS_OUTPUT.PUT_LINE('Error en PR_VALIDA_COBERT_PROV - Se tiene m√°s de un N√∫mero de Motor para el certificado.');
-                RAISE_APPLICATION_ERROR(-20100,'Error en PR_VALIDA_COBERT_PROV - Se tiene m√°s de un N√∫mero de Motor para el certificado.');
-        WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error en PR_VALIDA_COBERT_PROV - N√∫mero de Motor: '||SQLCODE||' - '||SQLERRM);
-                RAISE_APPLICATION_ERROR(-20100,'Error en PR_VALIDA_COBERT_PROV - N√∫mero de Motor: '||SQLCODE||' - '||SQLERRM);
-
-    END;
-   
-    -- Placa
-    BEGIN  
-      SELECT DISTINCT DP.Valtrasf
-        INTO cNumPlaca
-        FROM POLIZA PO, 
-             CERTIFICADO CE, 
-             CERT_RAMO CR, 
-             DATOS_PARTICULARES DP
-       WHERE PO.IdePol      = p_nIdePol
-         AND PO.IdePol      = CE.IdePol
-         AND CE.IdePol      = CR.IdePol
-         AND CE.NumCert     = CR.NumCert
-         AND CR.IdePol      = DP.IdePol
-         AND CR.NumCert     = DP.NumCert
-         AND CR.CodRamoCert = DP.CodRamoCert
-         AND CE.Numcert     = rC.Numcert
-         AND EXISTS (
-                      SELECT 1
-                       FROM LVAL LV
-                      WHERE LV.Tipolval = 'ESACPOCP'
-                        AND LV.Codlval LIKE 'CDP%' 
-                        AND LV.DESCRIP = CE.Stscert
-                        )
-         AND DP.CodCrit = 'PLACA_DE_RODAJE'
-         AND EXISTS (SELECT 1
-                       FROM LVAL LV
-                      WHERE LV.Tipolval = 'PROVEHCP'
-                        AND LV.Codlval = PO.Codprod);
-
-    EXCEPTION
-      WHEN TOO_MANY_ROWS THEN
-        DBMS_OUTPUT.PUT_LINE('Error en PR_VALIDA_COBERT_PROV - Se tiene m√°s de una Placa de Rodaje para el certificado.');
-              RAISE_APPLICATION_ERROR(-20100,'Error en PR_VALIDA_COBERT_PROV - Se tiene m√°s de una Placa de Rodaje para el certificado.');
-      WHEN OTHERS THEN
-        DBMS_OUTPUT.PUT_LINE('Error en PR_VALIDA_COBERT_PROV - Placa de Rodaje: '||SQLCODE||' - '||SQLERRM);
-              RAISE_APPLICATION_ERROR(-20100,'Error en PR_VALIDA_COBERT_PROV - Placa de Rodaje: '||SQLCODE||' - '||SQLERRM);
-    END;
-
-    BEGIN
-      PR_CARGA_MASIVA_DATPAR.SP_VALIDA_COBERT_PROV(cNumSerie,
-                                                   cNumMotor,
-                                                   cNumPlaca,
-                                                   cMsjError);
-    EXCEPTION
-      WHEN OTHERS THEN
-        cMsjError := 'Error en Valida Cobertura - '||SQLERRM;
-    END;
-    IF cMsjError IS NOT NULL THEN
-      p_cMsjCobProv  := cMsjError;
-    ELSE
-      p_cMsjCobProv  := NULL;
-    END IF;
-    EXIT WHEN p_cMsjCobProv IS NOT NULL;
-  END LOOP;
-END PR_VALIDA_COBERT_PROV;
---
-/*--------------------------------------------------------------------
-  Nombre      : FN_VALIDA_TREC
-  Proposito   : Validar el valor declarado contra monto ingreso maquinarias TREC
-  Referencia  : Formulario MANTPOL.fmb
-  Parametros  :
-              p_nIdePol  NUMBER    Identificador de P√≥liza
-
-  Fecha       Autor             Descripcion
-  11/10/2023  Robinzon Santana  Creacion
---------------------------------------------------------------------*/
-FUNCTION FN_VALIDA_TREC(p_nIdePol IN POLIZA.IdePol%TYPE) RETURN VARCHAR2 IS
-  --
-  CURSOR c_Data IS 
-    SELECT DISTINCT NumCert
-    FROM CERTIFICADO
-    WHERE IdePol = p_nIdePol;
-  --
-  nNumCertC NUMBER := 0;
-  nNumCertM NUMBER := 0;
-  cValTrasf DATOS_PARTICULARES.ValTrasf%TYPE;
-  nMtoMaqui MAQUINARIA_TREC.MtoMaqui%TYPE;
-  nValTrasf NUMBER := 0;
-  cValCas   VARCHAR2(1) := '0';
-  
-BEGIN
-  -- Valida numero de certificado registrados 
-  BEGIN
-    SELECT COUNT(DISTINCT NumCert)
-      INTO nNumCertC
-      FROM CERTIFICADO
-     WHERE IdePol = p_nIdePol;
-  EXCEPTION
-    WHEN OTHERS THEN
-      nNumCertC:= 0;      
-  END;
-  -- Valida numero certificado registrado tabla TREC
-  BEGIN
-    SELECT COUNT(DISTINCT NumCert)
-      INTO nNumCertM
-      FROM MAQUINARIA_TREC
-     WHERE IdePol = p_nIdePol
-       AND IndIncluido = '1';
-  EXCEPTION
-    WHEN OTHERS THEN
-      nNumCertM:= 0;      
-  END;
-  -- 
-  IF NVL(nNumCertC,0) = NVL(nNumCertM,0) AND NVL(nNumCertM,0) > 0 AND NVL(nNumCertC,0) > 0 THEN
-    cValCas:= '0';
-  ELSE
-    cValCas:= '1';
-  END IF;
-  --
-  IF cValCas = '0' THEN
-    FOR x IN c_Data LOOP
-      --
-      BEGIN
-          SELECT SUM(ValTrasf)
-          INTO cValTrasf
-          FROM DATOS_PARTICULARES
-          WHERE IdePol = p_nIdePol
-          AND NumCert = x.NumCert
-          AND CodCrit LIKE 'VALOR_DECLARADO%'
-            AND CODRAMOCERT = 'TREC';
-      EXCEPTION
-        WHEN OTHERS THEN
-          cValTrasf:= NULL;
-      END;
-      --
-      BEGIN
-          SELECT SUM(NVL(MTOMAQUI,0))
-          INTO nMtoMaqui
-          FROM MAQUINARIA_TREC
-          WHERE IdePol = p_nIdePol
-          AND NumCert = x.NumCert
-          AND IndIncluido = '1';
-      EXCEPTION
-        WHEN OTHERS THEN
-          nMtoMaqui:= NULL;
-      END;
-      --
-      IF cValTrasf IS NOT NULL THEN
-            BEGIN
-                SELECT TO_NUMBER(cValTrasf)
-                INTO nValTrasf
-                FROM DUAL;
-            EXCEPTION
-                WHEN OTHERS THEN
-                cValCas:= '1';
-            END;
-      END IF;
-      --
-      IF cValCas = '0' THEN
-        IF NVL(nMtoMaqui,0) = NVL(nValTrasf,0) AND NVL(nValTrasf,0) > 0  AND NVL(nMtoMaqui,0) > 0 THEN
-          cValCas:= '0';
-        ELSE   
-          cValCas:= '1';
-          EXIT;
-        END IF;
-      END IF;
-    END LOOP;
-    --
-    IF cValCas = '0' THEN
-      RETURN '0';
-    ELSE
-      RETURN '1';
-    END IF;   
-  ELSE  
-    RETURN '1';
-  END IF;
-
-END FN_VALIDA_TREC;
---
-
- /*--------------------------------------------------------------------
-  Nombre      : SP_VALIDAR_DATOS
-  Proposito   : Validar datos para la activacion que no exista duplicida de datos particulares.
-                Sol si son nuevas , son renovaciones , inclusiones , rehabilitacioines pero no 
-                prorrogas
-  Referencia  : Formulario MANTPOL.fmb
-  Parametros  :
-              p_nIdePol  NUMBER    Identificador de P√≥liza
-
-  Fecha       Autor             Descripcion
-  11/10/2023  Robinzon Santana  Creacion
---------------------------------------------------------------------*/
-PROCEDURE SP_VALIDAR_DATOS(p_nIdePol IN POLIZA.Idepol%TYPE) IS
-
-  kHoy       CONSTANT DATE := TRUNC(SYSDATE);
-  cError     VARCHAR2(300) := NULL;
-  nExiste    PLS_INTEGER;
-  bValida    BOOLEAN;
-
-  PZ   POLIZA%ROWTYPE;
-BEGIN
-  -- Se valida si las fechas equivalentes han sido actualizadas.
-  -- :C00.dFecOper := PR.Fecha_Movimiento(kHoy);
-    IF PR.Fecha_Movimiento(kHoy) IS NULL THEN
-            DBMS_OUTPUT.PUT_LINE('Favor actualizar la tabla de fechas de equivalencias');
-            RAISE_APPLICATION_ERROR(-20100,'Favor actualizar la tabla de fechas de equivalencias');
-    END IF; 
-  --Verificar si se valida datos particulares
-  --asumo que no
-  bValida := FALSE;
-
-    PZ := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF PZ.IDEPOL IS NULL THEN
-       DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||p_nIdePol);
-       RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||p_nIdePol);
-    END IF;
-
-  --se validaran las nuevas
-  IF (PZ.StsPol IN ('VAL','INC','ANU')) THEN 
-    bValida := TRUE; 
-  ELSE
-    nExiste := 0 ; 
-    BEGIN --1.verifico si hay inclusiones
-      SELECT 1
-      INTO nExiste
-      FROM DUAL 
-      WHERE EXISTS (SELECT 1
-                    FROM Certificado
-                    WHERE IdePol = PZ.IDEPOL
-                      AND StsCert IN ('INC','MOD') 
-                      AND FecExc IS NULL);
-    EXCEPTION
-      WHEN NO_DATA_FOUND THEN
-        nExiste := 0 ;
-      WHEN OTHERS THEN 
-         -- LR_Error(SQLERRM);
-               DBMS_OUTPUT.PUT_LINE(SQLERRM);
-               RAISE_APPLICATION_ERROR(-20100,SQLERRM);
-    END ; --1.
-    IF nExiste = 1 THEN
-      bValida := TRUE ; 
-    END IF ;         
-  END IF ;
-  IF bValida = TRUE THEN
-    cError := PR_POLIZA.ValidaDatoParticular(PZ.IDEPOL);
-  END IF;
-  
-  IF cError IS NOT NULL THEN 
-        DBMS_OUTPUT.PUT_LINE(cError);
-        RAISE_APPLICATION_ERROR(-20100,cError);
-  END IF;
-
-END SP_VALIDAR_DATOS;  
---
-/*--------------------------------------------------------------------
-  Nombre      : FN_MENSAJE_ACSEL
-  Proposito   : Enviar el mensaje de error
-  Referencia  : Formulario MANTPOL.fmb
-  Parametros  :
-               p_cTipo    VARCHAR2 Tipo de mensaje
-               p_nCodigo  NUMBER  Codigo del mensaje
-               p_cParam1  VARCHAR2 Parametro 1
-               p_cParam2  VARCHAR2 Parametro 2
-               p_cParam3  VARCHAR2 Parametro 2
-
-  Fecha       Autor             Descripcion
-  14/10/2023  Robinzon Santana  Creacion
---------------------------------------------------------------------*/
-FUNCTION FN_MENSAJE_ACSEL(p_cTipo   VARCHAR2, 
-                           p_nCodigo NUMBER, 
-                           p_cParam1 VARCHAR2,       
-                           p_cParam2 VARCHAR2,
-                           p_cParam3 VARCHAR2) RETURN VARCHAR2 IS                                   
-  cMensaje VARCHAR2 (500);                          
-BEGIN                                                  
-  --
-  BEGIN                                                
-    SELECT Mensaje                                     
-    INTO   cMensaje                                    
-    FROM   msg_acsel
-    WHERE  TipoMsg = p_cTipo                          
-      AND  CodMsg  = p_nCodigo;                          
-  EXCEPTION                                            
-    WHEN NO_DATA_FOUND THEN                            
-      IF p_cParam1 IS NOT NULL THEN                       
-        cMensaje := p_cParam1;                            
-      ELSE                                             
-        cMensaje := 'Mensaje desconocido ';            
-      END IF;                                          
-  END;                                                 
-  --
-  IF p_cParam1 != '  ' THEN                               
-    cMensaje := RTRIM(cMensaje);                                
-    cMensaje := REPLACE(cMensaje,'&1',p_cParam1);                  
-  ELSE                                                          
-    cMensaje := REPLACE(cMensaje,'&1','');                      
-  END IF;                                                       
-  --
-  IF p_cParam2 != '  ' THEN                               
-    cMensaje := RTRIM(cMensaje);                                
-    cMensaje := REPLACE(cMensaje,'&2',p_cParam2);                  
-  ELSE                                                          
-    cMensaje := REPLACE(cMensaje,'&2','');                      
-  END IF;                                                       
-  --
-  IF p_cParam3 != '  ' THEN                                        
-    cMensaje := RTRIM(cMensaje);                               
-    cMensaje := REPLACE(cMensaje,'&3',p_cParam3);                  
-  ELSE                                                          
-    cMensaje := REPLACE(cMensaje,'&3','');                      
-  END IF;                                                       
-  --
-  cMensaje := p_cTipo||'-'||TO_CHAR(p_nCodigo)||': '||RTRIM(cMensaje);         
-  RETURN (cMensaje); 
-
-END FN_MENSAJE_ACSEL;
---
-/*---------------------------------------------------------------------------------------------
-Nombre      : [PROYECTO TECH CORE] COR103-925 - Integraci√≥n con Satelites InsPAT
-Autor       : B2B - Werner Tito
-Fecha       : 29-08-2023
-Proposito   : Activar las Garantias de la Poliza
-Referencias : Reprogramacion AcselX
-Log de Cambios
-Fecha           Autor                       Descripcion
-29/08/2023    Werner Tito   [PROYECTO TECH CORE] COR103-925 - Integraci√≥n con Satelites InsPAT
-----------------------------------------------------------------------------------------------*/
-PROCEDURE SP_ACTIVA_GARANTIAS (p_stspol POLIZA.StsPol%TYPE, p_nIdePol IN Poliza.IdePol%TYPE) IS
-  nCantReg   NUMBER := 0;
-  v_NumOper  Oper_Pol.NumOper%TYPE; 
-  nStsPol  POLIZA.StsPol%TYPE;  
-  nStsPol_1  POLIZA.StsPol%TYPE;
-  PZ         POLIZA%ROWTYPE;
-BEGIN 
-  
-  nStsPol:=p_stspol;
-
-    PZ := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF PZ.IDEPOL IS NULL THEN            
-        DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||p_nIdePol);
-        RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||p_nIdePol);
-    END IF;
-  nStsPol_1 := PZ.STSPOL;
-    
-  -- Si la poliza esta en estados 'VAL','MOD','INC' permite activar las garantias
-  IF nStsPol IN ('VAL','MOD','INC') AND nStsPol_1 = 'ACT'  THEN     
-    
-    -- Valida si Producto es de INSPAT
-    IF PR.BUSCA_LVAL('SLIP_CER', PZ.CodPol) != 'INVALIDO' THEN      
-    BEGIN  
-      -- CUANDO LA POLIZA ESTA EN EMISION
-        SELECT COUNT(1) 
-          INTO nCantReg
-          FROM DIREC_GARANTIAS
-         WHERE IdePol = PZ.IdePol
-           AND STSGARANTIA  = 'VAL'
-           and nStsPol = 'VAL';
-      EXCEPTION WHEN OTHERS THEN
-        nCantReg := 0;
-      END; 
-        
-      IF(nCantReg=0) then 
-      BEGIN  
-         
-        -- CUANDO LA POLIZA YA EXISTE
-            SELECT COUNT(1) 
-              INTO nCantReg
-              FROM DIREC_GARANTIAS
-             WHERE IdePol = PZ.IdePol
-               AND STSGARANTIA  IN ('VAL', 'INC')
-               and nStsPol IN ('INC','MOD');
-          EXCEPTION WHEN OTHERS THEN
-            nCantReg := 0;
-          END;        
-     end if;
-   
-      -- Si existen Garantias para la Poliza
-      IF nCantReg > 0 THEN
-      BEGIN 
-          -- SE OBTIENE EL NUMERO DE OPERACION
-          SELECT max(NumOper) 
-            INTO v_NumOper
-            FROM Oper_Pol
-           WHERE IdePol = PZ.IdePol
-             AND NVL(INDANUL,'N') = 'N';
-        EXCEPTION WHEN OTHERS THEN
-          v_NumOper := NULL;
-        END;
-   
-        -- SE ACTUALIZA EL NUMERO DE OPERACION EN TODAS LAS GARANTIAS
-        IF v_NumOper IS NOT NULL THEN
-        BEGIN
-           
-            IF nStsPol = 'VAL'  THEN  
-                
-              UPDATE DIREC_GARANTIAS
-                 SET NumOper = v_NumOper,
-                     STSGARANTIA = 'ACT'
-               WHERE IdePol = PZ.IdePol
-                 AND STSGARANTIA IN ('VAL' ,'INC')
-                 and nStsPol = 'VAL';
-            ELSE   
-              UPDATE DIREC_GARANTIAS
-              SET NumOper = v_NumOper,STSGARANTIA = 'ACT'
-               WHERE IdePol = PZ.IdePol
-                 AND STSGARANTIA IN ('VAL' ,'INC')
-                 and nStsPol IN ('MOD', 'INC');                
-            END IF;  
-            -- STANDARD.COMMIT;
-            
-          EXCEPTION WHEN OTHERS THEN
-            NULL;
-          END;
-        END IF;
-      END IF;
-    END IF; 
-  END IF;     
-END SP_ACTIVA_GARANTIAS;
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_AUTORIZA_RESTRIC_EMI_POLIZA
-  Prop√≥sito  : Procedimiento para dar permisos a la autorizaci√≥n de recctricciones para la emision de la p√≥liza.
-  Referencia : EMI00005.FMB
-  Par√°metros :
-               p_nIdePol      NUMBER    Identificador de P√≥liza
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n 
-    10/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_AUTORIZA_RESTRIC_EMI_POLIZA(
-  p_nIdePol      IN Poliza.IdePol%TYPE
-) IS
-
-  cUsuario     USUARIO_AUTORIZA.CodUsu%TYPE;
-  n_Alerta     NUMBER;
-  c_Existe_Usuario NUMBER(6) := 0;
-
-    CURSOR C_AUTOVIALA IS
-        SELECT * 
-        FROM AUTORIZA_VIOLACION
-        WHERE IDEPOL = p_nIdePol 
-        AND STSAUTORIZADO = 'VAL';
-
-    AUVIO AUTORIZA_VIOLACION%ROWTYPE;
-
-    B01_Autoriza CHAR(1);
-
-BEGIN
-
-   OPEN C_AUTOVIALA;
-   FETCH C_AUTOVIALA INTO AUVIO;
-   WHILE C_AUTOVIALA%FOUND LOOP
-        BEGIN
-            SELECT DISTINCT CodUsu
-            INTO   cUsuario 
-            FROM   USUARIO_AUTORIZA 
-            WHERE  CodUsu = USER
-            AND    CodAut   IN (SELECT CODAUT
-                                FROM AUTORIZADOR
-                                WHERE CODBLOQ = AUVIO.CODBLOQ) 
-            AND    StsAut   = 'ACT';
-    EXCEPTION
-      WHEN NO_DATA_FOUND THEN
-                BEGIN   
-                    SELECT USER
-                    INTO cUsuario
-                    FROM DUAL
-                    WHERE EXISTS (SELECT 1
-                                    FROM USUARIO_AUTORIZA 
-                                    WHERE CodUsu = USER 
-                                    AND  CodAut = AUVIO.CODAUT) ;
-                EXCEPTION
-                    WHEN OTHERS THEN
-                cUsuario := 'INVALIDO';
-        END ;
-      WHEN OTHERS THEN
-            /* 
-            n_Alerta := ALERTA('Fallo SELECT a la tabla USUARIO_AUTORIZA'||chr(13)||' Error '||SQLERRM);
-            cUsuario := 'INVALIDO';
-        :B01.Autoriza := 'N';
-            RAISE FORM_TRIGGER_FAILURE;
-            */
-            cUsuario     := 'INVALIDO';
-            B01_Autoriza := 'N';
-            DBMS_OUTPUT.PUT_LINE('Fallo SELECT a la tabla USUARIO_AUTORIZA'||chr(13)||' Error '||SQLERRM);
-    END;
-        IF USER = cUsuario THEN
-            B01_Autoriza := 'S';
-        ELSE
-            -- n_Alerta :=ALERTA('Usuario No Existe..√≥ Inactivo Para Autorizar La Pol√≠tica...Verifique..!!!');
-            DBMS_OUTPUT.PUT_LINE('Usuario No Existe..√≥ Inactivo Para Autorizar La Pol√≠tica...Verifique..!!!');
-            B01_Autoriza := 'N';
-            /*
-            BEGIN
-                SELECT Count(1)
-                INTO c_Existe_Usuario
-                FROM USUARIO_AUTORIZA 
-                WHERE CodAut IN (SELECT CODAUT
-                                FROM AUTORIZADOR
-                                WHERE CODBLOQ= AUVIO.CODBLOQ) 
-                AND StsAut    = 'ACT';
-            END;
-            IF c_Existe_Usuario > 0 THEN
-                    GO_BLOCK('B03');
-                    LAST_RECORD;
-            END IF;
-            */
-        END IF;
-
-        IF p_nIdePol IS NOT NULL AND B01_Autoriza = 'S' THEN
-        BEGIN
-                -- FR_AUTORIZA_VIOLACION;
-                -- CONFIRMAR_RECALCULO (AUVIO.IDEAUT ,AUVIO.IDEPOL); .:. VALIDAR .:.
-                PR_EVALUA_POLITICA.AUTORIZA_BLOQUEO (AUVIO.IDEAUT ,AUVIO.IDEPOL ,USER);
-                DBMS_OUTPUT.PUT_LINE('Violaciones Autorizadas...!!!');
-                -- FIN
-                -- FR_UPDATE;
-                DECLARE
-                    nExiste_Violacion  NUMBER(1) :=0 ;
-                BEGIN
-                        BEGIN
-                            SELECT 1
-                            INTO nExiste_Violacion
-                            FROM AUTORIZA_VIOLACION
-                            WHERE IdePol = AUVIO.IDEPOL
-                            AND   StsAutorizado = 'VAL';
-                        EXCEPTION
-                            WHEN NO_DATA_FOUND THEN 
-                                nExiste_Violacion  := 0;
-                            --Se agrega lo siguiente.
-                            WHEN TOO_MANY_ROWS THEN       
-                                    nExiste_Violacion  := 1;  
-                            WHEN OTHERS THEN 
-                                    nExiste_Violacion  := 1;
-                        END;
-                        --Fin de codigo agregado por Jsanchez.
-                        --Ojo que al poner el estado a 2 , se indica que la poliza
-                        --no tiene violacion y por tanto se actualizara.
-                        IF nExiste_Violacion = 0 THEN 
-                                UPDATE POLIZA 
-                                SET    IndMovPolRen = '2' 
-                                WHERE  IdePol       = AUVIO.IDEPOL;
-                        END IF;          
-                        
-                END;
-                -- FIN
-            EXCEPTION 
-                WHEN OTHERS THEN 
-                  DBMS_OUTPUT.PUT_LINE('Error'||SQLERRM);
-                 RAISE_APPLICATION_ERROR(-20100,'Error'||SQLERRM);
-            END;
-        ELSE
-            DBMS_OUTPUT.PUT_LINE('No Existen Registros Seleccionados Para Autorizar...!!!');
-            RAISE_APPLICATION_ERROR(-20100,'No Existen Registros Seleccionados Para Autorizar...!!!');
-        END IF;
-
-      FETCH C_AUTOVIALA INTO AUVIO;
-   END LOOP;
-   CLOSE C_CLAUCERT;
-
-END SP_AUTORIZA_RESTRIC_EMI_POLIZA;
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_ACTU_OPERA_MOT_ENDOSO
-  Prop√≥sito  : Procedimiento para actualizar operacion de motivo endoso
-  Referencia : MODCOM.fmb
-  Par√°metros :
-               p_nIdePol NUMBER Identificador de P√≥liza
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n 
-    09/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
-  p_nIdePol      IN Poliza.IdePol%TYPE
-) IS
-
-  POL       POLIZA%ROWTYPE;
-  RPST      POLIZA_STATUS%ROWTYPE;
-  -- BTN ACTUALIZAR
-  cValida VARCHAR2(1);
-  --
-  -- FR_ACTUALIZAR
-  kSI               CONSTANT VARCHAR2(1) := '1' ; 
-  kNO               CONSTANT VARCHAR2(1) := '0' ; 
-  cPolitica         VARCHAR2(1);
-  nIndicador        NUMBER(1);
-  nValor            NUMBER;
-  nEstadoValGeneral NUMBER := 0;
-  --
-  nExiste NUMBER(1) := 0;
-
-DECLARE
-
-    
-    POL := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF P.IdePol IS NULL THEN
-
-       DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||p_nIdePol);
-       RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||p_nIdePol);
-    END IF;
-
-    IF PR_CNT_UTIL.POLIZA_CNF_PRIMAPACTADA(p_nIdePol) = 'S' THEN
-      BEGIN
-        PR_BBVA_UTIL.ProcesaPrimaPactada(p_nIdePol);
-      EXCEPTION
-        WHEN OTHERS THEN
-
-          DBMS_OUTPUT.PUT_LINE('Error ' || SQLERRM);
-          RAISE_APPLICATION_ERROR(-20100,'Error ' || SQLERRM);
-      END;
-    END IF;
-
-    cExPSt := PR_POLIZA_MASIVA.Existe_PS(POL.IDEPOL);
-
-  IF (cExPSt = 'N') THEN
-    BEGIN
-      SELECT DISTINCT OPS.Status
-      INTO   cStatusP
-      FROM   OPER_POL_STATUS OPS
-      WHERE  OPS.IdePol  = POL.IDEPOL
-        AND  OPS.NUMOPER = (SELECT MAX (OPS2.NUMOPER)
-                              FROM OPER_POL_STATUS OPS2,OPER_POL OP
-                              WHERE OPS2.IdePol = POL.IDEPOL 
-                              AND NVL(OP.INDANUL,'N') = 'N'
-                              AND OPS2.IdePol = OP.IdePol
-                              AND OPS2.NumOper = OP.NumOper);
-    EXCEPTION
-      WHEN NO_DATA_FOUND THEN
-        cStatusP := 0;
-    END;
-    RPST.IdePol := P.IdePol;
-    RPST.StsPol := cStatusP;
-    RPST.CodUsr := PR_SESION.USUARIO_APP;
-    RPST.Fecha  := sysdate;
-    IF RPST.StsPol != 0 THEN
-      PR_POLIZA_MASIVA.Crear_Poliza_Status( RPST );
-    END IF;
-  END IF;
-
-    -- cValida := FR_VALIDA_SERIE;
-    -- FUNCTION FR_VALIDA_SERIE RETURN VARCHAR2 IS
-    DECLARE
-
-        cReturn  VARCHAR2(1) := 'N';
-        nSerie   NUMBER := 2004;
-        nCont    NUMBER := 0;
-    
-        CURSOR C_REA Is
-            SELECT B.CODRAMOREA,A.IDECTTOREA,B.SERIE
-            FROM TEMP_DIST_REA A,CTTO_REA B
-            WHERE A.IDEPOL   = p_nIdePol  --:C01.nIdePol
-            AND B.IDECTTOREA = A.IDECTTOREA;
-    
-    BEGIN
-    
-        -- IF :C01.FecIni = :C01.FecPro THEN '30-JUN-2004'
-        IF P.FecIniVig = TO_DATE('30-JUN-2004','DD/MON/YYYY') THEN
-            FOR R_REA IN C_REA LOOP
-                IF PR.EXISTE_LVAL('RAMORENO',R_REA.CodRamoRea) = 'S' THEN
-                    IF R_REA.Serie != nSerie THEN
-                        nCont := nCont + 1;
-                    END IF;
-                END IF;
-            END LOOP;
-            
-            IF nCont > 0 THEN
-                cReturn := 'S';
-            END IF;
-            
-        END IF;
-        cValida := cReturn;
-    END;
-    /*
-    IF cValida = 'S' THEN
-        nDummy:= LR_ConfBox('No ha sido cambiada la fecha de contrato de reaseguro. Desea continuar con la activaci√≥n?');
-        IF nDummy = ALERT_BUTTON1 THEN
-          FR_Actualizar;
-        END IF;
-    ELSE
-      FR_Actualizar;
-    END IF;
-    */
-    --
-    IF PR.BUSCA_LVAL('CFREAMIX','VERSION') = '2' THEN
-      --FR_VALIDA_RECALCULO_RM;
-      SP_VALIDA_RECALCULO_RM(p_nIdePol);
-      PR_GEN_REA_UTIL_RM.VALIDAR_POLITICAS(p_nIdePol);
-    ELSE
-      -- FR_VALIDA_RECALCULO;
-      SP_VALIDA_RECALCULO(p_nIdePol);
-    END IF;
-
-    cPolitica := kNO;
-
-    BEGIN
-        BEGIN
-          pr_valida_emision.inicio(p_nIdePol, nValor);
-        END;
-
-        IF nValor = 1 THEN
-            --LR_Cursor_Ocupado('<<< EVALUACION DE POLITICAS DE SUBSCRIPCION INICIADA>>>');
-            DBMS_OUTPUT.PUT_LINE('<<< EVALUACION DE POLITICAS DE SUBSCRIPCION INICIADA>>>');
-            cPolitica := PR_Politicas.Principal(POL.IDEPOL,POL.NUMPOL, POL.CODPROD,USER,NVL(POL.CODPROD,'AC'));
-        ELSIF nValor  != 1 THEN
-            cPolitica := PR_EVALUA_POLITICA.EVALUA_VALOR_ENDOSADO(POL.IDEPOL,POL.NUMPOL, POL.CODPROD,USER);     
-        END IF;
-
-    EXCEPTION
-      WHEN OTHERS THEN
-        -- LR_Error('<<< ERROR EVALUANDO POLITICAS >>> '|| DBMS_ERROR_TEXT);
-          DBMS_OUTPUT.PUT_LINE('<<< ERROR EVALUANDO POLITICAS >>> ');
-          RAISE_APPLICATION_ERROR(-20100,'<<< ERROR EVALUANDO POLITICAS >>> ');
-    END;
-    --LR_Message('<<< EVALUACION DE POLITICAS DE SUBSCRIPCION CONCLUIDA>>>');
-    DBMS_OUTPUT.PUT_LINE('<<<EVALUACION DE POLITICAS DE SUBSCRIPCION CONCLUIDA>>>');
-    IF cPolitica = kSI THEN
-          /*        
-          IF :GLOBAL.PROCESO ='CVI' THEN
-             DBMS_OUTPUT.PUT_LINE('CVI Existen Politicas Violadas ...Verifique...');
-             RAISE_APPLICATION_ERROR(-20100,'CVI Existen Politicas Violadas ...Verifique...');
-          ELSE
-            -- LR_ERROR('Existen Politicas Violadas ...Verifique...');
-            DBMS_OUTPUT.PUT_LINE('Existen Politicas Violadas ...Verifique...');
-            SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
-          END IF;
-          */
-          DBMS_OUTPUT.PUT_LINE('Existen Politicas Violadas ...Verifique...');
-          PR_INTERFASE_AX_B2B.SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
-    END IF;
-
-  BEGIN
-    nEstadoValGeneral := PR_GEN_REA_UTIL_RM.VALIDAR_FACULTATIVO(p_nIdePol); -- 1:OK, 0:HAY ERRORES
-  EXCEPTION
-    WHEN OTHERS THEN
-      nEstadoValGeneral := 0;
-      DBMS_OUTPUT.PUT_LINE('Error: ' 
-                || DBMS_ERROR_TEXT
-                || 'Para : '
-                || FR_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol)
-                ||' <Informe al Area de Reaseguro>');
-      RAISE_APPLICATION_ERROR(-20100,'Error: ' 
-                || DBMS_ERROR_TEXT
-                || 'Para : '
-                || FR_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol)
-                ||' <Informe al Area de Reaseguro>');
-      
-  END;
-
-  IF nEstadoValGeneral = 1 THEN
-      DECLARE
-         nNUMOPER OPER_POL_T.NUMOPER%TYPE;
-      BEGIN
-        BEGIN
-           SELECT NUMOPER 
-           INTO  nNUMOPER
-           FROM OPER_POL_T 
-           WHERE IdePol = p_nIdePol;
-        EXCEPTION
-          WHEN OTHERS THEN         
-            DBMS_OUTPUT.PUT_LINE('Error'||SQLERRM);
-            RAISE_APPLICATION_ERROR(-20100,'Error'||SQLERRM);
-        END;
-        PR_GEN_REA_T.Copia_Esq_Cert_Anul_T(nNUMOPER); --(:B01_1.NUMOPER);
-        nIndicador := PR_GEN_REA_T.Valida_Facultativo(POL.IDEPOL);    
-      EXCEPTION
-        WHEN OTHERS THEN
-         -- LR_Error('Error' || DBMS_ERROR_TEXT);
-            DBMS_OUTPUT.PUT_LINE('Error'||SQLERRM);
-            RAISE_APPLICATION_ERROR(-20100,'Error'||SQLERRM);
-      END;    
-  END IF;
-
-END SP_ACTU_OPERA_MOT_ENDOSO;
---
-  /*-----------------------------------------------------------------------
-     Nombre : FN_OBTCONFREDIST 
-     Proposito: Si el analista de reaseguros respondi√≥ a la validaci√≥n del
-                rec√°lculo, obtendremos la respuesta (S/N).
-                Si no aplica el rec√°lculo, obtendremos por defecto N.
-     Referencia : Formulario MANTPOL.fmb                       
-     Parametro :
-                 p_nIdePol         Identificador de p√≥liza.
-     Log de Cambios
-     Fecha        Autor               Descripcion
-     -------      --------            --------------
-     15/10/2023   Robinzon Santana    Creaci√≥n
-  -----------------------------------------------------------------------------*/ 
- FUNCTION FN_OBTCONFREDIST ( p_nIdePol     IN    POLIZA.IdePol%TYPE ) RETURN VARCHAR2 IS  
-    cConfRedist            VARCHAR2(1) := 'N';    
-  BEGIN   
-    SELECT NVL(MAX(INDREDIST),'N')
-      INTO cConfRedist
-      FROM AUTORIZA_REDIST
-     WHERE IDEPOL = p_nIdePol 
-       AND NUMOPER IS NULL
-       AND INDAPLIC = 'S'
-       AND INDREDIST IS NOT NULL;    
-    RETURN cConfRedist;
-       
-  EXCEPTION
-    WHEN OTHERS THEN
-      RETURN 'N';
-      
-  END FN_OBTCONFREDIST;
- --
- /*-----------------------------------------------------------------------
-     Nombre : FN_EJECUTAR_ACTIVACION 
-     Proposito   : Funsi√≥n que ejecuta la activaci√≥n de la p√≥liza
-     Referencias : MANTPOL.fmb
-     Parametro :
-                 p_nIdePol    NUMBER   Identificador de p√≥liza.
-         p_cTipoOper  VARCHAR  Tipo motivo del endoso
-     Log de Cambios
-     Fecha        Autor               Descripcion
-     -------      --------            --------------
-     Fecha         Autor               Descripci√≥n
-     14/10/2023    Robinzon Santana     Creaci√≥n
-  -----------------------------------------------------------------------------*/   
-FUNCTION FN_EJECUTAR_ACTIVACION(p_nIdePol IN POLIZA.IdePol%TYPE, , p_cTipoOper IN LVAL.CODLVAL%TYPE) RETURN OPER_POL.NumOper%TYPE 
-IS
-
-    kSI             CONSTANT VARCHAR2(1) := 'S';
-    kNO             CONSTANT VARCHAR2(1) := 'N';     
-    kActivar        CONSTANT VARCHAR2(2) := 'AC';
-    nDummy      NUMBER;
-    cFirma      VARCHAR2(1);
-    nNumOper      OPER_POL.NumOper%TYPE;
-    nExisteOper     VARCHAR2(1);
-    cProcOper       REGLAS_STS.CodProceso%TYPE;  
-    nNumOperendoso  OPER_POL.NumOper%TYPE;
-    cIndAnul        OPER_POL.IndAnul%TYPE;
-
-    cIndAct         VARCHAR2(1);
-
-    P               POLIZA%ROWTYPE;
-    nOper           NUMBER;
-    nPlan           NUMBER(3);
-    nMensaje        NUMBER;
-    nMtoOper        OPER_POL.MtoOper%TYPE;
-    cIndOperValida  VARCHAR2(1);
-
-    cIndProc       VARCHAR2(1); 
-    nNumOperAux    OPER_POL.NumOper%TYPE;
-
-    pl_id         PARAMLIST;
-    cStsPol       POLIZA.STSPOL%TYPE;   
-    nIdImpresion  NUMBER;
-    cCodProd      POLIZA.CODPROD%TYPE;
-    nNumPol       POLIZA.NUMPOL%TYPE;
-    nIndCNT       VARCHAR2(1);
-    cTipoOper     OPER_POL.TIPOOP%TYPE;
-    nNumFinanc    COND_FINANCIAMIENTO.NUMFINANC%TYPE;
-    WSESION       NUMBER(20);
-
-      nNumFact       FACTURA.NUMFACT%TYPE;
-      cStsCert       CERTIFICADO.STSCERT%TYPE;
-      nMtoFactMoneda FACTURA.MTOFACTMONEDA%TYPE;
-      cCodMoneda     FACTURA.CODMONEDA%TYPE;
-
-      rops           OPER_POL_STATUS%ROWTYPE;
-      cstspolv       POLIZA_STATUS.STSPOL%TYPE;
-    
-    cConfRedist  VARCHAR2(1) := 'N';
-
-      cMensajePol   varchar2(100);
-
-       -- Generaci√≥n de marcas autom√°ticas en la exclusi√≥n de certificados desde SAS
-      vcMarca         ACSELX.CONTADOR_ELIMINACION_LAS.CODNECESIDAD%TYPE;
-    vnNumCert       ACSELX.CERTIFICADO.NUMCERT%TYPE;
-    vdFecExc        ACSELX.CERTIFICADO.FECEXC%TYPE;
-    vcMotExc        ACSELX.CERTIFICADO.CODMOTVEXC%TYPE;
-      -- Generaci√≥n de marcas autom√°ticas en la exclusi√≥n de certificados desde SAS 
-    --En esta tabla se guardan los certificados de trama de periodo corto
-    --Se actualizar√° el numero de liquidacion que ha generado por la activaci√≥n
-  CURSOR cActualiza IS
-    SELECT T.IDECOBERT, T.NUMMOD, T.NUMCERT, T.NUMPOL, T.CODPROD, T.IDEPOL, T.NUMCERTEXT, T.NUMCARGA, 
-           T.NUMCORRDATA, T.MTOTRAMA, T.TIPSEG, T.FECCARGA, T.NUMFACT, T.MTOFACTMONEDA, T.CODMONEDA, T.STSLOG
-    FROM   LOG_EXCLUYE_CERT T, CERTIFICADO C, POLIZA P
-    WHERE  P.IDEPOL = p_nIdePol
-      AND  P.STSPOL = 'ACT'
-      AND  T.IDEPOL = P.IdePol
-      AND  T.IDEPOL = C.IDEPOL
-      AND  T.NUMCERT = C.NUMCERT
-      AND  T.STSLOG = 'PEN'--ESTUVO PENDIENTE
-      AND  C.STSCERT = 'ACT'--EL CERTIFICADO ESTA ACTIVO
-      AND  T.TIPODOC = 'LQ'--  La tabla tiene LQ y LA
-      AND  T.NUMFACT IS NULL;
-
-  CURSOR cActu_DatPart (nNumOper OPER_POL.NumOper%TYPE) IS
-      SELECT op.idepol, op.numcert, op.mtooper 
-        FROM oper_pol op 
-       WHERE numoper = nNumOper 
-         AND tipoop = 'EMI';
-
-  nAnualiz PRODUCTO_ENT_EXT_CARGA.Anualizacion%TYPE;
-
-
-    -- Actualiza indicador de Facturado IndFact en la p√≥liza.
-    PROCEDURE Actualiza_Ind_Fact IS
-    BEGIN
-      UPDATE POLIZA
-         SET IndFact = 'N'
-       WHERE IdePol = p_nIdePol;     
-    END Actualiza_Ind_Fact;   
-    -- Devuelve indicador IndEsqReaPol de la p√≥liza.
-    FUNCTION TIENE_REASEGURO
-      RETURN POLIZA.IndEsqReaPol%TYPE IS
-      cIndCobPoliza  POLIZA.IndEsqReaPol%TYPE;
-    BEGIN
-      SELECT NVL(IndEsqReaPol,'N') IndCobPoliza
-      INTO   cIndCobPoliza
-      FROM   POLIZA
-      WHERE  IdePol = p_nIdePol;   
-      --
-      RETURN cIndCobPoliza;
-    END TIENE_REASEGURO;
-    -- Elimina datos de rehabilitaci√≥n de la p√≥liza.
-    PROCEDURE ELIMINAR_REHAB IS
-    BEGIN
-      DELETE POLIZA_REHAB 
-      WHERE  IdePol = p_nIdePol;  
-    END ELIMINAR_REHAB;
-
-      ---------------------------------
-      cAlcance VARCHAR2(8);
-    PZ POLIZA%ROWTYPE;
-BEGIN
-      PZ := PR_Poliza.Datos_Poliza(p_nIdePol);
-      IF PZ.IDEPOL IS NULL THEN            
-          DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||p_nIdePol);
-          RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||p_nIdePol);
-      END IF;
-    -- PR_Obligatoriedad_correo('EMISION INDIVIDUAL POLIZA');
-      PR_POL_CERT_ELECT.INICIAR('EMISION INDIVIDUAL POLIZA', cAlcance); --  Configuraci√≥n Obligatoriedad del ingreso de correo electr√≥nico
-    IF TIENE_REASEGURO = kSI THEN
-         -- Se invoca a los procedimientos de base de datos.
-         SUMA_MAYOR_REA(p_nIdePol);
-         PR_POLIZA.CERTIFICADO_CERO(p_nIdePol);
-         -- STANDARD.COMMIT;
-    END IF;
-
-    IF PZ.STSPOL = 'VAL' THEN       
-      -- LR_Cursor_Ocupado('Trabajando... Validando Poliza');
-        DBMS_OUTPUT.PUT_LINE('Trabajando... Validando Poliza');
-        PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Incluir: IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      PR_POLIZA.Incluir(p_nIdePol);
-        PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Incluir: IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      -- STANDARD.COMMIT;
-    END IF;
-    
-    
-    -- LR_Cursor_Ocupado('Trabajando... Activando Poliza');
-      DBMS_OUTPUT.PUT_LINE('Trabajando... Validando Poliza');
-      PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE('I','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Activar(T): IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-    
-   
-    nNumOper := PR_POLIZA.Activar(p_nIdePol,'T');
-      PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Activar(T): IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-    -- STANDARD.COMMIT;
-    -- LR_Cursor_Normal;
-
-    -- Invocar formulario de PreActivaci√≥n.
-    PR_INTERFASE_AX_B2B.SP_ACTU_OPERA_MOT_ENDOSO(p_nIdePol);
-    cIndAct := 'S';  -- .:. LR_Invocar_PreACT(kActivar,p_nIdePol,1,'N'); -- kActivar = 'AC'
-    --
-    LR_Cursor_Normal('Trabajando... Activando Poliza (Terminado)');
-
-    IF cIndAct = kSI THEN
-      nNumOper:=0;      
-      LR_Cursor_Ocupado('Trabajando... Activando Poliza Definitiva - 1');
-        PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Activar(D): IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      -- <I N3041386> Claudia Yugar Ladines / 14-08-2013 / CNT-01702: Manejo de re-c√°lculo de la distribuci√≥n de reaseguros     
-      cConfRedist := PR_INTERFASE_AX_B2B.FN_OBTCONFREDIST(p_nIdePol);-- FR_OBTCONFREDIST ( p_nIdePol );
-      --<I RTC-313128> Luis Venancio / 24-05-2022 / Generaci√≥n de marcas autom√°ticas en la exclusi√≥n de certificados desde SAS
-      BEGIN
-        SELECT numcert,
-               fecexc,
-               codmotvexc
-          INTO vnNumCert,
-               vdFecExc,
-               vcMotExc
-          FROM certificado
-         WHERE idepol = p_nIdePol
-           AND stscert = 'MOD'
-           AND ROWNUM = 1;
-      EXCEPTION WHEN OTHERS THEN
-                vnNumCert := NULL;
-                vdFecExc  := NULL;
-                vcMotExc  := NULL;
-      END;
-      
-      IF PR.Busca_Lval('PROANULA', '313126SWITCH') = 'ON' THEN
-         vcMarca := PR_MARCAS_ANULACION.FR_OBTENER_MARCA (p_nIdePol,TRUNC(vdFecExc),vcMotExc,vnNumCert,'CER');
-      END IF;
-      --<F RTC-313128> Luis Venancio / 24-05-2022 / Generaci√≥n de marcas autom√°ticas en la exclusi√≥n de certificados desde SAS
-      nNumOper    := PR_POLIZA.Activar ( p_nIdePol, 'D', cConfRedist);
-      --<I RTC-313128> Luis Venancio / 24-05-2022 / Generaci√≥n de marcas autom√°ticas en la exclusi√≥n de certificados desde SAS
-      IF PR.Busca_Lval('PROANULA', '313126SWITCH') = 'ON' THEN
-         IF vcMarca IS NOT NULL AND nNumOper IS NOT NULL THEN
-            PR_MARCAS_ANULACION.PR_GRABAR_MARCA(p_nIdePol,nNumOper,vnNumCert,'CER',vcMarca);
-         END IF;
-      END IF;
-      --<F RTC-313128> Luis Venancio / 24-05-2022 / Generaci√≥n de marcas autom√°ticas en la exclusi√≥n de certificados desde SAS
-      --nNumOper := PR_POLIZA.Activar(p_nIdePol,'D');
-      -- <F N3041386>     
-      PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_POLIZA.Activar(D): IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal            
-      --<I N3026404> Nelson D√≠az 27.11.2006 EMI-02491
-      BEGIN
-        SELECT 'S' 
-        INTO   cIndOperValida
-        FROM   dual
-        WHERE EXISTS ( SELECT 1
-                       FROM   Oper_Pol op
-                       WHERE  op.Idepol  = p_nIdePol
-                         AND  op.Numoper <> nNumOper);
-        EXCEPTION
-          WHEN NO_DATA_FOUND THEN
-            cIndOperValida := 'N';
-      END;
-      
-      IF  cIndOperValida = 'S' THEN
-        BEGIN
-          SELECT 'S' 
-          INTO   cIndOperValida
-          FROM   dual
-          WHERE EXISTS ( SELECT 1
-                         FROM   Oper_Pol op
-                         WHERE  op.Idepol  = p_nIdePol
-                           AND  op.Numoper = nNumOper
-                           AND  op.Tipoop  NOT IN ('ESV'));
-          EXCEPTION
-            WHEN NO_DATA_FOUND THEN
-              cIndOperValida := 'N';
-        END;
-        --<I N3038776> Edgard L√≥pez / 12-04-2012 / RQ:NNTEMIAX-00845 Credito Vehicular Anualizaci√≥n
-        nAnualiz := 'N';
-        BEGIN
-         SELECT anualizacion
-           INTO nAnualiz
-           FROM PRODUCTO_ENT_EXT_CARGA 
-          WHERE codprodext = PR_BBVA_UTIL.DEVOLVER_PRODEXT(p_nIdePol);
-        EXCEPTION
-         WHEN OTHERS THEN
-           nAnualiz := 'N';
-        END;
-        IF nAnualiz = 'S' THEN
-          FOR cADP IN cActu_DatPart (nNumOper) LOOP
-           UPDATE DATOS_PARTICULARES 
-              SET valtrasf = cADP.MtoOper
-            WHERE IdePol   = cADP.IdePol 
-              AND NumCert  = cADP.NumCert 
-              AND CodCrit  = 'PRIMA_PLAN';
-          END LOOP;
-        END IF;
-         --<F N3038776>         
-      END IF;
-      
-      IF cIndOperValida = 'S' THEN
-        PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_OPER_POL_DET.CREAR_MOV: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      PR_OPER_POL_DET.CREAR_MOV(nNumOper, p_cTipoOper, PZ.FecIniVig, PZ.FecFinVig); -- PR_OPER_POL_DET.CREAR_MOV(nNumOper, :B07_1.TipoOper, :B07_1.FecIniVig, :B07_1.FecFinVig);
-        PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_OPER_POL_DET.CREAR_MOV: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      END IF;   
-      --<F N3026404>  
-      --<I N3016652< O. Marin/15.10.2003/EMI-176
-      PR_OPER_POL.Existe_Oper_No_Nunca_Ren(p_nIdePol,cProcOper,nExisteOper,nNumOperEndoso);
-      IF nExisteOper = kSI THEN
-        cIndAnul := PR_OPER_POL.Obtener_IndAnul(nNumOperEndoso);
-        IF cIndAnul = kNo THEN
-          PR_POLIZA.Endoso_Ren(p_nIdePol, 'D');
-        END IF;        
-      END IF;
-      --<F N3016652>        
-      DBMS_OUTPUT.PUT_LINE('Trabajando... Activando Poliza Definitiva - 2'); 
-      -- <> El√≠ Segura / 06-04-2004 / Reprogramaci√≥n.
-      PR_EVALUA_POLITICA.Inicializa_Autoriza_Violacion(p_nIdePol,nNumOper);
-      --
-      cFirma := PR_EVALUA_POLITICA.Obtiene_Firma_Digital(p_nIdePol, nNumOper);
-      DBMS_OUTPUT.PUT_LINE('Trabajando... Activando Poliza Definitiva - 3'); 
-      -- 
-      Actualiza_Ind_Fact;    
-      --
-      BEGIN
-        PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_RECA_DCTO_CERTIF.Actualiza_Reca_Dcto_Cert: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-        PR_RECA_DCTO_CERTIF.Actualiza_Reca_Dcto_Cert(p_nIdePol,nNumOper);
-        PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_RECA_DCTO_CERTIF.Actualiza_Reca_Dcto_Cert: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0,p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      EXCEPTION
-        WHEN OTHERS THEN
-          -- LR_error('FRM-MANTPOL Error en package PR_RECA_DCTO_CERT.ACTUALIZA_RECA_DCTO_CERT - '||SQLERRM);
-      DBMS_OUTPUT.PUT_LINE('FN_EJECUTAR_ACTIVACION Error en package PR_RECA_DCTO_CERT.ACTUALIZA_RECA_DCTO_CERT - '||SQLERRM);
-          RAISE_APPLICATION_ERROR(-20100,'FN_EJECUTAR_ACTIVACION Error en package PR_RECA_DCTO_CERT.ACTUALIZA_RECA_DCTO_CERT - '||SQLERRM);
-      END;
-      -- Actualiza n√∫mero de operaci√≥n de las tablas de 
-      -- remesas a enviarse a Bancos.
-      PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','FR_ACTIVAR.Actualizar_Oper_Remesa_Bco: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      FR_ACTIVAR.Actualizar_Oper_Remesa_Bco(p_nIdePol,nNumOper);
-      PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','FR_ACTIVAR.Actualizar_Oper_Remesa_Bco: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      --<I N3020582>Esegura/ 06-11-2004 / Proyecto Help Desk.
-      -- Reemplazo de lo que estaba en DIST_REA
-      SELECT NVL(SUM(MtoOper),0)
-      INTO   nMtoOper
-      FROM   OPER_POL
-      WHERE  IdePol = p_nIdePol
-      AND    NumOper = nNumOper;
-      --
-      IF nMtoOper != 0 THEN
-        -- Si mueve prima se generan documentos.
-        LR_Cursor_Normal;
-        DBMS_OUTPUT.PUT_LINE('Se proceder√° a generar√°r Documentos de Cobranza,segun el Fraccionamiento Calculado,una vez Concluido este Proceso para Realizar cualquier Modificaci√≥n debera Anular dichos Documentos');
-        DBMS_OUTPUT.PUT_LINE('Generando Documentos');
-        cEvaluarCorreo:=TRUE;--<RTC-154713>13/03/2019   Milton Lope BBVA - Mejoras al proceso de emisi√≥n de G&L P9: Env√≠o de correos 
-      
-      END IF; 
-      PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','PR_POLIZA_UTIL.FINALIZAR_ACTIVACION: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-      PR_POLIZA_UTIL.FINALIZAR_ACTIVACION(p_nIdePol,nNumOper);            
-      --<I RTC-154713>13/03/2019   Milton Lopez BBVA - Mejoras al proceso de emisi√≥n de G&L P9: Env√≠o de correos autom√°ticos de respuesta de las emisiones manuales
-      IF PR.BUSCA_LVAL('PCBBVA','SWITCH') ='TRUE' THEN
-        cSwitchCorreo := TRUE;
-      ELSE          
-        cSwitchCorreo := FALSE;
-      END IF;
-    
-      --<F RTC-154713>
-      -- <I N3030497> Miguel Wilson / 11-09-2008 / Req. BSCOM-00103, Requerimiento CAMPA√ëA ACP 500  
-      cIndProc := PR_COBRANZA_PPR.Gen_Cobert_Dscto(p_nIdePol);
-      
-      --<I N3039004> - Carlos Torres - 21/05/2012 - Mejoras Contabilidad
-      -- Se invoca al procedimiento para actualizar el estado poliza
-      -- para los casos de polizas masivas
-      PR_POLIZA_MASIVA.Actualiza_Masiva(p_nIdePol);
-      --<F N3039004>      
-      
-      IF cIndProc = 'S' THEN
-          PR_GEN_REA_T.Eliminar_Rea_Temporal(p_nIdePol,NULL,NULL,NULL);       
-        nNumOperAux := PR_POLIZA.Activar(p_nIdePol,'D');
-        PR_POLIZA_UTIL.Finalizar_Activacion(p_nIdePol,nNumOperAux);
-        PR_COBRANZA_PPR.Compensar_Documentos(nNumOperAux);
-      END IF;
-      -- <F N3030497>    
-      
-      -- <I N3030785> Lourdes Valdivia G. (CONASTEC) / 09-10-2008 / Procesa Renovaci√≤n Cuotas Cero
-      --Consultamos Tipo de Producto Externo(CENCOSUB)
-      --IF PR_RENOV_AUTCOBERT.DEVOLVER_TIPSEG(p_nIdePol) = '241' THEN
-      IF PR.BUSCA_LVAL('PROCENCO',PR_RENOV_AUTCOBERT.DEVOLVER_TIPSEG(p_nIdePol)) <> 'INVALIDO' THEN --<N3034656> Lourdes Valdivia Glvez / 09.04.2010          
-         PR_RENOV_AUTCOBERT.GEN_RENCERO_DOCSUNAT(p_nIdePol, nNumOper);
-      END IF; 
-      -- <F N3030785>     
-       
-      PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','PR_POLIZA_UTIL.FINALIZAR_ACTIVACION: IDEPOL --> '||p_nIdePol ,
-                                            SYSDATE, SYSDATE, '01', 0, p_nIdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT. Pase temporal
-    -- STANDARD.COMMIT;
-      
-      
-        -- <I N3039737> N√©stor Cer√≥n - 31/10/2012 REQ. REA-01816 Optimizar c√°lculo de impuestos a Sunat.
-        BEGIN   --<N3040035> - N√©stor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-      select ps.stspol
-      into cstspolv
-      from poliza_status ps
-      where ps.idepol = p_nIdePol;
-      cstspolv := nvl(cstspolv,'0');
-        --<I N3040035> - N√©stor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-    EXCEPTION WHEN OTHERS THEN
-          cstspolv := '0';
-        END;
-        --<F N3040035>        
-        
-        rops.IdePol := p_nIdePol;
-        rops.NumOper := nNumOper;
-        rops.Status := cstspolv;
-        rops.CodUsr := PR_SESION.USUARIO_APP;
-        rops.Fecha  := sysdate;
-        IF rops.Status != '0' THEN   --<N3040035> - N√©stor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-          PR_POLIZA_MASIVA.Crear_Oper_Pol_st(rops);
-        END IF;  --<N3040035> - N√©stor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-        BEGIN    --<N3040035> - N√©stor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-           DELETE FROM poliza_status where idepol = p_nIdePol; 
-        --<I N3040035> - N√©stor Ceron - 04/12/2012 - HD 112175 - Optimizar calculo Impuesto Sunat
-        EXCEPTION WHEN OTHERS THEN
-          cstspolv := '0';
-        END;
-        --<F N3040035>        
-       -- STANDARD.COMMIT;
-        --
--- <F N3039737>
-
-      --<F N3020582>
-    DBMS_OUTPUT.PUT_LINE('Invocando a Distribuci√≥n de Reaseguros');   
-      --<I N3030565> 15.06.2008 / Max Canal Salas /Proyecto Impresiones CCM
-      BEGIN
-        SELECT STSPOL,CODPROD ,NUMPOL
-        INTO   cStsPol,cCodProd,nNumPol
-        FROM   POLIZA P
-        WHERE  P.IDEPOL = p_nIdePol;
-      EXCEPTION  
-        WHEN OTHERS THEN 
-           DBMS_OUTPUT.PUT_LINE('Error al obtener Numero de poliza');
-       RAISE_APPLICATION_ERROR(-20100,'Error al obtener Numero de poliza');
-      END ;  
-      nIndCNT := PR_IMP_POL_CCM_CON.VALIDA_CNT(nNumPol,cCodProd);
-      IF PR.BUSCA_LVAL('CCMLVGRL','SWICTHCCM') = 'S'  AND  nIndCNT ='N' AND PR.EXISTE_LVAL('CCMPRODX',PZ.CODPROD) = 'S' THEN  --<N3030980>/ 05.11.2008/Max Canal Salas /Proyecto CCM  impresion de polizas
-        nIdImpresion := PR_IMP_POL_CCM.DEVUELVE_IND_GRUPO_IMP(cCodProd,nNumOper,p_nIdePol); 
-        BEGIN
-          SELECT DISTINCT OP.TIPOOP 
-          INTO   cTipoOper
-          FROM   OPER_POL OP
-          WHERE  IdePol = p_nIdePol
-          AND    NumOper = nNumOper;
-        EXCEPTION 
-          WHEN OTHERS THEN 
-            cTipoOper  := NULL;
-        END ;  
-          
-      
-      END IF;
-      --<F N3030565>
-      
-      --<I N3043352> Juan Villaordu√±a / 17-11-2014 / 5791
-      IF nNumOper IS NOT NULL THEN
-        -- FR_ModificaCorredor(nNumOper);
-                DECLARE
-          nCodInterPol  acselx.intermediacion_pol.numid%TYPE DEFAULT NULL;
-          nCodInterFact acselx.factura.codinter%TYPE DEFAULT NULL;
-        BEGIN
-            BEGIN       
-              SELECT inter.codinter
-              INTO   nCodInterPol
-              FROM   acselx.poliza pol,
-                acselx.intermediacion_pol inp,
-                acselx.intermediario      inter
-              WHERE  pol.idepol = inp.idepol
-              -- AND    pol.idepol = :B01_1.idepol p_nIdePol
-              AND    pol.idepol = p_nIdePol
-              AND    inp.indlider = 'S'
-              AND    inter.numid = inp.numid;
-            EXCEPTION
-              WHEN no_data_found THEN
-              nCodInterPol := NULL;
-            END;
-            
-            BEGIN
-              SELECT codinter
-              INTO nCodInterFact
-              FROM acselx.factura
-              WHERE numoper = nNumOper;
-            EXCEPTION
-            WHEN no_data_found THEN
-              nCodInterFact := NULL;
-            END;
-            
-            IF nCodInterPol IS NOT NULL AND TO_NUMBER(nCodInterFact) IS NOT NULL THEN
-              IF nCodInterPol != nCodInterFact THEN
-                UPDATE acselx.factura
-                SET codinter = LPAD(nCodInterPol, 6, '0')
-                WHERE numoper = nNumOper;
-                
-                UPDATE acselx.acreencia
-                SET codinterlider = LPAD(nCodInterPol, 6, '0')
-                WHERE numacre IN (SELECT gif.numacre
-                        FROM acselx.cond_financiamiento cof, acselx.giros_financiamiento gif
-                        WHERE cof.numfinanc = gif.numfinanc
-                        AND numoper = nNumOper);
-              END IF;
-            END IF;
-        EXCEPTION
-          WHEN OTHERS THEN NULL;
-        END;
-        -- FIN
-      END IF;
-      --<F N3043352> Juan Villaordu√±a / 17-11-2014 / 5791
-            
-      -- .:. LR_Invocar_DistRea(p_nIdePol,nNumOper,0,'N');                            
-      --
-      DBMS_OUTPUT.PUT_LINE('Eliminando Temporales de Reaseguro.');
-      PR_GEN_REA_T.Eliminar_Rea_Temporal(p_nIdePol,NULL,NULL,NULL);
-      -- STANDARD.COMMIT;
-      -- Obtenemos datos actualizados de la p√≥liza para hacer validaciones.
-      -- .:. P := PR_POLIZA.Datos_Poliza(p_nIdePol);
-      IF PZ.StsPol = 'ACT' THEN     
-        -- Poner la actualizacion de inspecciones en notes
-        IF PR_POLIZA_UTIL.Maneja_Insp_Vehiculos_Pol(p_nIdePol) = kSI THEN    
-          DBMS_OUTPUT.PUT_LINE('Actualizando N√∫mero de Inspecci√≥n en Notes');
-          -- .:. FR_ACTIVAR.Actualizar_Inspeccion_Notes(p_nIdePol,PZ.NUMPOL);                      
-        END IF;
-        -- Elimina datos posibles de rehabilitaci√≥n si hubiera.
-        ELIMINAR_REHAB;
-        -- .:. STANDARD.COMMIT;
-      END IF;    
-      DBMS_OUTPUT.PUT_LINE('Trabajando... Eliminando temporales de Mov.Prima');
-      PR_MOV_PRIMA.Eliminar_Mov_T(p_nIdePol);    
-      -- .:. STANDARD.COMMIT;       
-      FR_UPDAUTORIZAREDIST(p_nIdePol, nNumOper); -- <N3041386> Claudia Yugar Ladines / 23-08-2013 / CNT-01702: Manejo de re-c√°lculo de la distribuci√≥n de reaseguros
-   ELSE
-      DBMS_OUTPUT.PUT_LINE('Trabajando... Reversando Activaci√≥n');
-      PR_MOV_PRIMA.Eliminar_Mov_T(p_nIdePol);
-      -- .:. STANDARD.COMMIT;
-   END IF;
-
-    DBMS_OUTPUT.PUT_LINE('Proceso ejecutado satisfactoriamente');
---<I N3033323>
-  FOR C IN cActualiza LOOP
-    BEGIN
-      SELECT F.NUMFACT, F.MTOFACTMONEDA, F.CODMONEDA
-      INTO nNumFact, nMtoFactMoneda, cCodMoneda
-      FROM FACTURA F
-      WHERE F.IDEFACT IN (SELECT A.IDEFACT
-                          FROM ACREENCIA A
-                          WHERE A.NUMACRE IN (SELECT G.NUMACRE
-                                              FROM GIROS_FINANCIAMIENTO G
-                                              WHERE G.NUMFINANC IN (SELECT RE.NUMFINANC
-                                                                    FROM REC_FINANCIAMIENTO RE
-                                                                    WHERE RE.IDEREC IN (SELECT MAX(R.IDEREC) IDEREC 
-                                                                                        FROM RECIBO R
-                                                                                        WHERE R.IDEMOVPRIMA IN ( SELECT M.IDEMOVPRIMA
-                                                                                                                 FROM   MOD_COBERT M
-                                                                                                                 WHERE  M.NUMMOD = C.NUMMOD
-                                                                                                                   AND  M.IDECOBERT = C.IDECOBERT)))));
-    EXCEPTION
-      WHEN OTHERS THEN 
-        nNumFact := 0;
-        nMtoFactMoneda := NULL;
-        cCodMoneda := C.CODMONEDA;
-    END;
-
-    SELECT CER.STSCERT
-    INTO   cStsCert
-    FROM   CERTIFICADO CER
-    WHERE  CER.IDEPOL = C.IDEPOL
-      AND  CER.NUMCERT = C.NUMCERT;
-
-    UPDATE LOG_EXCLUYE_CERT T
-    SET    T.NUMFACT = nNumFact,
-           T.STSLOG = decode(nNumFact,0,'ERR',cStsCert),
-           T.MTOFACTMONEDA = nMtoFactMoneda,
-           T.CODMONEDA = cCodMoneda,
-           T.NUMOPER = nNumOper
-    WHERE  T.IDEPOL = C.IDEPOL
-      AND  T.NUMCERT = C.NUMCERT
-      AND  T.STSLOG = 'PEN'
-      AND  T.IDECOBERT = C.IDECOBERT
-      AND  T.NUMMOD = C.NUMMOD
-      AND  T.NUMFACT IS NULL;
-    -- .:. COMMIT;  
-  END LOOP;
---<N3035871> NNTCOB-00015. Roberto Escudero / 23-09-2010 / Se mueve la baja de certificado a otro proceso 
-    -- Se devuelve la operaci√≥n procesada.
-  RETURN nNumOper;
-EXCEPTION
-  WHEN OTHERS THEN
-        PR_MOV_PRIMA.Eliminar_Mov_T(p_nIdePol);
-    -- .:. STANDARD.COMMIT;   
-    DBMS_OUTPUT.PUT_LINE('Error al Activar: '||SQLERRM);     
-    -- Devuelve nulo en se√±al de error.
-    RETURN TO_NUMBER(NULL);
-END FN_EJECUTAR_ACTIVACION;
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_ACTUALIZAR_INDCOBESP
-  Prop√≥sito  : 
-  Referencia : Formulario MANTPOL.fmb
-  Par√°metros :
-               p_nNumOper  NUMBER    Numero de operaci√≥n
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    14/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_ACTUALIZAR_INDCOBESP(p_nNumOper   IN   OPER_POL.NumOper%TYPE) IS
-  CURSOR c_Cobert_Cert IS
-    SELECT IdeCobert
-    FROM   MOD_COBERT
-    WHERE  IdeMovPrima IN (SELECT IdeMovPrima 
-                           FROM   RECIBO 
-                           WHERE  IdeOp = p_nNumOper
-                          );  
-BEGIN
-  FOR C IN c_Cobert_Cert LOOP
-    UPDATE MOD_COBERT
-    SET    IndCobEsp = 'S'
-    WHERE  IdeCobert = C.IdeCobert;
-  END LOOP;
-END SP_ACTUALIZAR_INDCOBESP;
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_ACTUALIZAR_BASERECADTCO
-  Prop√≥sito  : 
-  Referencia : Formulario MANTPOL.fmb
-  Par√°metros :
-               p_nNumOper  NUMBER    Numero de operaci√≥n
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    14/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_ACTUALIZAR_BASERECADTCO(p_nNumOper IN OPER_POL.NumOper%TYPE) IS
-    CURSOR c_Reca_Dcto_Esp  IS
-      SELECT CodRecaDcto,TipoRecaDcto,NumCert,IdePol
-      FROM   DET_OPER_POL
-      WHERE  NumOper = p_nNumOper;
-  
-  BEGIN
-    FOR R IN c_Reca_Dcto_Esp LOOP
-      UPDATE RECA_DCTO_CERTIF
-      SET    BaseRecaDcto = 'P'
-      WHERE  CodRecaDcto  = R.CodRecaDcto
-        AND  TipoRecaDcto = R.TipoRecaDcto
-        AND  IdePol = R.IdePol
-        AND  NumCert = R.NumCert;
-    END LOOP;
-END SP_ACTUALIZAR_BASERECADTCO;
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA
-  Prop√≥sito  : ACTIVAR MOTIVOS ENDOSOS VIGENCIA OPERACIO
-  Par√°metros :
-               p_nIdePol      NUMBER    Identificador de P√≥liza
-               p_cTipoOper    VARCHAR   Tipo motivo del endoso
-
-  Referencia : MANTPOL.FMB
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n 
-    14/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(
-  p_nIdePol   IN Poliza.IdePol%TYPE,
-  p_cTipoOper IN LVAL.CODLVAL%TYPE
-) IS
-
-  nCantReg  NUMBER := 0;
-  v_NumOper Oper_Pol.NumOper%TYPE;  
-  nStsPol   POLIZA.StsPol%TYPE;
-    PZ        POLIZA%ROWTYPE;
-    
-BEGIN
-    BEGIN
-      SELECT 1 
-      FROM   lval l 
-      WHERE  l.Tipolval = 'TIPOEND'
-      AND l.Codlval = p_cTipoOper;
-    EXCEPTION
-      WHEN OTHERS THEN
-    DBMS_OUTPUT.PUT_LINE('El motivo de endoso no valido.');
-        RAISE_APPLICATION_ERROR(-20100,'El motivo de endoso no valido.');
-    END;
-
-    PZ := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF PZ.IDEPOL IS NULL THEN
-       DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||p_nIdePol);
-       RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||p_nIdePol);
-    END IF;
-  
-    IF p_cTipoOper IS NOT NULL THEN
-
-        PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_Validar_Datos;  
-        PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);  
-
-        --<I RTC 316343> David Yupanqui / 24-02-2023 / [PROYECTO TECH CORE] Mejora en Registro y Validaci√≥n de Maquinaria TREC
-        IF PR.BUSCA_LVAL('MAQTREC', PZ.CODPOL)='1' THEN
-            BEGIN
-                SELECT COUNT(1) 
-                INTO nCantReg
-                FROM Maquinaria_Trec
-                WHERE IdePol = PZ.IDEPOL;
-            EXCEPTION WHEN OTHERS THEN
-                nCantReg := 0;
-            END;
-            IF nCantReg > 0 THEN
-                BEGIN
-                    SELECT max(NumOper)
-                    INTO v_NumOper
-                    FROM Oper_Pol
-                    WHERE IdePol = PZ.IDEPOL
-                    AND TipoOp <> ('EMI')
-                    AND NVL(INDANUL,'N') = 'N';
-                EXCEPTION WHEN OTHERS THEN
-                    v_NumOper := NULL;
-                END;
-                IF v_NumOper IS NOT NULL THEN
-                    BEGIN
-                        UPDATE Maquinaria_Trec
-                        SET NumOper = v_NumOper
-                        WHERE IdePol = PZ.IDEPOL
-                        AND TO_CHAR(FecOper,'DD/MM/YYYY') = TO_CHAR(SYSDATE,'DD/MM/YYYY');
-                        -- STANDARD.COMMIT;
-                    EXCEPTION WHEN OTHERS THEN
-                        NULL;
-                    END;
-                END IF;
-            END IF;
-        END IF;
-
-        PR_INTERFASE_AX_B2B.SP_ACTIVA_GARANTIAS(PZ.STSPOL, PZ.IDEPOL);  -- FR_ACTIVA_GARANTIAS(nStsPOL);
-
-        --<I RTC 316472> David Yupanqui / 27-04-2023 / [PROYECTO TECH CORE] Armado Autom√°tico del Anexo 7
-        if pr.busca_lval('SLIP_AUT',PZ.CODPROD) <> 'INVALIDO' then
-            acselx.pr_slip_auto.texto_prima(PZ.IDEPOL);
-        end if;
-        --<F RTC 316472>
-    
-    END IF;
-END SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA; -- Mejora en Registro y Validaci√≥n de Maquinaria TREC
---
-/*------------------------------------------------------------------------
-  Nombre     : SP_ACTIVAR_ACTUALIZAR_POLIZA
-  Prop√≥sito  : Activar actualizar la P√≥liza
-  Referencia : Formulario MANTPOL.fmb
-                FR_ACTIVAR.Actualizar_Poliza
-  Par√°metros :
-               p_nIdePol  NUMBER    Identificador de P√≥liza
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    14/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_ACTIVAR_ACTUALIZAR_POLIZA( p_nIdePol IN Poliza.IdePol%TYPE)
-IS
-  
-      kActivo       CONSTANT VARCHAR2(3) := 'ACT';
-    nButton       NUMBER;
-    cClasePol     POLIZA.ClasePol%TYPE;
-    cCodFormPago  POLIZA.CodFormPago%TYPE;
-    nIndFact      POLIZA.IndFact%TYPE;
-    nNumOper      OPER_POL.NumOper%TYPE;    
-
-    nNumFact       FACTURA.NUMFACT%TYPE;
-    cStsCert       CERTIFICADO.STSCERT%TYPE;
-    nMtoFactMoneda FACTURA.MTOFACTMONEDA%TYPE;
-    cCodMoneda     FACTURA.CODMONEDA%TYPE;
-    cVar           VARCHAR2(1):= 0;
-    nNumOblig      OBLIGACION.NUMOBLIG%TYPE;
-    cInd         NUMBER := 0;
-    nNumOperAnu    OPER_POL.NUMOPER%TYPE;
-
-    CURSOR cExcluye IS
-      SELECT T.IDECOBERT, T.NUMMOD, T.NUMCERT, T.NUMPOL, T.CODPROD, T.IDEPOL, T.NUMCERTEXT, T.NUMCARGA, 
-             T.NUMCORRDATA, T.MTOTRAMA, T.TIPSEG, T.FECCARGA, T.NUMFACT, T.MTOFACTMONEDA, T.CODMONEDA, T.STSLOG
-      FROM   acselx.LOG_EXCLUYE_CERT T, CERTIFICADO C, POLIZA P
-      WHERE  P.IDEPOL = p_nIdePol
-      AND  P.STSPOL = 'ACT'
-      AND  T.IDEPOL = P.IdePol
-      AND  T.IDEPOL = C.IDEPOL
-      AND  T.NUMCERT = C.NUMCERT
-      AND  T.STSLOG = 'ACT'--  ESTUVO ACTIVO
-      AND  C.STSCERT = 'ACT'-- EL CERTIFICADO ESTA ACTIVO
-      AND  T.TIPODOC = 'LQ'--  En la tabla se guarda LQ y LA
-      AND  T.NUMFACT IS NOT NULL;
-    
-    CURSOR cCertif_Anular (p_nNumOper OPER_POL.NUMOPER%TYPE)IS
-      SELECT IDECOBERT, NUMMOD, NUMCERT, NUMPOL, CODPROD, IDEPOL, NUMCERTEXT, NUMCARGA, 
-             NUMCORRDATA, MTOTRAMA, TIPSEG, FECCARGA, NUMFACT, MTOFACTMONEDA, CODMONEDA, 
-             STSLOG, TIPODOC, NUMOPER, FECFIN, FECANULACION, MTOOBLIG 
-      FROM  LOG_EXCLUYE_CERT L
-          WHERE L.NUMOPER = p_nNumOper
-          AND  L.TIPODOC = 'LQ'
-          AND  L.MTOOBLIG IS NOT NULL;
-
-    CURSOR cActObligs (p_nNumOperAnu OPER_POL.NUMOPER%TYPE)IS
-      SELECT DISTINCT NUMOBLIG, CODMONEDA, MTONETOOBLIGMONEDA
-      FROM   OPER_POL OP, OBLIGACION OB
-      WHERE  OP.IDEPOL = p_nIdePol
-      AND  OP.NUMOPER = p_nNumOperAnu
-      AND  OB.NUMOPER = OP.NUMOPER
-      AND  OB.STSOBLIG = 'ACT';     
-        
-        PZ POLIZA%ROWTYPE;
-    
-BEGIN
-        PZ := PR_Poliza.Datos_Poliza(p_nIdePol);
-        IF PZ.IDEPOL IS NULL THEN            
-            DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||p_nIdePol);
-            RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||p_nIdePol);
-        END IF;
-     -- Exclusi√≥n de Certificados Opci√≥n: Anulando Facturas
-    IF PR_VALIDA_EXC_CERT.FR_VERIF_TEMPORAL(PZ.IDEPOL) > 0 AND PR.BUSCA_LVAL('PRODEXCL',PZ.CODPROD)<>'INVALIDO' THEN
-      FR_EXCLUSION_MASIVA.EXCLUIR_ANULANDO_FACTURAS(PZ.IDEPOL);
-    ELSE
-    
-        IF PZ.STSPOL = kActivo AND PZ.CODFORMPAGO IN ('A','E') THEN
-              -- LR_Error(LR_Mensaje_Acsel('CSG',52,'  ','  ','  '));
-                    DBMS_OUTPUT.PUT_LINE(PR_INTERFASE_AX_B2B.FN_Mensaje_ACSEL('CSG',52,'  ','  ','  '));
-                    RAISE_APPLICATION_ERROR(-20100,PR_INTERFASE_AX_B2B.FN_Mensaje_ACSEL('CSG',52,'  ','  ','  '));
-          END IF;
-          -- Actualizamos fecha de operaci√≥n.
-          UPDATE POLIZA
-          SET    FecOper = PR.Fecha_Movimiento(TRUNC(SYSDATE)) -- :C00.dFecOper
-          WHERE  IdePol = PZ.IDEPOL;
-          IF PZ.CODFORMPAGO IN ('A','E') THEN
-                nNumOper := PR_INTERFASE_AX_B2B.FN_EJECUTAR_ACTIVACION(PZ.IDEPOL); --FR_ACTIVAR.Ejecutar_Activacion(p_nIdePol);       
-            IF nNumOper IS NULL THEN
-              -- LR_Rollback('Error al ejecutar activaci√≥n de p√≥liza.');
-              DBMS_OUTPUT.PUT_LINE('Error al ejecutar activaci√≥n de p√≥liza.');
-                            RAISE_APPLICATION_ERROR(-20100,'Error al ejecutar activaci√≥n de p√≥liza.');
-            END IF;  
-          ELSE
-            IF TRUNC(ADD_MONTHS(PZ.FECULTFACT,-1)) > TRUNC(PZ.FECFINVIG) THEN
-              -- LR_Error('A la P√≥liza ya se le realizo su ultima facturaci√≥n');
-              DBMS_OUTPUT.PUT_LINE('A la P√≥liza ya se le realizo su ultima facturaci√≥n');
-                            RAISE_APPLICATION_ERROR(-20100,'A la P√≥liza ya se le realizo su ultima facturaci√≥n');
-            END IF;
-
-            cClasePol    := PZ.CLASEPOL;
-            cCodFormPago := PZ.CODFORMPAGO;
-            nIndFact     := NVL(PZ.INDFACT,'N');
-            
-            IF nIndFact = 'N' AND cClasePol = '4' THEN
-              UPDATE POLIZA
-              SET    ClasePol = '3',
-                CodFormPago = 'A'
-              WHERE  IdePol = p_nIdePol;
-            ELSIF nIndFact != 'N' AND cClasePol = '4' THEN
-              -- LR_Error('No se puede actualizar movimientos despues de haber Pre-Liquidado');
-              DBMS_OUTPUT.PUT_LINE('No se puede actualizar movimientos despues de haber Pre-Liquidado');
-                            RAISE_APPLICATION_ERROR(-20100,'No se puede actualizar movimientos despues de haber Pre-Liquidado');
-            END IF;
-            nNumOper := PR_INTERFASE_AX_B2B.FN_EJECUTAR_ACTIVACION(p_nIdePol);  -- FR_ACTIVAR.Ejecutar_Activacion(p_nIdePol);
-            IF nNumOper IS NULL THEN
-              -- LR_Rollback('Error al ejecutar activaci√≥n de p√≥liza.');
-              DBMS_OUTPUT.PUT_LINE('Error al ejecutar activaci√≥n de p√≥liza.');
-                            RAISE_APPLICATION_ERROR(-20100,'Error al ejecutar activaci√≥n de p√≥liza.');
-            END IF;  
-            IF nIndFact = 'N' AND cClasePol = '4' THEN
-                UPDATE POLIZA
-                SET    ClasePol = cClasePol, CodFormPago = cCodFormPago
-                WHERE  IdePol = p_nIdePol;        
-                PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE('I','ACTIVAR POLIZA - MANTPOL','FR_ACTIVAR.Actualizar_BaseRecaDtco: IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, PZ.IdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT
-                PR_INTERFASE_AX_B2B.SP_ACTUALIZAR_BASERECADTCO(nNumOper); -- FR_ACTIVAR.Actualizar_BaseRecaDtco(nNumOper);            
-                PR_INTERFASE_AX_B2B.SP_ACTUALIZAR_INDCOBESP(nNumOper); -- FR_ACTIVAR.Actualizar_IndCobEsp(nNumOper);
-                PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE('F','ACTIVAR POLIZA - MANTPOL','FR_ACTIVAR.Actualizar_BaseRecaDtco: IDEPOL --> '||p_nIdePol ,SYSDATE, SYSDATE, '01', 0, PZ.IdePol); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT Log de proceso. Pase temporal
-                -- STANDARD.COMMIT;
-            END IF;       
-          END IF;
-          --<I N3035871> NNTCOB-00015. Roberto Escudero / 23-09-2010 / Se crea los procesos de generaci√≥n de obligaciones por CC pendiente
-          --1)Valida si cualquier certificado de esta poliza para esta operacion, tiene documentos pendientes para generar una LA
-          PR_BBVA_01.OBTIENE_MTO_OBLIGACION (p_nIdePol,nNumOper,cInd);
-    
-          IF cInd = 1 THEN 
-          --2)Para cada una de los certificados por poliza, genera la LA y anula el certificado
-            FOR cR IN cCertif_Anular (nNumOper) LOOP
-              PR_BBVA_01.GENERA_OBLIG_ANULA_CERT(cR,nNumOperAnu);
-              --Por cada operacion se puede haber generado mas de una LA          
-              FOR cObl IN cActObligs (nNumOperAnu) LOOP
-                IF cObl.NumOblig IS NOT NULL THEN 
-                  INSERT INTO LOG_EXCLUYE_CERT (IDECOBERT, NUMMOD, NUMCERT, NUMPOL, CODPROD, IDEPOL, NUMCERTEXT, NUMCARGA, 
-                     NUMCORRDATA, MTOTRAMA, TIPSEG, FECCARGA, NUMFACT, MTOFACTMONEDA, CODMONEDA, 
-                     STSLOG, TIPODOC, NUMOPER, FECFIN, FECANULACION, MTOOBLIG )
-                     VALUES (cR.IDECOBERT, cR.NUMMOD, cR.NUMCERT, cR.NUMPOL, cR.CODPROD, cR.IDEPOL, cR.NUMCERTEXT,cR.NUMCARGA,
-                     cR.NUMCORRDATA, cR.MTOTRAMA, cR.TIPSEG, cR.FECCARGA, cObl.NumOblig, cObl.MTONETOOBLIGMONEDA, cObl.CODMONEDA, 
-                     cR.STSLOG, 'LA', nNumOperAnu, cR.FECFIN, cR.FECANULACION, cR.MTOOBLIG);
-                ELSE 
-                  UPDATE LOG_EXCLUYE_CERT
-                  SET    MTOOBLIG = NULL
-                  WHERE  IDECOBERT = cR.IDECOBERT
-                    AND  NUMMOD = cR.NUMMOD
-                    AND  NUMCERT = cR.NUMCERT
-                    AND  NUMPOL = cR.NUMPOL
-                    AND  IDEPOL = cR.IDEPOL
-                    AND  TIPODOC = 'LQ';
-                END IF;
-              END LOOP;
-              --Actualiza los datos del certificados
-              SELECT CER.STSCERT
-              INTO   cStsCert
-              FROM   CERTIFICADO CER
-              WHERE  CER.IDEPOL = p_nIdePol
-                AND  CER.NUMCERT = cR.NUMCERT;
-                
-              IF cStsCert IN ('EXC','ANU') THEN
-                UPDATE acselx.LOG_EXCLUYE_CERT T
-                SET    T.STSLOG = 'EXC'
-                WHERE  T.IDEPOL = p_nIdePol
-                  AND  T.NUMCERT = cR.NUMCERT
-                  AND  T.STSLOG = 'PEN'
-                  AND  TIPODOC = 'LA';
-                COMMIT;
-              END IF;
-            END LOOP; 
-          ELSE
-
-            FOR C IN cExcluye LOOP
-              BEGIN 
-                PR_BBVA_01.PROCESA_BAJAS_PERIODO_CORTO(C.IDEPOL,C.NUMPOL,C.NUMCERT, C.TIPSEG, C.FECCARGA, C.NUMCARGA,C.NUMCORRDATA);
-              EXCEPTION 
-                WHEN OTHERS THEN
-                  NULL;
-              END;
-              
-              SELECT CER.STSCERT
-              INTO   cStsCert
-              FROM   CERTIFICADO CER
-              WHERE  CER.IDEPOL = C.IDEPOL
-                AND  CER.NUMCERT = C.NUMCERT;
-                
-              IF cStsCert IN ('EXC','ANU') THEN
-                UPDATE acselx.LOG_EXCLUYE_CERT T
-                SET    T.STSLOG = 'EXC'
-                WHERE  T.IDEPOL = C.IDEPOL
-                  AND  T.NUMCERT = C.NUMCERT
-                  AND  T.STSLOG != 'PEN'
-                  AND  T.IDECOBERT = C.IDECOBERT
-                  AND  T.NUMMOD = C.NUMMOD        
-                  AND  T.NUMFACT IS NOT NULL;
-                -- COMMIT;
-              END IF;
-            END LOOP;
-          END IF;
-
-    END IF;
-    
-
-END SP_ACTIVAR_ACTUALIZAR_POLIZA;
---
--- SP_ACTUALIZAR POLIZA
-/*------------------------------------------------------------------------
-  Nombre     : SP_ACTUALIZAR_POLIZA
-  Prop√≥sito  : Actualizar la P√≥liza y Generar el Movimiento de Prima
-  Referencia : Formulario MANTPOL.fmb
-                FR_ACTIVAR.Actualizar_Poliza
-  Par√°metros :
-               p_nIdePol   NUMBER    Identificador de P√≥liza
-               p_cTipoOper VARCHAR   Tipo motivo del endoso
-  Retorno    : p_cError   VARCHAR2  Retorno de resultado del proceso (OK = 0,OK / ERROR = 1,DescError)
-
-  Log de Cambios:
-    Fecha         Autor               Descripci√≥n
-    04/10/2023    Robinzon Santana    Creaci√≥n
- -----------------------------------------------------------------------------*/
-PROCEDURE SP_ACTUALIZAR_POLIZA( 
-  p_nIdePol      IN Poliza.IdePol%TYPE,
-  p_cTipoOper    IN LVAL.CODLVAL%TYPE,
-  p_cError       OUT VARCHAR2(3000)
-) IS
-
-  cTextoTr       VARCHAR2(200);
-  cCantOpera     NUMBER;
-  cTipo          VARCHAR2(10); 
-  nIdepol        NUMBER(14);
-  nNumOper       NUMBER(14);
-  cNumPol        POLIZA.NUMPOL%TYPE;
-  cExistTramit   NUMBER;
-  nNumTram       Poliza_Tramite.Numtramite%TYPE;
-
-  cTexto         VARCHAR2(200);
-  cOperEnd       VARCHAR2(1); 
-  nDummy         pls_integer;
-  cValidaTram    VARCHAR2(1);
-
-  nNumIdInterm   INTERMEDIACION_POL.NumIdInter_MC%Type;
-  cCodAgInterm   INTERMEDIACION_POL.CodAgeInter_MC%Type;
-
-  c_Codplanf     DATOS_PARTICULARES.CodPlan%type;
-  c_Revplanf     DATOS_PARTICULARES.RevPlan%type;
-  n_NumIDViaCob  AUTORIZA_DOC_PAGO_CLIENTE.NumIdViaCob%type;
-  c_CodDep       AUTORIZA_DOC_PAGO_CLIENTE.CodDep%type;
-  n_NumIdDocf    DOCS_IDENTIDAD.NumIdDoc%type;
-  c_cResp        VARCHAR2(100);
-  cExiste        VARCHAR2(1);
-  cDescbloq      VARCHAR2(100);
-
-  cExisteBloqMor VARCHAR2(1);
-  cDescbloqMor   VARCHAR2(100);
-
-  cMsjCobProv    VARCHAR2(1000):= NULL;
-  cValTrec       VARCHAR2(1):= '0';
-  cMsjPolSBS     VARCHAR2(1000):= NULL; 
-  cMsjError      VARCHAR2(1000):= NULL; 
-  
-  nCantReg       NUMBER := 0;
-  v_NumOper      Oper_Pol.NumOper%TYPE;
-
-  PZ             POLIZA%ROWTYPE;
-  cNumTramite    VARCHAR2(30);
-
-BEGIN
-  p_cError := '0,OK';
-    
-    PZ := PR_Poliza.Datos_Poliza(p_nIdePol);
-    IF PZ.IDEPOL IS NULL THEN
-       p_cError := '1,'||'No existe la P√≥liza '||p_nIdePol;
-       DBMS_OUTPUT.PUT_LINE('No existe la P√≥liza '||p_nIdePol);
-       RAISE_APPLICATION_ERROR(-20100,'No existe la P√≥liza '||p_nIdePol);
-    END IF;
-    
-    BEGIN
-      SELECT NumIdInter_MC, CodAgeInter_MC
-      INTO nNumIdInterm, cCodAgInterm
-      FROM INTERMEDIACION_POL
-      WHERE IDEPOL = PZ.IDEPOL
-      AND INDLIDER = 'S';
-    EXCEPTION
-      WHEN OTHERS THEN
-        nNumIdInterm := null;
-        cCodAgInterm := null;
-    END;
-    
-    IF nNumIdInterm IS NULL THEN
-        -- nDummy := LR_ALERTA('No se puede activar la P√≥liza, no se ha consignado el Intermediario.');
-        p_cError := '1,'||'No se puede activar la P√≥liza, no se ha consignado el Intermediario.';
-        DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, no se ha consignado el Intermediario.');
-        RAISE_APPLICATION_ERROR(-20100,'No se puede activar la P√≥liza, no se ha consignado el Intermediario.');
-    END IF;
-  
-    IF cCodAgInterm IS NULL THEN
-      -- nDummy := LR_ALERTA('No se puede activar la P√≥liza, no se ha consignado la Agencia de Intermediario.');
-        p_cError := '1,'||'No se puede activar la P√≥liza, no se ha consignado la Agencia de Intermediario.';
-        DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, no se ha consignado la Agencia de Intermediario.');
-        RAISE_APPLICATION_ERROR(-20100,'No se puede activar la P√≥liza, no se ha consignado la Agencia de Intermediario.');
-    END IF;
-
-    cExisteBloqMor:= ACSELX.PR_BLOQUEO_MOROSIDAD.VALIDAR_MOROSIDAD_POLIZA(PZ.IDEPOL);
-    
-    IF cExisteBloqMor <> 'N' THEN
-      BEGIN 
-          SELECT NVL(B.DescBloq,'MOROSIDAD')
-          INTO cDescbloqMor
-          FROM BLOQUEOS B
-          WHERE B.Codbloq = PR.BUSCA_LVAL('CFANMSV', 'CODBLOQ')
-          AND ROWNUM = 1;
-      EXCEPTION WHEN OTHERS THEN  
-        cDescbloqMor:='MOROSIDAD';
-      END;
-    END IF;
-    
-    IF cExisteBloqMor = 'S' THEN
-        -- nDummy := LR_ALERTA('No se puede activar la P√≥liza, el Cliente/Contratante se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')');
-        p_cError := '1,'||'No se puede activar la P√≥liza, el Cliente/Contratante se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')';
-        DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, el Cliente/Contratante se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')');
-        RAISE_APPLICATION_ERROR(-20100,'No se puede activar la P√≥liza, el Cliente/Contratante se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')');
-    ELSIF cExisteBloqMor = 'X' THEN
-        -- nDummy := LR_ALERTA('No se puede activar la P√≥liza, existe un Responsable de Pago que se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')');
-         p_cError := '1,'||'No se puede activar la P√≥liza, existe un Responsable de Pago que se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')';
-         DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, existe un Responsable de Pago que se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')');
-         RAISE_APPLICATION_ERROR(-20100,'No se puede activar la P√≥liza, existe un Responsable de Pago que se encuentra Bloqueado. (Motivo: '||cDescbloqMor||')');
-    END IF;
-    
-    IF PR.BUSCA_LVAL('POLDASBS', 'SWITCH') = 'S' AND PR.BUSCA_LVAL('PROVEHPO', PZ.CodProd) != 'INVALIDO' THEN
-        PR_VALIDAR_POLITICAS_SBS.PR_VALIDA_POLITICA_SBS(PZ.IDEPOL, cMsjPolSBS, cMsjError); -- Politica de Datos SBS 
-        
-        IF cMsjPolSBS IS NOT NULL THEN
-            p_cError := '1,'||cMsjPolSBS;
-            DBMS_OUTPUT.PUT_LINE(cMsjPolSBS);
-            RAISE_APPLICATION_ERROR(-20101,cMsjPolSBS);
-        END IF;
-      
-        --  Politica de Datos SBS 
-        IF cMsjError IS NOT NULL THEN
-          p_cError := '1,'||cMsjError;
-          DBMS_OUTPUT.PUT_LINE(cMsjError);
-          RAISE_APPLICATION_ERROR(-20102,cMsjError);
-        END IF;
-        --Politica de Datos SBS 
-        --Necesidad 2 Nuevo procedimiento para EN TRAMITE y SIN DATO 
-        --Se setea el mensaje de error para validar la necesidad 2
-        cMsjPolSBS:= null;    
-        PR_VALIDAR_POLITICAS_SBS.PR_VALIDA_POLITICA_SBS_N2(PZ.IDEPOL, PZ.CODPROD, PZ.NUMPOL, cMsjPolSBS, cMsjError); --<RTC 288374> Juan Villaordu√±a - 10/06/2021 - Politica de Datos SBS 
-    
-        IF cMsjPolSBS IS NOT NULL THEN
-          p_cError := '1,'||cMsjPolSBS;
-          DBMS_OUTPUT.PUT_LINE(cMsjPolSBS);
-          RAISE_APPLICATION_ERROR(-20103,cMsjPolSBS);
-        END IF;
-      
-        IF cMsjError IS NOT NULL THEN
-          p_cError := '1,'||cMsjError;
-          DBMS_OUTPUT.PUT_LINE(cMsjError);
-          RAISE_APPLICATION_ERROR(-20104,cMsjError);
-        END IF;
-
-    End If;
-    
-    If PR.BUSCA_LVAL('POLDASBS', 'SWITCH') = 'S' AND PR.BUSCA_LVAL('PROVEHTR', PZ.CodProd) != 'INVALIDO' THEN 
-      
-      cMsjPolSBS:= null;
-      PR_VALIDAR_POLITICAS_SBS.PR_VALIDA_POLITICA_SBS_N3(PZ.IDEPOL, PZ.FECINIVIG , PZ.FecFinVig, PZ.CodProd, cMsjPolSBS, cMsjError); --<RTC 288374> Juan Villaordu√±a - 10/06/2021 - Politica de Datos SBS 
-    
-      IF cMsjPolSBS IS NOT NULL and cMsjPolSBS <> '.' THEN       
-         p_cError := '1,'||cMsjPolSBS;
-         DBMS_OUTPUT.PUT_LINE(cMsjPolSBS);
-         RAISE_APPLICATION_ERROR(-20105,cMsjPolSBS);
-      END IF;
-      
-      --Politica de Datos SBS 
-      IF cMsjError IS NOT NULL THEN
-        p_cError := '1,'||cMsjError;
-        DBMS_OUTPUT.PUT_LINE(cMsjError);
-        RAISE_APPLICATION_ERROR(-20106,cMsjError);
-      END IF;
-      
-    END IF;
-    
-    IF PR.BUSCA_LVAL('PROVEHCP', PZ.CODPROD) != 'INVALIDO' THEN      
-      PR_INTERFASE_AX_B2B.SP_VALIDA_COBERT_PROV(PZ.IDEPOL, cMsjCobProv); -- PR_VALIDA_COBERT_PROV(PZ.IDEPOL, cMsjCobProv);
-      IF cMsjCobProv IS NOT NULL THEN
-          p_cError := '1,'||cMsjCobProv;
-          DBMS_OUTPUT.PUT_LINE(cMsjCobProv);
-          RAISE_APPLICATION_ERROR(-20107,cMsjCobProv);
-      END IF;
-    END IF;
-    
-    BEGIN 
-      SELECT dp.CodPlan, dp.RevPlan
-        INTO c_Codplanf, c_Revplanf
-        FROM DATOS_PARTICULARES dp
-       WHERE dp.idepol = PZ.IDEPOL
-         AND dp.numcert = 1
-         AND rownum = 1;
-    EXCEPTION WHEN OTHERS THEN
-      c_Codplanf := NULL;
-      c_Revplanf := NULL;
-    END;
-    
-    IF c_Codplanf IS NOT NULL AND c_Revplanf IS NOT NULL AND PR.BUSCA_LVAL('RENOVDPP',PZ.CODPROD||c_Codplanf||c_Revplanf) != 'INVALIDO' THEN
-      --Validaci√≥n de la v√≠a de cobro en AS400.
-      BEGIN
-          SELECT AD.NumIDViaCob, AD.CodDep
-          INTO n_NumIDViaCob, c_CodDep
-          FROM AUTORIZA_DOC_PAGO_CLIENTE AD 
-          WHERE AD.numautoriza = (SELECT rp.numautoriza 
-                                   FROM RESP_PAGO rp 
-                                  WHERE rp.idepol = PZ.IDEPOL 
-                                    AND rp.numcert = 1)
-            AND AD.Tipomodcob = 'DPP';
-      EXCEPTION WHEN OTHERS THEN
-        p_cError := '1,'||'No se puede activar la P√≥liza, No se ha ingresado el Nro. de Pago F√°cil.';
-        DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, No se ha ingresado el Nro. de Pago F√°cil.');
-        RAISE_APPLICATION_ERROR(-20106,'No se puede activar la P√≥liza, No se ha ingresado el Nro. de Pago F√°cil.');
-      END;
-
-      BEGIN
-         SELECT di.NumIdDoc
-         INTO n_NumIdDocf 
-         FROM DOCS_IDENTIDAD di 
-         WHERE di.tipoiddoc = '1' 
-         AND di.numid = n_NumIDViaCob;  
-      EXCEPTION WHEN OTHERS THEN
-        p_cError := '1,'||'No se puede activar la P√≥liza, No se ha encontrado el RUC de la V√≠a de Cobro.';
-        DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, No se ha encontrado el RUC de la V√≠a de Cobro.');
-        RAISE_APPLICATION_ERROR(-20106,'No se puede activar la P√≥liza, No se ha encontrado el RUC de la V√≠a de Cobro.');
-      END;
-    
-        PR_PREAFILIACION_AM.F_VALIDA_VIA_COBRO(n_NumIdDocf, '1' , c_cResp);
-      IF c_cResp IS NOT NULL THEN
-          p_cError := '1,'||'No se puede activar la P√≥liza, '||c_cResp;
-          DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, '||c_cResp);
-          RAISE_APPLICATION_ERROR(-20106,'No se puede activar la P√≥liza, '||c_cResp);
-      END IF;
-      
-      --Validaci√≥n de Cliente A/x.
-      BEGIN
-        SELECT 'S', B.Descbloq
-        INTO  cExiste, cDescbloq 
-          FROM  BLOQUEOS_TERCEROS BT, BLOQUEOS B
-          WHERE BT.Codbloq = B.Codbloq
-          AND BT.Codvinc = B.Codvinc 
-          AND TipoId =   '0'
-          AND  NumId =   PZ.CODCLI
-          AND  DvId  =   '0';
-      EXCEPTION WHEN OTHERS THEN
-        cExiste := 'N';
-      END;
-      
-      IF cExiste='S' THEN
-          p_cError := '1,'||'No se puede activar la P√≥liza, el Cliente se encuentra Bloqueado. (Motivo: '||cDescbloq||')';
-          DBMS_OUTPUT.PUT_LINE('No se puede activar la P√≥liza, el Cliente se encuentra Bloqueado. (Motivo: '||cDescbloq||')');
-          RAISE_APPLICATION_ERROR(-20106,'No se puede activar la P√≥liza, el Cliente se encuentra Bloqueado. (Motivo: '||cDescbloq||')');
-      END IF;
-
-    END IF;
-    -- 1
-    IF PR.BUSCA_LVAL('MAQTREC', PZ.CODPOL)='1' THEN
-      BEGIN
-        SELECT COUNT(1) 
-          INTO nCantReg
-          FROM Maquinaria_Trec
-         WHERE IdePol = PZ.IDEPOL;
-      EXCEPTION WHEN OTHERS THEN
-        nCantReg := 0;
-      END;
-      IF nCantReg > 0 THEN
-        cValTrec := PR_INTERFASE_AX_B2B.FN_VALIDA_TREC(PZ.IDEPOL); -- FR_VALIDA_TREC(PZ.IdePol);
-        IF NVL(cValTrec,'0') = '1' THEN 
-           p_cError := '1,'||'El valor declarado en Datos Particulares no coincide con la sumatoria valores declarados Registro Maquinarias TREC';
-           DBMS_OUTPUT.PUT_LINE('El valor declarado en Datos Particulares no coincide con la sumatoria valores declarados Registro Maquinarias TREC');
-           RAISE_APPLICATION_ERROR(-20106,'El valor declarado en Datos Particulares no coincide con la sumatoria valores declarados Registro Maquinarias TREC');
-        END IF;
-      END IF;
-    END IF;
-    -- FIN 1
-    
-    -- 2
-    nNumTram := PR_POLIZA_TRAMITE.ObtenerUltimoTramite(PZ.IDEPOL);
-    BEGIN
-      SELECT 1
-      into  cExistTramit
-      FROM DUAL 
-      WHERE EXISTS (SELECT 1
-                    FROM   POLIZA_TRAMITE PT
-                    WHERE  PT.IDEPOL = PZ.IDEPOL
-                      AND  NUMOPER  = 0 );
-    EXCEPTION 
-      WHEN OTHERS THEN
-        cExistTramit :=0;
-    END;
-    -- FIN 2
-    -- 3
-    IF nNumTram IS NULL THEN
-       cTextoTr := 'Confirma ACTIVAR la p√≥liza sin Numero de Tr√°mite';
-        DBMS_OUTPUT.PUT_LINE(cTextoTr);
-        PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL);
-        cTexto := 'Confirma ACTIVAR la p√≥liza con fecha: '||TO_CHAR(PR.Fecha_Movimiento(TRUNC(SYSDATE)),'DD/MM/YYYY');
-        DBMS_OUTPUT.PUT_LINE(cTexto);
-        IF PZ.STSPOL <> 'MOD' THEN
-            PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
-            PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
-            PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
-        ELSE 
-          cOperEnd := 'N';
-          BEGIN 
-            SELECT 'S' 
-            INTO   cOperEnd
-            FROM   dual
-            WHERE EXISTS (SELECT 1
-                          FROM   POLIZA P 
-                          WHERE  P.IDEPOL = PZ.IDEPOL
-                          AND    P.Stspol = 'MOD'
-                          AND    EXISTS ( SELECT * 
-                                          FROM   Mod_Cobert C
-                                          WHERE  C.Idepol = P.Idepol
-                                          AND    C.Stsmodcobert = 'INC'
-                                          ));
-          EXCEPTION 
-              WHEN NO_DATA_FOUND THEN
-                 cOperEnd := 'N';
-          END;
-          IF  cOperEnd = 'S' THEN
-            /*
-            GO_BLOCK('B07_1');
-            CLEAR_BLOCK;
-            :B07_1.TXT_EMI    := cTexto;
-            :B07_1.CodProd    := :B01_1.CodProd;
-            :B07_1.NumPol     := :B01_1.NumPol;
-            :B07_1.FecIniVig  := :B01_1.FecIniVig;
-            :B07_1.FecFinVig  := :B01_1.FecFinVig;
-            */
-            /*
-             ---------------------------------------------------------------------------------
-             .:.SE INVOCA AL FORMULARIO MOTIVOS DE ENDOSOS Y VIGENCIA DE OPERACI√ìN.:.
-             ----------------------------------------------------------------------------------
-            */
-            DBMS_OUTPUT.PUT_LINE(cTexto);
-            PR_INTERFASE_AX_B2B.SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(PZ.IDEPOL,p_cTipoOper);
-          ELSE
-
-            SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_Validar_Datos;  
-            PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
-
-          END IF;
-        END IF;
-    ELSE
-        IF PR.EXISTE_LVAL('CCMPRODX',PZ.CODPROD) = 'S' THEN
-            BEGIN
-              SELECT NUMTRAMITE 
-              INTO   nNumTram
-              FROM   POLIZA_TRAMITE PT
-              WHERE  PT.IDEPOL = PZ.IdePol
-                AND  NUMOPER  = 0
-                AND ROWNUM=1;
-            EXCEPTION 
-              WHEN OTHERS THEN 
-                nNumTram := NULL;
-            END;
-            BEGIN
-              SELECT DISTINCT TIPOOP,IDEPOL,NUMOPER ,1
-              INTO cTipo, nIdepol, nNumOper,cCantOpera
-              FROM oper_pol op
-              WHERE op.numoper IN  (SELECT p.numoper 
-                                    FROM   poliza_tramite  p
-                                    WHERE  p.numtramite =  NVL(PR_POLIZA_TRAMITE.ObtenerUltimoTramite(PZ.IDEPOL),nNumTram)
-                                      AND  p.numoper != 0)
-              AND    FECANUL IS NULL ;
-            EXCEPTION 
-              WHEN NO_DATA_FOUND THEN 
-                cCantOpera:=0;
-              WHEN TOO_MANY_ROWS THEN
-                cCantOpera:=2;
-            END;
-            
-            IF cCantOpera = 0 THEN
-                PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_VALIDAR_DATOS;
-                cTexto := 'Confirma ACTIVAR la p√≥liza con fecha: '||TO_CHAR(PR.Fecha_Movimiento(TRUNC(SYSDATE)),'DD/MM/YYYY');
-                DBMS_OUTPUT.PUT_LINE(cTexto);
-                IF PZ.STSPOL <> 'MOD' THEN            
-                    cValidaTram := FR_VALIDA_TRAMITE(NVL(PR_POLIZA_TRAMITE.OBTENERULTIMOTRAMITE(PZ.IDEPOL),nNumTram));
-                    IF cValidaTram = 'N' THEN
-                       DBMS_OUTPUT.PUT_LINE(cValidaTram);
-                       RAISE_APPLICATION_ERROR(-20106,cValidaTram);
-                    END IF; 
-          
-                    -- Si todo est√° correcto se continuamos con la actualizaci√≥n.
-                    PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT
-                    PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
-                    PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);  -- <N3028071> Giancarlo Ramirez - Optimizacion CNT                      
-                END IF;
-            ELSE
-               DBMS_OUTPUT.PUT_LINE('El tr√°mite '|| ' con el que se esta activando la p√≥liza pertenece a otra operaci√≥n '||cTipo||' , '||PZ.CODPROD||'-'||PZ.NUMPOL ||', NumOper '|| nNumOper);
-            END IF;
-            
-        ELSE 
-
-          PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL); -- FR_Validar_Datos;
-          cTexto := 'Confirma ACTIVAR la p√≥liza con fecha: '||TO_CHAR(PR.Fecha_Movimiento(TRUNC(SYSDATE)),'DD/MM/YYYY');
-          DBMS_OUTPUT.PUT_LINE(cTexto);
-          IF PZ.STSPOL <> 'MOD' THEN
-              PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
-              PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
-              PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
-          ELSE 
-              cOperEnd := 'N';
-              BEGIN 
-                SELECT 'S' 
-                INTO   cOperEnd
-                FROM   dual
-                WHERE EXISTS (SELECT 1
-                              FROM   POLIZA P 
-                              WHERE  P.IDEPOL = PZ.IdePol
-                              AND    P.Stspol = 'MOD'
-                              AND    EXISTS ( SELECT * 
-                                              FROM   Mod_Cobert C
-                                              WHERE  C.Idepol = P.Idepol
-                                              AND    C.Stsmodcobert = 'INC'
-                                            ));
-              EXCEPTION 
-                WHEN NO_DATA_FOUND THEN
-                    cOperEnd := 'N';
-              END;
-              IF  cOperEnd = 'S' THEN
-                /*
-                GO_BLOCK('B07_1');
-                CLEAR_BLOCK;
-                :B07_1.TXT_EMI    := cTexto;
-                :B07_1.CodProd    := :B01_1.CodProd;
-                :B07_1.NumPol     := :B01_1.NumPol;
-                :B07_1.FecIniVig  := :B01_1.FecIniVig;
-                :B07_1.FecFinVig  := :B01_1.FecFinVig;
-                */
-                /*
-                ---------------------------------------------------------------------------------
-                SE INVOCA AL FORMULARIO MOTIVOS DE ENDOSOS Y VIGENCIA DE OPERACI√ìN
-                ----------------------------------------------------------------------------------
-                */
-                PR_INTERFASE_AX_B2B.SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(PZ.IDEPOL,p_cTipoOper);
-              ELSE
-
-                PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL); -- FR_Validar_Datos;
-                PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
-
-              END IF;
-     
-      END IF;
-    END IF;
-    -- FIN 3
-    	PR_INTERFASE_AX_B2B.SP_ACTIVA_GARANTIAS(nStsPOL, PZ.IDEPOL); -- FR_ACTIVA_GARANTIAS(nStsPOL);
-	--<F COR103-925>			      
- 
-	--<I RTC 316472> David Yupanqui / 27-04-2023 / [PROYECTO TECH CORE] Armado Autom√°tico del Anexo 7
-	if pr.busca_lval('SLIP_AUT',PZ.CodPol) <> 'INVALIDO' then
-		acselx.pr_slip_auto.texto_prima(PZ.IdePol);
-	end if;
-    
-EXCEPTION
-  WHEN OTHERS THEN 
-    DBMS_OUTPUT.PUT_LINE(SQLERRM);
-    RAISE_APPLICATION_ERROR(-20106,SQLERRM);
-
-END SP_ACTUALIZAR_POLIZA;
-
--- FIN CLAUSULA C
-
 
 
 end;
+/
