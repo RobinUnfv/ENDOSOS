@@ -38,7 +38,7 @@ CREATE OR REPLACE PROCEDURE SP_MNT_COBERT_CERT_C(
   n_Existe NUMBER;  
 
   -- CPPD COBERT_PLAN_PROD%ROWTYPE;
-	cMensajeRestriccionSAS VARCHAR2(400);
+  cMensajeRestriccionSAS VARCHAR2(400);
 
   CURSOR C_COBERTCERT IS
     SELECT * FROM COBERT_CERT CC
@@ -55,8 +55,8 @@ CREATE OR REPLACE PROCEDURE SP_MNT_COBERT_CERT_C(
   nTasaCambioPol NUMBER(30);
   cEliminar      CHAR(1) := 'N';
   cCODCOBERT     COBERT_PLAN_PROD.CODCOBERT%TYPE := 'TR12';
-
-DECLARE
+  
+BEGIN
     p_cError := '0,OK';
     
     P := PR_Poliza.Datos_Poliza(p_nIdePol);
@@ -83,7 +83,7 @@ DECLARE
       p_cError := '1,'||cMensajeRestriccionSAS;
       DBMS_OUTPUT.PUT_LINE(cMensajeRestriccionSAS);
      -- RAISE_APPLICATION_ERROR(-20104,cMensajeRestriccionSAS);
-	END IF;
+  END IF;
   
   OPEN C_COBERTCERT;
   FETCH C_COBERTCERT INTO CP;
@@ -97,7 +97,7 @@ DECLARE
               WHERE  EXISTS ( SELECT 1 
                               FROM   MOD_COBERT
                               WHERE  IdeCobert  = CP.IdeCobert
-                              AND    StsModCobert NOT IN ('VAL'));	     	                
+                              AND    StsModCobert NOT IN ('VAL'));                        
             EXCEPTION
               WHEN NO_DATA_FOUND THEN
                 n_Existe := 0;
@@ -129,8 +129,8 @@ DECLARE
           AND C.STSCOBERT IN('INC','VAL');
       
           PR_CERT_RAMO.GENERAR_CLAUSULAS_ASOCIADAS(CP.IdePol,CP.NumCert, P.codprod,
-			                                        R.CodPlan,R.RevPlan,CP.CodRamoCert,
-			 	                                       CP.FecIniValid,CP.FecFinValid);
+                                              R.CodPlan,R.RevPlan,CP.CodRamoCert,
+                                               CP.FecIniValid,CP.FecFinValid);
        
           cEliminar := 'N';
        END IF;
@@ -211,13 +211,13 @@ DECLARE
     END;
     
     BEGIN
-	      SELECT CodCobertDep
-	      INTO   cCodCobertDep
-	      FROM   RAMO_PLAN_PROD
-	      WHERE  CodProd   = P.codprod
-	      AND  CodPlan     = R.codplan 
-	      AND  RevPlan     = R.revplan 
-	      AND  CodRamoPlan = p_cCodRamoCert;
+        SELECT CodCobertDep
+        INTO   cCodCobertDep
+        FROM   RAMO_PLAN_PROD
+        WHERE  CodProd   = P.codprod
+        AND  CodPlan     = R.codplan 
+        AND  RevPlan     = R.revplan 
+        AND  CodRamoPlan = p_cCodRamoCert;
     EXCEPTION
           WHEN NO_DATA_FOUND THEN 
             NULL;
@@ -286,10 +286,10 @@ DECLARE
   nTasaCambio    := PR.TASA_CAMBIO(RB01_1(POSICION).codmonedacob,PR_VINISUSC.CODIGO_MONEDA,SYSDATE,'D');
   nTasaCambioPol := PR.TASA_CAMBIO(RB01_1(POSICION).codmonedacob,P.codmoneda,SYSDATE,'D');
 
-	RB01_1(POSICION).prima          := RB01_1(POSICION).primamonedacob * nTasaCambio;
-	RB01_1(POSICION).sumaaseg       := RB01_1(POSICION).sumaasegmonedacob * nTasaCambio;
-	RB01_1(POSICION).sumaasegmoneda := RB01_1(POSICION).sumaasegmonedacob * nTasaCambioPol;
-	RB01_1(POSICION).primamoneda    := RB01_1(POSICION).primamonedacob * nTasaCambioPol;
+  RB01_1(POSICION).prima          := RB01_1(POSICION).primamonedacob * nTasaCambio;
+  RB01_1(POSICION).sumaaseg       := RB01_1(POSICION).sumaasegmonedacob * nTasaCambio;
+  RB01_1(POSICION).sumaasegmoneda := RB01_1(POSICION).sumaasegmonedacob * nTasaCambioPol;
+  RB01_1(POSICION).primamoneda    := RB01_1(POSICION).primamonedacob * nTasaCambioPol;
     
     INSERT INTO COBERT_CERT(
         tasa, -- 1
@@ -404,7 +404,6 @@ DECLARE
         rB01_1(POSICION).mtototdctomonedacob, -- 54
         rB01_1(POSICION).indcobpoliza -- 55
     );
-    
     
     BEGIN
          PR_DED_COBERT.CARGA_DEDUCIBLES(p_nIdePol,p_nNumCert,p_cCodRamoCert,

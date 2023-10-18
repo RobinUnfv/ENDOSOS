@@ -14,7 +14,7 @@
 PROCEDURE SP_INCLUIR_CERTI_CLAU_C( 
   p_nIdePol      IN Poliza.IdePol%TYPE,
   p_nNumCert     IN Certificado.NumCert%TYPE,
-  p_cError       OUT VARCHAR2(3000)
+  p_cError       OUT VARCHAR2
 ) IS
   bExisteSelec BOOLEAN;
   n_IDLogLote  NUMBER;
@@ -220,7 +220,7 @@ BEGIN
       DBMS_OUTPUT.PUT_LINE('Proceso ejecutado satisfactoriamente.');
 
     END IF;
-
+    
     DBMS_OUTPUT.PUT_LINE(p_cError);
 EXCEPTION
   WHEN OTHERS THEN

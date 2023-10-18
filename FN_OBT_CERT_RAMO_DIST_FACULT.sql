@@ -1,5 +1,5 @@
 /*-------------------------------------------------------------------------------
-  Nombre      : FR_OBT_CERT_RAMO_DIST_FACULT
+  Nombre      : PR_API_COMISION_INTERMEDIARIO.FN_OBT_CERT_RAMO_DIST_FACULT
   Proposito   : Obtener certificado y ramo en donde no se haya colocado detalle facultativo.
   Referencia : MODCOM.FMB
   Parámetros :
@@ -8,7 +8,7 @@
     Fecha	            Autor			     Descripción
   10/10/2023       Robinzon Santana          Creación
 -------------------------------------------------------------------------------*/
-FUNCTION FR_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol POLIZA.IdePol%TYPE) RETURN VARCHAR2 IS
+FUNCTION FN_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol POLIZA.IdePol%TYPE) RETURN VARCHAR2 IS
 
     cMensaje VARCHAR2(1000):= '';
 
@@ -41,4 +41,4 @@ BEGIN
 EXCEPTION
   WHEN OTHERS THEN
     RETURN '';
-END;
+END FN_OBT_CERT_RAMO_DIST_FACULT;

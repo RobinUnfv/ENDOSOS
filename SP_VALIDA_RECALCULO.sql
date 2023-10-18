@@ -8,7 +8,7 @@
      -------      --------            --------------
      09/10/2023   Robinzon Santana    Creación.
   -----------------------------------------------------------------------------*/     
-  CREATE OR REPLACE PROCEDURE SP_VALIDA_RECALCULO(p_nIdePol IN Poliza.IdePol%TYPE) IS
+PROCEDURE SP_VALIDA_RECALCULO(p_nIdePol IN Poliza.IdePol%TYPE) IS
 	
 	  cAplicaRedist	   VARCHAR2(2);
 	  nExisteAutRedist VARCHAR2(1) := NULL;	
@@ -18,7 +18,7 @@
 	    BEGIN
 			cAplicaRedist := 'NO';
 			DBMS_OUTPUT.PUT_LINE('Verificando si aplica recálculo ...');
-			cAplicaRedist := FN_CAL_APLICA_RECALCULO(p_nIdePol); -- FR_APLICA_RECALCULO(:C01.nIdePol);
+			cAplicaRedist := PR_API_COMISION_INTERMEDIARIO.FN_CAL_APLICA_RECALCULO(p_nIdePol); -- FR_APLICA_RECALCULO(:C01.nIdePol);
 		EXCEPTION
 			WHEN OTHERS THEN
 				cAplicaRedist := 'NO';
@@ -31,7 +31,7 @@
 				SELECT NVL(COUNT(1),0)
 				INTO nExisteAutRedist
 			  	FROM AUTORIZA_REDIST
-			 	WHERE IDEPOL = :C01.nIdePol
+			 	WHERE IDEPOL = p_nIdePol
 				AND NUMOPER IS NULL
 				AND INDAPLIC = 'S';			    
 			EXCEPTION WHEN OTHERS THEN

@@ -9,7 +9,7 @@
      -------      --------            --------------
      09/10/2023   ROBINZON SANTANA    Creación.
   -----------------------------------------------------------------------------*/     
-  CREATE OR REPLACE PROCEDURE SP_VALIDA_RECALCULO_RM(p_nIdePol IN Poliza.IdePol%TYPE)
+  PROCEDURE SP_VALIDA_RECALCULO_RM(p_nIdePol IN Poliza.IdePol%TYPE)
     IS 
         nIdePol	          POLIZA.IdePol%TYPE;
         nFormPagoInv      NUMBER := 0;
@@ -141,7 +141,7 @@
 		          --EVALUAMOS SI ES FACULTATIVO PARA COLOCAR EL INDREDIST COMO NULO O CON UN VALOR 'S'
 		          --<I RTC-103795> Brayan Pereda 17-08-2017 Modificacion de la funcion para obtener el indicador facultativo
 		          --IF fr_Existe_Facultativo (XX.IdePol, XX.NumCert) = 1 THEN	
-		          IF FR_IND_FACULTATIVO (XX.IdePol, XX.NumCert, XX.CodRamoCert, XX.CodRamoRea, nIdeRecAnt, XX.IdeRec) = 1 THEN
+		          IF PR_API_COMISION_INTERMEDIARIO.FN_IND_FACULTATIVO(XX.IdePol, XX.NumCert, XX.CodRamoCert, XX.CodRamoRea, nIdeRecAnt, XX.IdeRec) = 1 THEN
 		          --<F RTC-103795>
 		          	cIndFacultativo := kSI;
 		          	cIndRedist := NULL;

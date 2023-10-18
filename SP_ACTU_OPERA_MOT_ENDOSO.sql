@@ -8,9 +8,7 @@
     Fecha         Autor               Descripción 
     09/10/2023    Robinzon Santana    Creación
  -----------------------------------------------------------------------------*/
-PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
-  p_nIdePol      IN Poliza.IdePol%TYPE
-) IS
+PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(p_nIdePol IN Poliza.IdePol%TYPE) IS
 
   POL       POLIZA%ROWTYPE;
   RPST      POLIZA_STATUS%ROWTYPE;
@@ -27,9 +25,8 @@ PROCEDURE SP_ACTU_OPERA_MOT_ENDOSO(
   --
   nExiste NUMBER(1) := 0;
 
-DECLARE
+BEGIN
 
-    
     POL := PR_Poliza.Datos_Poliza(p_nIdePol);
     IF P.IdePol IS NULL THEN
 
@@ -121,11 +118,11 @@ DECLARE
     --
     IF PR.BUSCA_LVAL('CFREAMIX','VERSION') = '2' THEN
       --FR_VALIDA_RECALCULO_RM;
-      SP_VALIDA_RECALCULO_RM(p_nIdePol);
+      PR_API_COMISION_INTERMEDIARIO.SP_VALIDA_RECALCULO_RM(p_nIdePol);
       PR_GEN_REA_UTIL_RM.VALIDAR_POLITICAS(p_nIdePol);
     ELSE
       -- FR_VALIDA_RECALCULO;
-      SP_VALIDA_RECALCULO(p_nIdePol);
+      PR_API_COMISION_INTERMEDIARIO.SP_VALIDA_RECALCULO(p_nIdePol);
     END IF;
 
     cPolitica := kNO;
@@ -163,7 +160,7 @@ DECLARE
 		  	  END IF;
           */
           DBMS_OUTPUT.PUT_LINE('Existen Politicas Violadas ...Verifique...');
-          PR_INTERFASE_AX_B2B.SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
+          PR_API_COMISION_INTERMEDIARIO.SP_AUTORIZA_RESTRIC_EMI_POLIZA(p_nIdePol);
 	  END IF;
 
   BEGIN
@@ -174,12 +171,12 @@ DECLARE
       DBMS_OUTPUT.PUT_LINE('Error: ' 
 	 		          || DBMS_ERROR_TEXT
                 || 'Para : '
-                || FR_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol)
+                || PR_API_COMISION_INTERMEDIARIO.FN_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol)
                 ||' <Informe al Area de Reaseguro>');
       RAISE_APPLICATION_ERROR(-20100,'Error: ' 
 	 		          || DBMS_ERROR_TEXT
                 || 'Para : '
-                || FR_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol)
+                || PR_API_COMISION_INTERMEDIARIO.FN_OBT_CERT_RAMO_DIST_FACULT(p_nIdePol)
                 ||' <Informe al Area de Reaseguro>');
       
 	END;

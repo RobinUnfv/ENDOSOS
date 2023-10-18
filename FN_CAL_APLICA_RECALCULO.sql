@@ -9,7 +9,7 @@
      -------      --------            --------------
      09/10/2023   Robinzon Santana     Creación
   -----------------------------------------------------------------------------*/     
-  CREATE OR REPLACE FUNCTION FN_CAL_APLICA_RECALCULO(p_nIdePol IN POLIZA.IdePol%TYPE) RETURN VARCHAR2 
+  FUNCTION FN_CAL_APLICA_RECALCULO(p_nIdePol IN POLIZA.IdePol%TYPE) RETURN VARCHAR2 
   
   IS
   														
@@ -90,7 +90,7 @@
           --
           IF ABS(nSumaAsegAnt) <> ABS(XX.SumaAseg)  THEN
           	
-			 cIndDivRecal := FR_APLICA_REDIST_FINAL(XX.IdePol, XX.NumCert, XX.CodRamoCert, XX.IdeRec, XX.FecIniVig, XX.FecFinVig, XX.CodRamoRea);
+			 cIndDivRecal := PR_API_COMISION_INTERMEDIARIO.FN_APLICA_REDIST_FINAL(XX.IdePol, XX.NumCert, XX.CodRamoCert, XX.IdeRec, XX.FecIniVig, XX.FecFinVig, XX.CodRamoRea);
 			 IF cIndDivRecal = 'SI' AND fr_Existe_Facultativo (XX.IdePol, XX.NumCert) = 1 THEN
 			 	RETURN cIndDivRecal;
 			 END IF;

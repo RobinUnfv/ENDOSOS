@@ -36,7 +36,7 @@ CREATE OR REPLACE PROCEDURE SP_ELIM_CLAU_CERT_C(
     P   POLIZA%ROWTYPE;
     R   CERT_RAMO%ROWTYPE;
 
-DECLARE
+BEGIN
     p_cError := '0,OK';
     -- CLAU_CERT --> CLC
    P := PR_Poliza.Datos_Poliza(p_nIdePol);

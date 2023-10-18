@@ -1,4 +1,4 @@
--- SP_ACTUALIZAR POLIZA
+
 /*------------------------------------------------------------------------
   Nombre     : SP_ACTUALIZAR_POLIZA
   Propósito  : Actualizar la Póliza y Generar el Movimiento de Prima
@@ -177,7 +177,7 @@ BEGIN
     END IF;
     
     IF PR.BUSCA_LVAL('PROVEHCP', PZ.CODPROD) != 'INVALIDO' THEN      
-      PR_INTERFASE_AX_B2B.SP_VALIDA_COBERT_PROV(PZ.IDEPOL, cMsjCobProv); -- PR_VALIDA_COBERT_PROV(PZ.IDEPOL, cMsjCobProv);
+      PR_API_COMISION_INTERMEDIARIO.SP_VALIDA_COBERT_PROV(PZ.IDEPOL, cMsjCobProv); -- PR_VALIDA_COBERT_PROV(PZ.IDEPOL, cMsjCobProv);
       IF cMsjCobProv IS NOT NULL THEN
           p_cError := '1,'||cMsjCobProv;
           DBMS_OUTPUT.PUT_LINE(cMsjCobProv);
@@ -265,7 +265,7 @@ BEGIN
         nCantReg := 0;
       END;
       IF nCantReg > 0 THEN
-        cValTrec := PR_INTERFASE_AX_B2B.FN_VALIDA_TREC(PZ.IDEPOL); -- FR_VALIDA_TREC(PZ.IdePol);
+        cValTrec := PR_API_COMISION_INTERMEDIARIO.FN_VALIDA_TREC(PZ.IDEPOL); -- FR_VALIDA_TREC(PZ.IdePol);
         IF NVL(cValTrec,'0') = '1' THEN 
            p_cError := '1,'||'El valor declarado en Datos Particulares no coincide con la sumatoria valores declarados Registro Maquinarias TREC';
            DBMS_OUTPUT.PUT_LINE('El valor declarado en Datos Particulares no coincide con la sumatoria valores declarados Registro Maquinarias TREC');
@@ -301,12 +301,12 @@ BEGIN
     IF nNumTram IS NULL THEN -- IF NVL(:B02_1.cNumTramite,nNumTram) IS NULL THEN
         cTextoTr := 'Confirma ACTIVAR la póliza sin Numero de Trámite';
         DBMS_OUTPUT.PUT_LINE(cTextoTr);
-        PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_Validar_Datos;
+        PR_API_COMISION_INTERMEDIARIO.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_Validar_Datos;
 	      cTexto := 'Confirma ACTIVAR la póliza con fecha: '||TO_CHAR(PR.Fecha_Movimiento(TRUNC(SYSDATE)),'DD/MM/YYYY');
         DBMS_OUTPUT.PUT_LINE(cTexto);
         IF PZ.STSPOL <> 'MOD' THEN
             PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
-	          PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
+	          PR_API_COMISION_INTERMEDIARIO.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
 	          PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
         ELSE 
 		      cOperEnd := 'N';
@@ -343,11 +343,11 @@ BEGIN
              ----------------------------------------------------------------------------------
             */
             DBMS_OUTPUT.PUT_LINE(cTexto);
-            PR_INTERFASE_AX_B2B.SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(PZ.IDEPOL,p_cTipoOper);
+            PR_API_COMISION_INTERMEDIARIO.SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(PZ.IDEPOL,p_cTipoOper);
 			    ELSE
 
 			      SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_Validar_Datos;  
-			      PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
+			      PR_API_COMISION_INTERMEDIARIO.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
 
 			    END IF;
 	    	END IF;     
@@ -386,7 +386,7 @@ BEGIN
 	          cCantOpera:=2;
 	      END;
 	      IF cCantOpera = 0 THEN
-	        PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_VALIDAR_DATOS;
+	        PR_API_COMISION_INTERMEDIARIO.SP_VALIDAR_DATOS(PZ.IDEPOL);-- FR_VALIDAR_DATOS;
 	        cTexto := 'Confirma ACTIVAR la póliza con fecha: '||TO_CHAR(PR.Fecha_Movimiento(TRUNC(SYSDATE)),'DD/MM/YYYY');
 	        DBMS_OUTPUT.PUT_LINE(cTexto);
           IF PZ.STSPOL <> 'MOD' THEN	          
@@ -398,7 +398,7 @@ BEGIN
 		
 	            -- Si todo está correcto se continuamos con la actualización.
 	            PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL); -- <N3028071> Giancarlo Ramirez - Optimizacion CNT
-	            PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
+	            PR_API_COMISION_INTERMEDIARIO.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
 	            PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);  -- <N3028071> Giancarlo Ramirez - Optimizacion CNT	          	        
 	        END IF;
 	      ELSE
@@ -408,12 +408,12 @@ BEGIN
 
 	    ELSE 
 
-	   	    PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL); -- FR_Validar_Datos;
+	   	    PR_API_COMISION_INTERMEDIARIO.SP_VALIDAR_DATOS(PZ.IDEPOL); -- FR_Validar_Datos;
 		      cTexto := 'Confirma ACTIVAR la póliza con fecha: '||TO_CHAR(PR.Fecha_Movimiento(TRUNC(SYSDATE)),'DD/MM/YYYY');
           DBMS_OUTPUT.PUT_LINE(cTexto);
 			    IF PZ.STSPOL <> 'MOD' THEN
 	            PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('I','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
-		          PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
+		          PR_API_COMISION_INTERMEDIARIO.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
 		          PR_CONTROL_CONTABLE.REGISTRA_LOG_CIERRE ('F','ACTIVAR POLIZA - MANTPOL','ACTIVAR POLIZA: IDEPOL --> '||PZ.IDEPOL ,SYSDATE, SYSDATE, '01', 0, PZ.IDEPOL);
 			    ELSE 
               cOperEnd := 'N';
@@ -449,11 +449,11 @@ BEGIN
                 SE INVOCA AL FORMULARIO MOTIVOS DE ENDOSOS Y VIGENCIA DE OPERACIÓN
                 ----------------------------------------------------------------------------------
                 */
-                PR_INTERFASE_AX_B2B.SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(PZ.IDEPOL,p_cTipoOper);
+                PR_API_COMISION_INTERMEDIARIO.SP_ACTI_MOT_ENDOSOS_VIGEN_OPERA(PZ.IDEPOL,p_cTipoOper);
               ELSE
 
-                PR_INTERFASE_AX_B2B.SP_VALIDAR_DATOS(PZ.IDEPOL); -- FR_Validar_Datos;
-                PR_INTERFASE_AX_B2B.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
+                PR_API_COMISION_INTERMEDIARIO.SP_VALIDAR_DATOS(PZ.IDEPOL); -- FR_Validar_Datos;
+                PR_API_COMISION_INTERMEDIARIO.SP_ACTIVAR_ACTUALIZAR_POLIZA(PZ.IDEPOL); -- FR_ACTIVAR.Actualizar_Poliza(:B01_1.IdePol);
 
               END IF;
      
@@ -465,7 +465,7 @@ BEGIN
  
 	--<I COR103-925> Werner Tito / 19-09-2023 / [PROYECTO TECH CORE] Integración con Satelites InsPAT
 	-- Activa Garantias
-	PR_INTERFASE_AX_B2B.SP_ACTIVA_GARANTIAS(nStsPOL, PZ.IDEPOL); -- FR_ACTIVA_GARANTIAS(nStsPOL);
+	PR_API_COMISION_INTERMEDIARIO.SP_ACTIVA_GARANTIAS(nStsPOL, PZ.IDEPOL); -- FR_ACTIVA_GARANTIAS(nStsPOL);
 	--<F COR103-925>			      
  
 	--<I RTC 316472> David Yupanqui / 27-04-2023 / [PROYECTO TECH CORE] Armado Automático del Anexo 7
